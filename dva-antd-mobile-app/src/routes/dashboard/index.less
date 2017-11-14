@@ -1,0 +1,47 @@
+@PrefixCls: dashboard;
+
+.@{PrefixCls}-normal {
+  margin-top : 0.9rem;
+}
+
+.@{PrefixCls}-grid{
+  &-img{
+    width: 60%;
+    height:60%;
+    border-radius: 0.2rem;
+  }
+  &-title{
+    color: #888;
+    font-size: 0.25rem;
+  }
+}
+
+.@{PrefixCls}-list{
+  &-header {
+
+    color : #1284d6;
+    font-size : 0.32rem;
+    border-left:8px solid #1284d6;
+    padding-left: 15px;
+  }
+  &-body {
+    font-size : 0.3rem;
+  }
+}
+.@{PrefixCls}-img-box{
+   position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+}
+:global {
+  .am-grid-item{
+    min-height: ~'90px;'
+  }
+  .special-badge .am-list-line .am-list-extra {
+    padding: 0;
+    flex-basis: 10%;
+  }
+  .am-list-header{
+    background: #fff;
+  }
+}

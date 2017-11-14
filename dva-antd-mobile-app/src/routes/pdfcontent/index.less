@@ -1,0 +1,41 @@
+@PrefixCls: pdfcontent;
+@navbar-height: 90px;
+@bgColor : white;
+
+.@{PrefixCls}-header {
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	width : 100%;
+	height: @navbar-height;
+}
+
+.@{PrefixCls}-normal {
+	margin-top : @navbar-height + 10;
+}
+
+:global {
+  .ReactPDF {
+    &__Document {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__Page {
+      max-width: calc(~"100% - .2rem");
+      box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+      margin: .1rem;
+
+      canvas {
+        max-width: 100%;
+        height: auto !important;
+      }
+    }
+
+    &__Loader, &__Error, &__NoData {
+      padding: 1rem;
+      color: black;
+    }
+  }
+}

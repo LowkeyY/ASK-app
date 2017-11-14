@@ -1,0 +1,26 @@
+@PrefixCls: creates;
+@navbar-height: 90px;
+@bgColor : white;
+
+.@{PrefixCls}-header {
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	width : 100%;
+	height: @navbar-height;
+}
+
+.@{PrefixCls}-normal {
+	margin-top: 0.2rem;
+	:global {
+		.am-input-label , .am-textarea-label , .am-textarea-control textarea{
+			font-size : .3rem;
+		}
+		input{
+			font-size : 0.3rem !important;
+		}
+	}
+}
+.@{PrefixCls}-preview-btn{
+  float: right;
+}

@@ -1,0 +1,117 @@
+.my-drawer {
+  position: relative;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.my-drawer .am-drawer-sidebar {
+  background-color: #fff;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.my-drawer .am-drawer-sidebar .am-list {
+  width: 6rem;
+  padding: 0;
+}
+
+.my-tag{
+    height: .9rem;
+    display: flex;
+    width: 100%;
+    background-color: white;
+    align-items: center;
+
+    :global{
+      .am-list-body {
+        padding-left : .2rem;
+        background-color: white;
+        text-align: center;
+        border : 0;
+        &:after{
+          border : 0;
+        }
+      }
+      .am-tag{
+        background-color: #fff;
+        color: #108ee9;
+        border: 1PX solid #108ee9;
+      }
+    }
+}
+
+.my-list{
+
+  :global {
+    .am-list-body {
+      background-color: #1284d6;
+      text-align: left;
+    }
+    .am-list-header{
+      background-color: #fff;
+      font-size : .34rem;
+    }
+    .am-flexbox-item{
+      margin : 0;
+    }
+    .am-list-item .am-list-line .am-list-content{
+      font-size : .3rem;
+    }
+  }
+}
+
+.my-badge {
+    :global {
+      .am-badge-text{
+        z-index : 0;
+      }
+    }
+}
+@navbarPrefixCls: navbar-fixed;
+@navbar-height: 90px;
+
+.@{navbarPrefixCls}{
+  display: flex;
+  width : 100%;
+  height: @navbar-height;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  background-color:white;
+  &-left , &-center , &-right {
+    display: flex;
+    height : 100%;
+    align-items: center;
+    color: #108ee9;
+  }
+  &-left {
+    margin-left: 0.32rem;
+    font-size: .3rem;
+    flex : 1;
+  }
+  &-center {
+    margin: 0 0.3rem;
+    flex : 18;
+  }
+  &-right {
+    margin-right: 0.32rem;
+    flex : 1;
+  }
+}
+
+.search {
+    width : 98%;
+    color: white;
+    justify-content : flex-start;
+    background-color: #1284d6;
+    border: 1PX solid #108ee9;
+    
+    & svg{
+        width: 0.36rem;
+      height: 0.36rem;
+      opacity: .5;
+    }
+    & span{
+      font-size:0.3rem;
+      opacity: .5;
+    }
+}
