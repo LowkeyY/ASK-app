@@ -9,7 +9,7 @@ const model = {
       }
     },
   },
-}
+};
 
 const pageModel = modelExtend(model, {
 
@@ -25,8 +25,8 @@ const pageModel = modelExtend(model, {
   },
 
   reducers: {
-    querySuccess (state, { payload }) {
-      const { list, pagination } = payload
+    querySuccess (state, { payload}) {
+      const { list, pagination } = payload;
       return {
         ...state,
         list,
@@ -37,11 +37,8 @@ const pageModel = modelExtend(model, {
       }
     },
   },
-
-})
-
-
+});
 module.exports = {
   model,
   pageModel,
-}
+};

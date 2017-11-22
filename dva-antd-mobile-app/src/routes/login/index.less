@@ -1,45 +1,30 @@
-
-.form {
-  width: 100%;
-  height: 100%;
-  button {
-    width: 100%;
-  }
-
-  p {
-    color: rgb(204, 204, 204);
-    text-align: center;
-    margin-top: 16px;
-
-    span {
-      &:first-child {
-        margin-right: 16px;
-      }
-    }
-  }
+@PrefixCls: login;
+.@{PrefixCls}-container{
+   width: 100%;
+  height:100%;
+  background: url("../../themes/images/logebg.png") no-repeat ;
+  background-size: cover;
+  position: absolute;
 }
+.@{PrefixCls}-logobox{
 
-.logo {
-  text-align: center;
-  height: 40px;
-  line-height: 40px;
-  cursor: pointer;
-  margin-bottom: 24px;
-
-  img {
-    width: 40px;
-    margin-right: 8px;
-  }
-
-  span {
-    vertical-align: text-bottom;
-    font-size: 16px;
-    text-transform: uppercase;
-    display: inline-block;
-  }
+  padding:100px 50px 0 50px;
 }
-
-.ant-spin-container,
-.ant-spin-nested-loading {
+.@{PrefixCls}-logobox img{
+   width: 100%;
   height: 100%;
+  margin:0 auto;
+}
+.@{PrefixCls}-form{
+  margin-top: 380px;
+}
+.@{PrefixCls}-agreement{
+}
+:global{
+  .am-list-item .am-input-item .am-input-focus .am-input-android{
+    background: #999999;
+  }
+  .am-input-label .am-input-label-5{
+    width: 46px
+  }
 }

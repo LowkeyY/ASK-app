@@ -1,11 +1,34 @@
-.hot-tag{
-  height:30px;
-  line-height:30px;
+@PrefixCls: hotwords;
+
+
+.@{PrefixCls}-container{
+  width: 100%;
+  background: #fff;
+  position:relative;
+  &-head{
+    height: 80px;
+    overflow: hidden;
+    padding: 0 90px 0 20px;
+  }
+  .@{PrefixCls}-dropdownBtn{
+    position: absolute;
+    top:0;
+    right: 30px;
+    padding:20px 0 10px 30px;
+    color: #1284d6;
+  }
+  .@{PrefixCls}-hotwrodsBox{
+    width: 100%;
+      background: #ffffff;
+      padding: 0 20px;
+  }
+}
+.@{PrefixCls}-hot-tag{
   color:#1284d6;
   font-size: 25px;
   padding: 10px;
   margin: 15px 15px 15px 15px;
-  display: inline-block;
+  display:inline-block;
 }
 
 

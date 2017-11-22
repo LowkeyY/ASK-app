@@ -9,11 +9,11 @@ import pdffile from './1.pdf'
 
 
 function pdfcontent({
-  location , pdfcontent , loading , dispatch 
+  location , pdfcontent , loading , dispatch
 }) {
-	
+
   	let {fileUrl = "http://projekty.wojtekmaj.pl/react-pdf/sample.pdf" , pdfProps = {} , numPages} = pdfcontent;
-  
+
 	const goBack = ()=> {
 	    dispatch(routerRedux.goBack())
 	} , loadSuccess = (pdf)=>{
@@ -21,13 +21,13 @@ function pdfcontent({
 		console.log("loadSuccess" , arguments);
 	}
 
-	const PrefixCls = "pdfcontent"; 
+	const PrefixCls = "pdfcontent";
 
 	const finalProps = {
 		...pdfProps,
 		onLoadSuccess : loadSuccess,
 		onParseError : (e)=> {console.log("onParseError",e)},
-		onParseSuccess : ()=> {console.log("onParseSuccess",e)} 
+		onParseSuccess : ()=> {console.log("onParseSuccess",e)}
 	}
 	let index = 0;
 

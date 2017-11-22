@@ -1,12 +1,14 @@
-import { List,WhiteSpace , Switch} from 'antd-mobile';
+import { List} from 'antd-mobile';
 import styles from './index.less'
-import { createForm } from 'rc-form';
-
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 const Item = List.Item;
 const defaultImgSrc = require("themes/images/user.png");
-let Sets =(props) =>{
+let Sets =({dispatch,loading}) =>{
 
-    const { getFieldProps } = props.form;
+  const handleChange = ()=> {
+      dispatch(routerRedux.push({pathname:"/fontcontrol"}))
+  };
     return (
       <div>
         <List className="my-list">
@@ -18,18 +20,15 @@ let Sets =(props) =>{
           </Item>
           <Item extra={'系统用户'}>用户名</Item>
           <Item extra={'将军'}>等级</Item>
-          <Item extra={<Switch
-            {...getFieldProps('Switch1', {
-              initialValue: false,
-              valuePropName: 'checked',
-            })}
-            onClick={(checked) => { console.log(checked); }}
-          />}>字体放大</Item>
+          <Item
+            arrow="horizontal"
+            onClick={handleChange}
+           >字体大小</Item>
         </List>
       </div>
     )
 
 };
 
-export default  createForm()(Sets)
+export default connect(({ sets, loading }) => ({ sets, loading }))(Sets);
 

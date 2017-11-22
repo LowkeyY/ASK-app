@@ -16,7 +16,7 @@ const app = dva({
 })
 
 // 2. Model
-app.model(require('./models/app'))
+app.model(require('./models/discuss'))
 
 // 3. Router
 app.router(require('./router'))

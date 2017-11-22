@@ -9,7 +9,8 @@ import image from './img/watermark.png'
 function PageContent ({
   location, pagecontent, loading, dispatch,
 }) {
-  const { currentPage: { content, infos, title, comments, imgs }, currentSelected } = pagecontent
+  console.log(pagecontent);
+  const { currentPage: { content, infos, title, comments, imgs }, currentSelected } = pagecontent;
   const { query: { froms = '/' } } = location,
     PrefixCls = 'pagecontent',
     Item = List.Item;
@@ -47,14 +48,14 @@ function PageContent ({
       dispatch(routerRedux.push({ pathname: '/pdfcontent' }))
     },
     getContent = (index = 0) => {
-      const datas = []
+      const datas = [];
       switch (index) {
         case 0 : {
           let imgIndex = 0;
           content.split('_image_').map((_, index) => {
             if (index % 2 !== 0) { datas.push(<img style={{ maxWidth: '100%' }} src={require('themes/images/page01.jpeg')} />) }
             datas.push(<p>{_}</p>)
-          })
+          });
           return (<div className={styles[`${PrefixCls}-page`]}>
             {datas}
             <div className={styles[`${PrefixCls}-water-mark`]}>
@@ -63,7 +64,7 @@ function PageContent ({
           </div>)
         }
         case 1 : {
-          const keys = Object.keys(infos)
+          const keys = Object.keys(infos);
           keys.map((key, index) => {
             datas.push(<li
               className={index === keys.length - 1 ? styles[`${PrefixCls}-props-last-prop`] : ''}
@@ -71,7 +72,7 @@ function PageContent ({
             datas.push(<li
               className={index === keys.length - 1 ? styles[`${PrefixCls}-props-last-value`] : styles[`${PrefixCls}-props-value`]}
             >{infos[key]}</li>)
-          })
+          });
           return (
             <div className={styles[`${PrefixCls}-props`]}>
               <ul>{datas}</ul>
@@ -103,7 +104,7 @@ function PageContent ({
           )
         }
       }
-    }
+    };
 
   return (
     <div>

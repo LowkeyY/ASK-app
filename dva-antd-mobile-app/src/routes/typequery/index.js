@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import DemoDrawer from '../test/Drawer';
 
 function Typequery({
-  location , typequery , loading , dispatch 
+  location , typequery , loading , dispatch
 }) {
   	const  PrefixCls = "typequery" , {query : {froms = "/"}} = location;
     const {selectSys} = typequery;
@@ -21,6 +21,5 @@ function Typequery({
 Typequery.propTypes = {
 	test: PropTypes.object,
 	loading: PropTypes.object,
-}
-
+};
 export default connect(({ typequery, loading }) => ({ typequery, loading }))(Typequery)

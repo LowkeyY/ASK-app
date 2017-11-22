@@ -1,74 +1,67 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Form, Icon, Input, Button, Checkbox} from 'antd';
+import { routerRedux } from 'dva/router';
+import { InputItem, WhiteSpace,WingBlank,Button,Checkbox, Flex } from 'antd-mobile';
 import { config } from 'utils';
 import styles from './index.less';
+import user from '../../themes/images/用户名.png'
+import pwd from '../../themes/images/密码.png'
+import img from '../../themes/images/logo3.png'
+const PrefixCls="login";
+const AgreeItem = Checkbox.AgreeItem;
+const Login = ({dispatch,login}) => {
 
+  const handleLogin = () =>{
+    dispatch(routerRedux.push({pathname:"/"}))
+  };
+  const handleDisabled =()=>{
+    dispatch({
+      type:'login/disabled'
+    });
 
-
-const FormItem = Form.Item;
-
-const Login = ({
-  loading,
-  dispatch,
-  form: {
-    getFieldDecorator,
-    validateFieldsAndScroll,
-  },
-}) => {
-  function handleOk () {
-    validateFieldsAndScroll((errors, values) => {
-      if (errors) {
-        return
-      }
-      dispatch({ type: 'login/login', payload: values })
-    })
-  }
-
+    return login
+  };
   return (
-    <div className={styles.form}>
-      <div className={styles.logo}>
-        <img alt={'logo'} src={config.logo} />
-        <span>{config.name}</span>
-      </div>
-      <Form  className="login-form">
-        <FormItem>
-          {getFieldDecorator('userName', {
-            rules: [{ required: true, message: 'Please input your username!' }],
-          })(
-            <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="Username" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
-          })(
-            <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="Password" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(
-            <Checkbox>Remember me</Checkbox>
-          )}
-          <a className="login-form-forgot" href="">Forgot password</a>
-          <Button type="primary" htmlType="submit" className="login-form-button">
-            Log in
-          </Button>
-          Or <a href="">register now!</a>
-        </FormItem>
-      </Form>
+
+  <div className={styles[`${PrefixCls}-container`]}>
+    <div className={styles[`${PrefixCls}-logobox`]}>
+      <img src={img} alt=""/>
     </div>
+    <div className={styles[`${PrefixCls}-form`]}>
+      <WingBlank size="lg">
+        <InputItem
+          placeholder="用户名"
+        ><div style={{ backgroundImage: 'url('+user+')', backgroundSize: 'cover', height: '22px', width: '22px' }} />
+        </InputItem>
+      </WingBlank>
+      <WingBlank size="lg">
+        <InputItem
+          type="password"
+          placeholder="密码"
+        ><div style={{ backgroundImage: 'url('+pwd+')', backgroundSize: 'cover', height: '22px', width: '22px' }} />
+        </InputItem>
+        <WhiteSpace size="lg"/>
+        <div className={styles[`${PrefixCls}-check`]}>
+          <Flex>
+            <Flex.Item>
+              <AgreeItem data-seed="logId" onChange={handleDisabled}>
+                <span onClick={(e) =>{ e.preventDefault(); }}><span className={styles[`${PrefixCls}-agreement`]}><span>我已阅读并同意</span><a href="#">《隐私协议》</a></span></span>
+              </AgreeItem>
+            </Flex.Item>
+          </Flex>
+        </div>
+        <WhiteSpace size="lg"/>
+        <WhiteSpace size="lg"/>
+      </WingBlank>
+      <WingBlank size="lg"><Button type="primary"
+                                   disabled={login}
+                                   onClick={handleLogin.bind(null)}>登录</Button> </WingBlank>
+    </div>
+  </div>
+
   )
 };
 
-Login.propTypes = {
-  form: PropTypes.object,
-  dispatch: PropTypes.func,
-  loading: PropTypes.object,
-};
 
-export default connect(({ loading }) => ({ loading }))(Form.create()(Login))
+export default connect(({login})=>({login}))(Login)

@@ -1,29 +1,18 @@
 import { routerRedux } from 'dva/router'
 import { login } from 'services/login'
 
-export default {
+import modelExtend from 'dva-model-extend'
+import { pageModel } from './common'
+
+
+export default modelExtend(pageModel, {
   namespace: 'login',
 
-  state: {},
+  state:true,
+  reducers:{
+    'disabled'(state){
+     return state= !state;
+    }
+  }
+})
 
-  effects: {
-    * login ({
-      payload,
-    }, { put, call, select }) {
-      const data = yield call(login, payload)
-      const { locationQuery } = yield select(_ => _.app)
-      if (data.success) {
-        const { from } = locationQuery
-        yield put({ type: 'app/query' })
-        if (from && from !== '/login') {
-          yield put(routerRedux.push(from))
-        } else {
-          yield put(routerRedux.push('/dashboard'))
-        }
-      } else {
-        throw data
-      }
-    },
-  },
-
-}

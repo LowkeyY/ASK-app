@@ -8,8 +8,9 @@ import { NavBar } from 'antd-mobile';
 import styles from './index.less';
 
 function Mysets({
-  location , mysets , loading , dispatch 
+  location , mysets , loading , dispatch
 }) {
+  console.log(location)
   const {query : {froms = "/" , title = ""}} = location , PrefixCls = "mysets";
   const goBack = ()=> {
     dispatch(routerRedux.goBack())

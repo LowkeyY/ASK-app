@@ -4,7 +4,8 @@ import { pageModel } from './common'
 
 
 export default modelExtend(pageModel, {
-  namespace: 'page02',
+  namespace: 'set',
+
   state: {
     currentItem: {},
     modalVisible: false,
@@ -12,3 +13,4 @@ export default modelExtend(pageModel, {
     selectedRowKeys: [],
   }
 })
+

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Accordion ,Badge} from 'antd-mobile';
+import {Badge,Icon} from 'antd-mobile';
 import { connect } from 'dva';
 import Hottag from './component/hottag'
 import styles from './index.less'
+import {getLocalIcon} from 'utils'
+import Animate from 'rc-animate';
 const data = [
   {
     id:1,
@@ -44,29 +46,65 @@ const data = [
     id:10,
     word:"银魂"
   },
-]
+];
+const PrefixCls = 'hotwords';
 class HotWords extends React.Component {
-
-  onChange = (key) => {
-    console.log(key);
+  constructor() {
+    super();
+    this.state = {
+      enter: false,
+    };
+    this.toggleDropdown = this.toggleDropdown.bind(this);
+  }
+  toggleDropdown(){
+    this.setState({enter: !this.state.enter});
   }
   render() {
+    const icon=this.state.enter?'/dropup.svg':'/dropdown.svg',
+      enter=this.state.enter?'none':'block',
+      style={
+        display: this.state.enter ? 'block' : 'none',
+      };
     return (
-      <div >
-        <Accordion  className="my-accordion" onChange={this.onChange} accordion ={false}>
-          <Accordion.Panel header={[ <Badge text="热词" hot style={{ marginLeft: 12 }} />,<Hottag />,<Hottag />,<Hottag />,<Hottag />]} className="pad">
-            {
-              data.map((item,index)=>{
-                return (
-                  <div style={{display:"inline-block"}} key={item.id}>
-                    <a className={styles['hot-tag']}>{item.word}</a>
-                  </div>
-                );
-              })
-            }
+      <div className={styles[`${PrefixCls}-container`]}>
+        <div className={styles[`${PrefixCls}-container-head`]}>
+        <Badge text="热词"  />
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <Hottag/>
+        <div
+          onClick={this.toggleDropdown}
+          className={styles[`${PrefixCls}-dropdownBtn`]}><Icon type={getLocalIcon(icon)} size="xs" /></div>
+        </div>
+        <Animate
+          transitionName="fade"
+          component=""
+        >
+          {this.state.enter ?
+            <div key="1" className={styles[`${PrefixCls}-hotwrodsBox`]}
+            >
+              {
 
-          </Accordion.Panel>
-        </Accordion>
+                data.map((item, index) => {
+                  return (
+
+                      <a key={item.id} className={styles[`${PrefixCls}-hot-tag`]}>{item.word}</a>
+
+                  );
+                })
+              }
+            </div>
+            :
+            null
+          }
+        </Animate>
 
       </div>
     );

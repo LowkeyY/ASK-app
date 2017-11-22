@@ -1,0 +1,40 @@
+@PrefixCls: fontsizepage;
+@navbar-height: 90px;
+@bgColor : white;
+
+.@{PrefixCls}-header {
+
+  width : 100%;
+  height: @navbar-height;
+  :global{
+    .am-navbar-title{
+      color : #108ee9;
+      font-size: .3rem;
+    }
+  }
+}
+
+.@{PrefixCls}-silder-box{
+  width: 100%;
+  height:100px;
+  position: absolute;
+  bottom: 100px;
+  left:0;
+
+}
+.@{PrefixCls}-preview-size{
+  width: 100%;
+  margin-top: 20px;
+  min-height: 500px;
+  background: @bgColor;
+  .@{PrefixCls}-font{
+     width: 100%;
+    text-align: center;
+
+   }
+}
+:global{
+  .am-slider-wrapper{
+    height:35px;
+  }
+}
