@@ -71,6 +71,15 @@ const Routers = function ({ history, app }) {
             }, 'fontcontrol')
           }
         }
+        ,{
+          path: 'discuss',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('models/discuss'));
+              cb(null, require('routes/discuss/'))
+            }, 'discuss')
+          }
+        }
         , {
           path: 'pagecontent',
           getComponent (nextState, cb) {
@@ -108,7 +117,7 @@ const Routers = function ({ history, app }) {
           path: 'search',
           getComponent (nextState, cb) {
             require.ensure([], require => {
-              registerModel(app, require('models/search'));
+              registerModel(app, require('models/search'))
               cb(null, require('routes/search/'))
             }, 'search')
           }

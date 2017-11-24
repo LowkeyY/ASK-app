@@ -1,0 +1,44 @@
+@PrefixCls: fornmdetails;
+.@{PrefixCls}-author-box{
+  display: flex;
+  justify-content: space-between;
+  &-information-box{
+    display: flex;
+    justify-content: space-between;
+  }
+  &-icon{
+    width: 100px !important;
+    height:100px !important;
+  }
+  &-information{
+    margin-left: 20px;
+    display: flex;
+    flex-direction:column;
+    justify-content: space-between;
+    &-author{
+      font-size: 28px;
+      margin: 0 0 10px 0;
+      font-weight: normal;
+    }
+    &-info{
+      display: flex;
+      justify-content: flex-start;
+      color: #888;
+      &-integral{
+        margin: 0;
+        font-size: 28px;
+
+      }
+      &-master{
+        font-size: 22px;
+        margin: 0 0 0 30px;
+        padding: 5px;
+        border: 1px solid #108ee9;
+        border-radius: 20px;
+
+      }
+
+    }
+  }
+
+}

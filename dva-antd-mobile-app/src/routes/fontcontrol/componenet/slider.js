@@ -11,8 +11,9 @@ class FontSlider extends React.Component{
   render(){
     return(
       <div className={styles[`${PrefixCls}-silder-box`]}>
+        <p className={styles[`${PrefixCls}-font-small`]}>小</p>
+        <p className={styles[`${PrefixCls}-font-big`]}>大</p>
       <List>
-
         <Item>
         <Slider
           style={{ marginLeft: 30, marginRight: 30 }}

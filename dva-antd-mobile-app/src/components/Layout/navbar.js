@@ -1,5 +1,9 @@
 import React from 'react';
 import { NavBar } from 'antd-mobile';
+const css ={
+  color:'#108ee9',
+  fontSize:'.32rem'
+};
 
 function Nav(props) {
 
@@ -11,6 +15,7 @@ function Nav(props) {
         leftContent="返回"
         onLeftClick={props.goBack}
       >
+        <p style={css}>{props.title}</p>
       </NavBar>
     </div>
   )

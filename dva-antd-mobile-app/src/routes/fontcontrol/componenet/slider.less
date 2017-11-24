@@ -2,10 +2,26 @@
 .@{PrefixCls}-silder-box{
   width: 100%;
   height:100px;
-  position: absolute;
-  bottom: 100px;
+  position: fixed;
+  bottom: 0;
   left:0;
 
+}
+.@{PrefixCls}-font-small{
+  font-size: 32px;
+  position: absolute;
+  margin: 0;
+  top: 25px;
+  left:45px;
+  z-index: 2;
+}
+.@{PrefixCls}-font-big{
+  font-size: 60px;
+  position: absolute;
+  top: 5px;
+  right:25px;
+  z-index: 2;
+  margin: 0;
 }
 :global{
   .am-slider-wrapper{

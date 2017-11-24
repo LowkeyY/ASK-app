@@ -12,7 +12,10 @@ import { NavBar } from 'antd-mobile';
 import styles from './index.less';
 import { Accordion , Modal, List, InputItem, Switch, Stepper, Range, Button, createTooltip , Toast, WhiteSpace, WingBlank , SwipeAction} from 'antd-mobile';
 import CaseDetail from  '../casedetail/index'
-import Discuss from '../../components/discuss/index'
+import Discuss from '../discuss/index'
+import DiscussFoot from '../../components/discussfoot/index'
+import LibraryDetails from '../librarydetails/index'
+import ForumDeatils from '../forumdetails/index'
 import Nav from '../../components/Layout/navbar'
 import Login from '../login/index'
 import HotWords from '../hotwords/index'
@@ -23,7 +26,7 @@ function test() {
 
   return (
     <div>
-      <Discuss />
+      <DiscussFoot />
     </div>
 
   );

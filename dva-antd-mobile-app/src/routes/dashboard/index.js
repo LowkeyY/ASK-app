@@ -45,7 +45,7 @@ function Dashboard({
   }
 
   const handleItemClick = () =>{
-     dispatch(routerRedux.push({pathname:"/pagecontent" , query : {froms : "/"}}));
+     dispatch(routerRedux.push({pathname:"/casedetail" , query : {froms : "/"}}));
  n }
 
   const packCards = (datas) => {

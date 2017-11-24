@@ -6,7 +6,7 @@ export default modelExtend(pageModel,{
   state:'20px',
   reducers:{
      'small'(state){
-          state='14px';
+          state='16px';
           return state
      },
     'normal'(state){

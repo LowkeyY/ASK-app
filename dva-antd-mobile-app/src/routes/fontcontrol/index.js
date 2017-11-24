@@ -2,6 +2,8 @@ import React from 'react';
 import { List,NavBar} from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import FontSlider from './componenet/slider'
+import CaseContentTitle from '../../components/contenttitle/contenttitle'
+import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
 import { connect } from 'dva';
 import styles from './index.less'
 const Item = List.Item,
@@ -38,8 +40,12 @@ function FontSizePage({loading,dispatch,fontcontrol}) {
                 rightContent={<a>保存</a>}
         >字体大小</NavBar>
       </div>
+      <div>
+        <CaseContentTitle casecontenttitle={'预览字体大小'}/>
+      </div>
+      <List><Item><SecrecyAgreement/></Item></List>
       <div className={styles[`${PrefixCls}-preview-size`]}>
-        <Item>预览</Item>
+        <Item>详情</Item>
         <Item
           wrap
         >

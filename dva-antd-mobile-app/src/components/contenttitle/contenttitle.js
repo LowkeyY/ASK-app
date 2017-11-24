@@ -12,13 +12,12 @@ const CaseContentTitle =(props)=>{
           <Item
             wrap="true"
           >
-            <div className={styles['case-title']}>
-              <img src={defaultImgSrc} alt=""/>
-              <h3>{props.casecontenttitle}</h3>
+            <div className={styles['case-title-box']}>
+              <img className={styles['case-icom']} src={defaultImgSrc} alt=""/>
+              <h3 className={styles['case-title']}>{props.casecontenttitle}</h3>
             </div>
             <div>
             </div>
-
           </Item>
         </List>
     </div>

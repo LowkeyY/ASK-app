@@ -6,7 +6,7 @@ import { parse } from 'qs'
 import config from 'config'
 import { query, logout } from 'services/app'
 
-const { prefix } = config
+const { prefix } = config;
 
 export default {
   namespace: 'app',
