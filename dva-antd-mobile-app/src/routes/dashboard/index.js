@@ -6,47 +6,33 @@ import { Card, WingBlank, WhiteSpace , Grid , NavBar , Icon , SearchBar , Button
 import { Layout } from 'components'
 import styles from './index.less';
 import HotWords from '../hotwords/index';
-import {getLocalIcon} from 'utils'
-
+import {getLocalIcon , mockGrids , getMockData , getHotWord , getInfoWord} from 'utils'
 function Dashboard({
   location , dashboard , loading , dispatch
 }) {
-  const {Header} = Layout;
-  const PrefixCls = "dashboard" ,
-    defaultImageSrc = "https://gw.alipayobjects.com/zos/rmsportal/WXoqXTHrSnRcUwEaQgXJ.png",
-    defaultData = {
-      name : '共享手机现身昆明:年租金近4000元不如直接买一台',
-      date : '2017年09月10日',
-      author : '网易科技',
-    };
-  let data = [];
-  for (let i = 0; i < 5; i++) {
-    data.push(defaultData)
-  }
+  const {Header , BaseLine} = Layout , PrefixCls = "dashboard" , hotwords = getHotWord() , infoWord = getInfoWord(0);
 
-  let nodes = [
-    {id:"1",text:"交流论坛" , icon : require("themes/images/交流论坛.svg")},
-    {id:"2",text:"经验案例" , icon : require("themes/images/经验案例.svg")},
-    {id:"3",text:"设备资料" , icon : require("themes/images/设备资料.svg")},
-    {id:"4",text:"知识文库" , icon : require("themes/images/知识文库.svg")},
-  ];
-
-  const getData = ()=>{
+  const getData = (nodes , data , counts = 10)=>{
     const datas = [];
     nodes.map((node , index) =>{
-      const list = Array.from(new Array(5)).map(_ => defaultData);
+      const list = Array.from(new Array(counts)).map((_ , i) => {
+        let newData = Object.assign({} , data);
+        newData.title = newData.title + (i > 0 ? i : "");
+        return newData;
+      });
       datas.push({
         title : node.text,
         key : node.id,
         list : list,
+        icon : node.icon
       })
     });
     return datas;
   }
 
   const handleItemClick = () =>{
-     dispatch(routerRedux.push({pathname:"/casedetail" , query : {froms : "/"}}));
- n }
+     dispatch(routerRedux.push({pathname:"/forumdetails"}));
+  }
 
   const packCards = (datas) => {
     return datas.map((data , index) => {
@@ -54,33 +40,29 @@ function Dashboard({
       const Item = List.Item;
       const Brief = Item.Brief;
       return (
-        <div style={isLast ? {marginBottom: "1rem"}:{}}>
+        <div style={isLast ? {marginBottom: ".1rem"}:{}}>
           <WhiteSpace size="sm" />
-          <List renderHeader={() => (<span className={styles[`${PrefixCls}-list-header`]}>{data.title}</span>)}>
+          <List renderHeader={() => (<div className={styles[`${PrefixCls}-head-title`]}><img src={data.icon} /><span className={styles[`${PrefixCls}-list-header`]}>{data.title}</span></div>)}>
               {
                 data.list && data.list.map((item , index) => {
-                  return index > 1 ?
-                    <Item
-                      arrow="horizontal"
-                      multipleLine
-                      onClick={handleItemClick}
-                      key={`${data.id}-${index}`}
-                      wrap
-                    >
-                        <span className={styles[`${PrefixCls}-list-body`]}>{defaultData.name}</span>
-                      <Brief>{`${defaultData.author} - (${defaultData.date})`}</Brief>
-                    </Item> :
-                    <Item
-                      multipleLine
-                      onClick={handleItemClick}
-                      key={`${data.id}-${index}`}
-                      wrap
-                      className="special-badge"
-                      extra={<Badge text={'新'}/>}
-                    >
-                        <span className={styles[`${PrefixCls}-list-body`]}>{defaultData.name}</span>
-                      <Brief>{`${defaultData.author} - (${defaultData.date})`}</Brief>
-                    </Item>
+                  let isNew = item.isNew === true || index <= 1;
+                  let result = (
+                      <Item
+                        arrow="horizontal"
+                        multipleLine
+                        onClick={handleItemClick}
+                        key={`${data.id}-${index}`}
+                        wrap
+                      >
+                        <span className={ styles[`${PrefixCls}-list-body`]+" "+(isNew ? styles[`${PrefixCls}-list-isNew`] : "")}>{item.title}</span>
+                        <Brief>{`${item.author} - (${item.date})`}</Brief>
+                      </Item>
+                    );
+
+                  return !isNew ? result :
+                    <Badge text={'新'} corner>
+                      {result}
+                    </Badge>
                 })
               }
           </List>
@@ -89,39 +71,33 @@ function Dashboard({
       )
     })
   };
+
   const headerProps = {
       dispatch
   };
+
+  const currentData = mockGrids[0];
   return (
     <div>
       <Header {...headerProps}/>
       <div className={styles[`${PrefixCls}-normal`]}>
-      <WingBlank size="sm" >
-        <WhiteSpace size="sm" />
-        <Grid
-          data={nodes}
-          columnNum={4}
-          renderItem={dataItem => (
-            <div className={styles[`${PrefixCls}-img-box`]}>
-              <img className={styles[`${PrefixCls}-grid-img`]} src={dataItem.icon} alt="icon" />
-              <div className={styles[`${PrefixCls}-grid-title`]}>
-                <span>{dataItem.text}</span>
-              </div>
-            </div>
-          )}
-          style={{minHeight: '90px' }}
-          onClick={(_el, index) => {
-            const node = nodes[index];
-            dispatch({type :"typequery/updateState" , payload:{selectSys : (--node.id)}});
-            dispatch(routerRedux.push({pathname:"/typequery"}))}
-          }
+      <Grid
+        data={mockGrids}
+        columnNum={4}
+        hasLine={false}
+        onClick={(_el, index) => {
+          const grid = mockGrids[index];
+          dispatch({type :"typequery/updateState" , payload:{selectSys : grid.id}});
+          dispatch(routerRedux.push({pathname:"/typequery"}))}
+        }
       />
-      </WingBlank>
-      <HotWords />
-      <NoticeBar  mode="link" icon={<Icon type={getLocalIcon("/broadcast.svg")}/>} marqueeProps={{ loop: true, style: { padding: '0 0.15rem' } }}>
-        {defaultData.name + defaultData.name}
+      <HotWords hotwords={hotwords}/>
+      <WhiteSpace size="sm" />
+      <NoticeBar mode="link" icon={<Icon type={getLocalIcon("/page/notes.svg")}/>} marqueeProps={{ loop: true, style: { padding: '0 0.15rem' } }}>
+        {infoWord.title}
       </NoticeBar>
-      {packCards(getData())}
+      {packCards(getData([currentData] , getMockData(currentData.id)))}
+      <BaseLine />
       </div>
     </div>
   );

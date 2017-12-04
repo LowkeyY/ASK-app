@@ -11,7 +11,8 @@ function Typequery({
     const demoDrawerProps ={
       dispatch,
       froms : "/typequery",
-      selectSys
+      selectSys,
+      updateState : (payload)=>{dispatch({type :"typequery/updateState" , payload});}
     }
     return (
       <DemoDrawer {...demoDrawerProps}/>

@@ -1,0 +1,56 @@
+@PrefixCls: tq-list;
+@first-color: #656577;
+@second-color: #635f5f;
+@line-color: #c7c7cc;
+@font-size : 26px;
+
+:global{
+	.@{PrefixCls}-row{
+		.am-list-line .am-list-brief{
+	    	font-size: @font-size;
+	        color: @first-color;
+	    }
+	    & .title{
+	    	border-bottom: 1px solid @line-color;
+			& h3{
+				margin: 12px 0;
+				font-size: 30px;
+			}
+	    }
+
+	    & .content{
+			display: flex;
+			justify-content: flex-end;
+			margin: 12px 0 0;
+			color: @second-color;
+			& div{
+				display: flex;
+				align-items: center;
+				margin-left: 18px;
+				font-size: @font-size;
+				&>span{
+					padding-left : 3px;
+				}
+			}
+			& .am-tag-normal {
+				border: 1PX solid @second-color;
+				& .am-tag-text{
+					color: @second-color;
+				}
+			}
+	    }
+
+	    & .info{
+	    	margin: 12px 0 0;
+	    	&>p{
+	    		color : #008000;
+	    		margin : 0 5px;
+	    		font-size: @font-size;
+	    		&>span{
+	    			padding-left: 5px;
+	    			color:@second-color;
+	    		}
+	    	}
+	    }
+	}
+}

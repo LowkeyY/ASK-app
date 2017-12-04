@@ -1,14 +1,14 @@
 const menus = [{
 	title : "首页",
 	key : 1,
-	icon : "/homeV2-o.svg",
-	selectedIcon : '/homeV2.svg',
+	icon : "/footer/home.svg",
+	selectedIcon : '/footer/home-o.svg',
 	route : '/'
 },{
 	title : "分类检索",
 	key : 5,
-	icon : "/queryV2-o.svg",
-	selectedIcon : '/queryV2.svg',
+	icon : "/footer/types.svg",
+	selectedIcon : '/footer/types-o.svg',
 	route : '/typequery'
 },/*{
 	title : "分类检索1",
@@ -16,17 +16,19 @@ const menus = [{
 	icon : "/querys.svg",
 	selectedIcon : '/querys-o.svg',
 	route : '/page01'
+949494
+33a3f4
 },*/{
 	title : "测试",
 	key : 3,
-	icon : "/test.svg",
-	selectedIcon : '/test-o.svg',
-	route : '/test'
+	icon : "/footer/test.svg",
+	selectedIcon : '/footer/test-o.svg',
+	route : '/page01'
 },{
 	title : "我的",
 	key : 4,
-	icon : "/mineV2-o.svg",
-	selectedIcon : '/mineV2.svg',
+	icon : "/footer/mine.svg",
+	selectedIcon : '/footer/mine-o.svg',
 	route : '/page02'
 }]
 

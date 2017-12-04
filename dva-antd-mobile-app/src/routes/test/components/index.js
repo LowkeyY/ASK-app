@@ -2,7 +2,7 @@
 import { RefreshControl, ListView , List , Tag ,Icon} from 'antd-mobile';
 import ReactDOM from 'react-dom';
 import { routerRedux } from 'dva/router';
-import { getLocalIcon} from 'utils'
+import { getLocalIcon , getMockData} from 'utils'
 import styles from './index.less';
 const Item = List.Item , Brief = Item.Brief;
 const data = [
@@ -34,6 +34,7 @@ class App extends React.Component {
 
     this.state = {
       dataSource,
+      selectSys : this.props.selectSys,
       refreshing: true,
       height: document.documentElement.clientHeight,
     };
@@ -93,7 +94,6 @@ class App extends React.Component {
     if (this.state.isLoading && !this.state.hasMore) {
       return;
     }
-    console.log('reach end', event);
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.rData = [...this.rData, ...genData(++pageIndex)];
@@ -104,49 +104,52 @@ class App extends React.Component {
     }, 1000);
   };
   handleItemClick = () =>{
-    this.props.dispatch(routerRedux.push({pathname:"/pagecontent" , query : {froms : this.props.froms}}))
+    this.props.dispatch(routerRedux.push({pathname:"/pagecontent"}))
   };
+
   render() {
     const separator = (sectionID, rowID) => (
       <div
         key={`${sectionID}-${rowID}`}
         style={{
           backgroundColor: '#F5F5F9',
-          height: 8,
+          height: 5,
           borderTop: '1px solid #ECECED',
           borderBottom: '1px solid #ECECED',
         }}
       />
     );
     const row = (rowData, sectionID, rowID) => {
-      if (index < 0) {
-        index = data.length - 1;
-      }
-      const obj = data[index--];
-      return (
-        <Item className={styles["row"]}
-            arrow="horizontal"
-            multipleLine
-            onClick={this.handleItemClick}
-            key={rowID}
-            wrap
-        >
-          <div className={styles["row-title"]}><span>{obj.name}</span></div>
-          <Brief>{`${obj.author} - (${obj.date})`}</Brief>
-          <div className={styles["row-text"]}>
-            <div className={styles["row-text-center"]}>
-              <Icon type="info-circle" size="xs" /><span>{obj.pinglun || 0}</span>
+      if(+rowID <= 20){
+        if (index < 0) {
+          index = data.length - 1;
+        }
+        const obj = getMockData(this.props.selectSys);
+        return (
+          <Item className={styles["row"]}
+              arrow="horizontal"
+              multipleLine
+              onClick={this.handleItemClick}
+              key={rowID}
+              wrap
+          >
+            <div className={styles["row-title"]}><span>{obj.title + rowID}</span></div>
+            <Brief>{`${obj.author} - (${obj.date})`}</Brief>
+            <div className={styles["row-text"]}>
+              <div className={styles["row-text-center"]}>
+                <Icon type="info-circle" size="xs" /><span>{obj.pinglun || 0}</span>
+              </div>
+              <div className={styles["row-text-right"]}>
+                <Icon type={getLocalIcon("/page/view.svg")} size="xs" color={"#888"}/><span>{obj.yulan || 0}</span>
+              </div>
+              <Tag className={styles["row-text-tag"]}>
+                  <Icon type={getLocalIcon("/page/collection.svg")} size="xs" />
+                  <span>收藏</span>
+              </Tag>
             </div>
-            <div className={styles["row-text-right"]}>
-              <Icon type={getLocalIcon("/view.svg")} size="xs" color={"#888"}/><span>{obj.yulan || 0}</span>
-            </div>
-            <Tag className={styles["row-text-tag"]}>
-                <Icon type={getLocalIcon("/collection.svg")} size="xs" />
-                <span>收藏案例</span>
-            </Tag>
-          </div>
-        </Item>
-      );
+          </Item>
+        );
+      };
     };
     return (
       <ListView ref={el => this.lv = el}

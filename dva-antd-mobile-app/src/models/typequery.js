@@ -8,6 +8,6 @@ export default modelExtend(pageModel, {
 
   state: {
   	currentItem: {},
-  	selectSys : 0,
+  	selectSys : 1,
   }
 })

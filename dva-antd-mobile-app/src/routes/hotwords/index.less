@@ -6,13 +6,65 @@
   background: #fff;
   position:relative;
   &-head{
-    height: 80px;
+    min-height: 160px;
     overflow: hidden;
-    padding: 0 90px 0 20px;
+    padding: 0 20px 0 20px;
+   &-logo{
+     padding: 10px;
+     height: .6rem;
+     line-height: .6rem;
+      font-size: .30rem;
+     color: #FFf;
+     background:#f19736;
+     border-radius: 10px;
+     //-webkit-animation: Glow 1.5s ease infinite alternate;
+     //animation: Glow 1.5s ease infinite alternate;
+     background-image: -webkit-linear-gradient(-40deg, rgba(200,152,69,.6) 30%, #fff 50%, rgba(200,152,69, 0.6) 70%); /*设置渐变的背景，按对角线渐变*/
+
+     background-blend-mode: hard-light; /*设置背景为混合模式下的强光模式*/
+     background-size: 200%;
+     -webkit-animation: shine 1.5s infinite ; /*给背景添加动画改变位置*/
+   }
+    //@-webkit-keyframes Glow {
+    //  from {
+    //    text-shadow: 0 0 0 #fff,
+    //    0 0 10px #fff,
+    //    0 0 20px #fff,
+    //    0 0 60px #f13200
+    //  }
+    //  to {
+    //    text-shadow: 0 0 0 #fff,
+    //    0 0 10px #fff,
+    //    0 0 15px #fff,
+    //    0 0 50px #f13200
+    //
+    //  }
+    //}
+    //@keyframes Glow {
+    //  from {
+    //    text-shadow: 0 0 0 #fff,
+    //    0 0 10px #fff,
+    //    0 0 20px #fff,
+    //    0 0 60px #f13200
+    //
+    //  }
+    //  to {
+    //    text-shadow: 0 0 0 #fff,
+    //    0 0 10px #fff,
+    //    0 0 15px #fff,
+    //    0 0 50px #f13200
+    //
+    //  }
+    //}
+    @-webkit-keyframes shine {
+      from {background-position: 200%;}
+      to {background-position: -50%;}
+    }
+
   }
   .@{PrefixCls}-dropdownBtn{
     position: absolute;
-    top:0;
+    top:80px;
     right: 30px;
     padding:20px 0 10px 30px;
     color: #1284d6;
@@ -27,7 +79,7 @@
   color:#1284d6;
   font-size: 25px;
   padding: 10px;
-  margin: 15px 15px 15px 15px;
+  margin: 15px 0;
   display:inline-block;
 }
 

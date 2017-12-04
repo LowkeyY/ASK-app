@@ -9,12 +9,14 @@
   position: fixed;
   z-index: 100;
   top: 0;
-  background-color:white;
+  //background-color:white;
+  background-color : #108ee9;
   &-left , &-center , &-right {
     display: flex;
     height : 100%;
     align-items: center;
-    color: #108ee9;
+    //color: #108ee9;
+    color : white;
   }
   &-left {
     margin-left: 0.32rem;
@@ -22,12 +24,21 @@
     flex : 4;
   }
   &-center {
-    margin: 0 0.3rem;
+    margin: 0 0.1rem 0 0.3rem;
     flex : 18;
   }
   &-right {
     margin-right: 0.32rem;
     flex : 1;
+    :global{
+      .am-badge {
+        color : white;
+        & .am-icon-md{
+          width : 0.5rem;
+          height : 0.5rem;
+        }
+      }
+    }
   }
 }
 
@@ -35,16 +46,17 @@
     width : 98%;
     color: white;
     justify-content : flex-start;
-    background-color: #1284d6;
-    border: 1PX solid #108ee9;
-    
-    & svg{
+    background-color: #006dbc;
+    border: 1PX solid #1a72b9;
+    :global{
+      & svg{
         width: 0.36rem;
-      height: 0.36rem;
-      opacity: .5;
-    }
-    & span{
-      font-size:0.3rem;
-      opacity: .5;
+        height: 0.36rem;
+        opacity: .9;
+      }
+      & span{
+        font-size:0.3rem;
+        opacity: .9;
+      }   
     }
 }

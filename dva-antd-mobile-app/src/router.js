@@ -45,7 +45,8 @@ const Routers = function ({ history, app }) {
               cb(null, require('routes/page02/'))
             }, 'page02')
           }
-        }, {
+        },
+         {
           path: 'mylist',
           getComponent (nextState, cb) {
             require.ensure([], require => {
@@ -54,6 +55,31 @@ const Routers = function ({ history, app }) {
             }, 'mylist')
           }
         }, {
+          path: 'casedetail',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('models/casedetail'));
+              cb(null, require('routes/casedetail/'))
+            }, 'casedetail')
+          }
+        },{
+          path: 'librarydetails',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('models/librarydetails'));
+              cb(null, require('routes/librarydetails/'))
+            }, 'librarydetails')
+          }
+        },{
+          path: 'forumdetails',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('models/forumdetails'));
+              cb(null, require('routes/forumdetails/'))
+            }, 'forumdetails')
+          }
+        }
+        , {
           path: 'mysets',
           getComponent (nextState, cb) {
             require.ensure([], require => {
@@ -89,15 +115,7 @@ const Routers = function ({ history, app }) {
             }, 'pagecontent')
           }
         },
-        {
-          path: 'casedetail',
-          getComponent (nextState, cb) {
-            require.ensure([], require => {
-              registerModel(app, require('models/casedetail'));
-              cb(null, require('routes/casedetail/'))
-            }, 'casedetail')
-          }
-        },{
+       {
           path: 'typequery',
           getComponent (nextState, cb) {
             require.ensure([], require => {
@@ -140,9 +158,17 @@ const Routers = function ({ history, app }) {
         }, {
           path: '*',
           getComponent (nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('routes/error/'))
-            }, 'error')
+            const {location : {pathname}} = nextState;
+            if(pathname && /^\/(android).+?index\.html$/.exec(pathname)){
+              require.ensure([], require => {
+                registerModel(app, require('models/dashboard'));
+                cb(null, require('routes/dashboard/'))
+              })
+            } else {
+              require.ensure([], (require) => {
+                cb(null, require('routes/error/'))
+              }, 'error')
+            }
           },
         },{
           path: 'dashboard',
@@ -151,6 +177,14 @@ const Routers = function ({ history, app }) {
               registerModel(app, require('models/dashboard'));
               cb(null, require('routes/dashboard/'))
             }, 'dashboard')
+          }
+        },{
+          path: 'android/www/index.html',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('models/dashboard'));
+              cb(null, require('routes/dashboard/'))
+            }, 'android')
           }
         }
       ],

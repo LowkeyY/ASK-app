@@ -1,68 +1,55 @@
 import React from 'react';
-import { List,NavBar} from 'antd-mobile';
+import { List,NavBar,Button} from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import FontSlider from './componenet/slider'
 import CaseContentTitle from '../../components/contenttitle/contenttitle'
 import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
 import { connect } from 'dva';
 import styles from './index.less'
+import pagecontentstyles from 'themes/content.less'
 const Item = List.Item,
  Brief = Item.Brief,
   PrefixCls='fontsizepage';
-function FontSizePage({loading,dispatch,fontcontrol}) {
+function FontSizePage({loading , dispatch , fontcontrol}) {
+  const {fontSize} =  fontcontrol
   const goBack = ()=> {
     dispatch(routerRedux.goBack())
   };
   const getFontSize=(size)=>{
-      if(size===0){
-        dispatch({
-          type:'fontcontrol/small'
-        })
-      }
-      if(size===50){
-        dispatch({
-          type:'fontcontrol/normal'
-
-        })
-      }
-      if(size===100){
-        dispatch({
-          type:'fontcontrol/big'
-        })
-      }
+      const newSize = size===100 ? "large" : size===0 ? "small" : "normal";
+      dispatch({
+          type:'fontcontrol/updateState' , payload : {fontSize : newSize}
+      })
   }
+
+  const saveFontSize = ()=>{
+      dispatch({
+          type:'app/updateState' , payload : {pageFontsize : fontSize}
+      })
+  }
+
   return(
     <div>
       <div className={styles[`${PrefixCls}-header`]}>
         <NavBar leftContent="返回"
                 mode="light"
                 onLeftClick={goBack}
-                rightContent={<a>保存</a>}
+                rightContent={<Button type="primary" inline size="small" onClick={saveFontSize}>保存</Button>}
         >字体大小</NavBar>
       </div>
       <div>
         <CaseContentTitle casecontenttitle={'预览字体大小'}/>
       </div>
       <List><Item><SecrecyAgreement/></Item></List>
-      <div className={styles[`${PrefixCls}-preview-size`]}>
-        <Item>详情</Item>
-        <Item
-          wrap
-        >
-         <p className={styles[`${PrefixCls}-font`]}
-              style={{fontSize:fontcontrol}}>
-            常记溪亭日暮，
-           <br/>
-            沉醉不知归路，
-           <br/>
-            兴尽晚回舟，
-           <br/>
-            误入藕花深处。
-           <br/>
-            争渡，争渡，惊起一滩鸥鹭。</p>
-        </Item>
+      <div className={`page-content ${fontSize}`}>
+        <p>【详情】</p>
+        <p>  常记溪亭日暮，</p>
+        <p>  沉醉不知归路，</p> 
+        <p>  兴尽晚回舟，</p>
+        <p>  误入藕花深处。</p>
+        <p>  争渡，争渡，惊起一滩鸥鹭。</p>
       </div>
-      <FontSlider controlSize={getFontSize}/>
+      <FontSlider fontSize={fontSize} controlSize={getFontSize}/>
     </div>
   )
 }

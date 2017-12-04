@@ -1,0 +1,23 @@
+@PrefixCls: page-search;
+
+:global{
+	.@{PrefixCls} , .@{PrefixCls}-terms {
+		& .am-flexbox-item{
+			margin-left: 0.1rem;
+		}
+		& .am-list-item .am-list-line {
+			& .am-list-extra{
+				flex-basis : 20%;
+			}
+			& .am-list-content{
+				font-size : 28px;
+			}
+		}
+	}
+	.@{PrefixCls}-terms{
+		& .am-list-item .am-list-line .am-list-extra{
+			flex-basis : 70%;
+			font-size: 28px;
+		}
+	}
+}

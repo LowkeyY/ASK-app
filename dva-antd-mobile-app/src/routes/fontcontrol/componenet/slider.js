@@ -9,6 +9,8 @@ class FontSlider extends React.Component{
   }
 
   render(){
+    const defaultValue = this.props.fontSize==="large" ? 100: this.props.fontSize==="small" ? 0 : 50; 
+
     return(
       <div className={styles[`${PrefixCls}-silder-box`]}>
         <p className={styles[`${PrefixCls}-font-small`]}>小</p>
@@ -17,7 +19,7 @@ class FontSlider extends React.Component{
         <Item>
         <Slider
           style={{ marginLeft: 30, marginRight: 30 }}
-          defaultValue={50}
+          defaultValue={defaultValue}
           min={0}
           max={100}
           step={50}

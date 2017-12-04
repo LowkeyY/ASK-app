@@ -5,7 +5,6 @@ import { pageModel } from './common'
 
 export default modelExtend(pageModel, {
   namespace: 'pdfcontent',
-
   state: {
   	file: {},
   	numPages : 0,
@@ -14,5 +13,24 @@ export default modelExtend(pageModel, {
   		loading: 'PDF文件加载中…',
   		noData: '未找到PDF文件。',
   	}
+  },
+  subscriptions: {
+    setup ({ dispatch, history }) {
+      history.listen(location => {
+        let { pathname, query } = location;
+        if (pathname.startsWith('/pdfcontent')) {
+          dispatch({ type: 'pdfcontent/updateQuery', payload: {...query}
+          })
+        }
+      })
+    }
+  },
+  effects: {
+    *updateQuery ({ payload }, { call, put }) {
+        yield put({
+          type: 'updateState',
+          payload
+        })
+    },
   }
 })

@@ -5,7 +5,7 @@ import { routerRedux } from 'dva/router';
 import { NavBar , SearchBar, Button, WhiteSpace, WingBlank } from 'antd-mobile';
 import { Document , Page} from 'react-pdf/build/entry.webpack'
 import styles from './index.less'
-import pdffile from './1.pdf'
+import pdffile from './sample.pdf'
 
 
 function pdfcontent({
@@ -13,7 +13,7 @@ function pdfcontent({
 }) {
 
   	let {fileUrl = "http://projekty.wojtekmaj.pl/react-pdf/sample.pdf" , pdfProps = {} , numPages} = pdfcontent;
-
+  	fileUrl = pdffile;
 	const goBack = ()=> {
 	    dispatch(routerRedux.goBack())
 	} , loadSuccess = (pdf)=>{
@@ -41,7 +41,7 @@ function pdfcontent({
 		    </div>
 		    <div className={styles[`${PrefixCls}-normal`]}>
 				<WingBlank size="sm">
-				<Document file={pdffile} {...finalProps}>
+				<Document file={fileUrl} {...finalProps}>
 					{
 	                Array.from(
 	                  new Array(numPages),

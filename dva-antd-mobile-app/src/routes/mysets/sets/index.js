@@ -6,28 +6,31 @@ const Item = List.Item;
 const defaultImgSrc = require("themes/images/user.png");
 let Sets =({dispatch,loading}) =>{
 
-  const handleChange = ()=> {
+  const PrefixCls = "mysets" , handleChange = ()=> {
       dispatch(routerRedux.push({pathname:"/fontcontrol"}))
   };
-    return (
-      <div>
-        <List className="my-list">
-          <Item>
-             <p className={styles["sets-icon-title"]}>头像</p>
-             <div className={styles["sets-icon-img-box"]}>
-              <img src={defaultImgSrc} alt="icon"/>
-            </div>
-          </Item>
-          <Item extra={'系统用户'}>用户名</Item>
-          <Item extra={'将军'}>等级</Item>
-          <Item
-            arrow="horizontal"
-            onClick={handleChange}
-           >字体大小</Item>
-        </List>
-      </div>
-    )
-
+  return (
+    <div>
+      <List className={`${PrefixCls}-list`}>
+        <Item>
+           <p className={"icon-title"}>头像预览</p>
+           <div className={"icon-img-box"}>
+            <img src={defaultImgSrc} alt="icon"/>
+          </div>
+        </Item>
+        <Item extra={'系统管理员'}>姓名</Item>
+        <Item extra={' - '}>所属部门</Item>
+        <Item extra={'20'}>积分</Item>
+        <Item extra={'设备资料版主'}>身份</Item>
+        <Item extra={'系统管理员，设备资料版主'}>角色</Item>
+        <Item extra={'wangfulin@timetang.com'}>邮件</Item>
+        <Item
+          arrow="horizontal"
+          onClick={handleChange}
+         >字体大小</Item>
+      </List>
+    </div>
+  )
 };
 
 export default connect(({ sets, loading }) => ({ sets, loading }))(Sets);

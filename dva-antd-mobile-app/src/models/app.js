@@ -21,9 +21,9 @@ export default {
       },
     ],
     locationQuery: {},
+    pageFontsize : "normal"
   },
   subscriptions: {
-
     setupHistory ({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
@@ -38,7 +38,6 @@ export default {
 
   },
   effects: {
-
     * query ({
       payload,
     }, { call, put, select }) {

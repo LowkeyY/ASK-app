@@ -2,46 +2,128 @@
 
 .@{PrefixCls}-normal {
   margin-top : 0.9rem;
+  :global {
+    & .am-grid .am-flexbox .am-flexbox-item .am-grid-item-content .am-grid-item-inner-content .am-grid-icon{
+        width : 60%;
+        height: 60%;
+    }
+    .am-grid-item{
+      min-height: ~'90px;'
+    }
+    .special-badge .am-list-line .am-list-extra {
+      padding: 0;
+      height: 44px;
+      flex-basis: 10%;
+    }
+    .am-list-header{
+      background:#ffffff;
+    }
+    .am-icon-md{
+      vertical-align:middle;
+    }
+    .am-list-body .am-badge.am-badge-corner-wrapper{
+      width:100%;
+    }
+    .am-notice-bar-icon{
+      padding-left : 30px;
+      margin-left : 0;
+    }
+    .am-notice-bar-icon + div {
+      padding-left: 10px;
+      margin-left : 0;
+    }
+    .am-list-body .am-badge .am-badge-corner{
+      background-image: -webkit-linear-gradient(0deg, rgba(200,152,69,.6) 30%, #fff 50%, rgba(200,152,69, 0.6) 70%);
+      background-blend-mode: hard-light;
+      background-size:200%;
+      -webkit-animation: shine 1s infinite;
+      @-webkit-keyframes shine {
+        from {background-color: #fff;}
+        to {background-color: #000;}
+      }
+    }
+  }
 }
 
 .@{PrefixCls}-grid{
   &-img{
-    width: 60%;
-    height:60%;
+    width: .9rem;
+    height: .9rem;
     border-radius: 0.2rem;
   }
   &-title{
     color: #888;
     font-size: 0.25rem;
+    margin-top: 0.1rem;
+
   }
 }
 
 .@{PrefixCls}-list{
   &-header {
-
     color : #1284d6;
     font-size : 0.32rem;
-    border-left:8px solid #1284d6;
-    padding-left: 15px;
+    border-left:5px solid #1284d6;
+    vertical-align:middle;
+    padding-left:10px;
   }
   &-body {
     font-size : 0.3rem;
   }
+  &-isNew {
+    color :#ff5b05;
+  }
 }
-.@{PrefixCls}-img-box{
-   position: absolute;
-  top:50%;
-  transform: translateY(-50%);
+
+
+.@{PrefixCls}-head-title{
+  & img {
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+  }
 }
-:global {
-  .am-grid-item{
-    min-height: ~'90px;'
+
+.@{PrefixCls}-notes{
+  :global {
+    & .am-list-body{
+      border : 0;
+      & .am-list-item{
+        min-height: 0.5rem;
+        padding-left: 0.2rem;
+        & .am-list-thumb {
+          margin-right : 0;
+          & img {
+            width: 0.5rem;
+            height: 0.5rem;
+          }
+        }
+        & .am-list-line {
+          min-height: 0.5rem;
+          padding-right: 0.2rem;
+          & .am-list-extra{
+            flex-basis : 10%;
+            font-size : 0.25rem;
+          }
+        }
+      }
+      &:after {
+        border : 0 !important;
+       }
+    }
   }
-  .special-badge .am-list-line .am-list-extra {
-    padding: 0;
-    flex-basis: 10%;
+  &-item{
+  min-height: 0.5rem;
+  :global {
+    & .am-list-line{
+       min-height: 0.5rem;
+       & .am-list-content{
+        font-size : 0.25rem;
+       }
+       &:after {
+        border : 0 !important;
+       }
+    }
   }
-  .am-list-header{
-    background: #fff;
-  }
+}
 }

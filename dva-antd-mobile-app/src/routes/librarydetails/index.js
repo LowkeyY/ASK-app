@@ -4,12 +4,15 @@ import Nav from '../../components/Layout/navbar'
 import CaseContentTitle from '../../components/contenttitle/contenttitle'
 import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
 import WaterMark from '../../components/watermark/index'
-import Discuss from '../discuss/index'
+import BaseLine from '../../components/Layout/baseline'
+import DiscussFoot from '../../components/discussfoot/index'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import styles from './index.less'
+import {getMockData} from 'utils/index'
 function LibraryDetails({loading,dispatch,librarydetails}) {
-  const  {currentPage:{title}} = librarydetails;
+  // const  {currentPage:{title}} = librarydetails;
+  const {title,date,author, dept, fileName, fileUrl,keywords , stype}=getMockData(4)
   const Item = List.Item;
   const Brief = Item.Brief;
   const datas = [];
@@ -17,8 +20,11 @@ function LibraryDetails({loading,dispatch,librarydetails}) {
       dispatch(routerRedux.goBack())
     },
     handleAtt = () => {
-      dispatch(routerRedux.push({ pathname: '/pdfcontent' }))
-    };
+      dispatch(routerRedux.push({ pathname: '/pdfcontent' , query : {fileUrl : fileUrl}}))
+    },
+    goDiscuss=()=>{
+      dispatch(routerRedux.push({ pathname: '/discuss' }))
+    }
   return(
     <div>
       <Nav goBack={goBack} title="文库详情"/>
@@ -26,35 +32,28 @@ function LibraryDetails({loading,dispatch,librarydetails}) {
         <CaseContentTitle casecontenttitle={title}/>
       </div>
       <List><Item><SecrecyAgreement/></Item></List>
-      <Accordion className="my-accordion">
-        <Accordion.Panel header="案例信息">
+  
           <List>
-            <Item extra="莱昂纳多" >编制者</Item>
-            <Item extra="影视部" >部门</Item>
-            <Item extra="故障维修" >所属类型</Item>
-            <Item extra="2017-5-4" >发布时间</Item>
-            <Item extra="98K">关键索引词</Item>
+            <Item extra={author} wrap>编制者</Item>
+            <Item extra={dept} wrap>部门</Item>
+            <Item extra={stype} wrap>所属类型</Item>
+            <Item extra={date} wrap>发布时间</Item>
+            <Item extra={keywords} wrap>关键索引词</Item>
           </List>
-        </Accordion.Panel>
-      </Accordion>
+     
       <WhiteSpace size='sm'/>
-      <Accordion className="my-accordion">
-        <Accordion.Panel header="查看附件">
+     
       <List>
-        <Item arrow="horizontal" onClick={handleAtt}>PDF</Item>
+        <Item arrow="horizontal" onClick={handleAtt.bind(null , fileUrl)}>{fileName}</Item>
       </List>
-        </Accordion.Panel>
-      </Accordion>
+     
       <WhiteSpace size='sm'/>
       <div className={styles['casedetail-content']}>
         <WaterMark/>
-        <Discuss/>
       </div>
       <WhiteSpace size='lg'/>
-      <WhiteSpace size='lg'/>
-      <WhiteSpace size='lg'/>
-      <WhiteSpace size='lg'/>
-      <WhiteSpace size='lg'/>
+      <BaseLine/>
+      <DiscussFoot goDiscuss={goDiscuss}/>
     </div>
   )
 }

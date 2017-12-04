@@ -17,16 +17,18 @@ const ForumAuthor =(props)=>{
               <img className={styles[`${PrefixCls}-author-box-icon`]} src={defaultImgSrc} alt=""/>
               <div className={styles[`${PrefixCls}-author-box-information`]}>
                 <h5 className={styles[`${PrefixCls}-author-box-information-author`]}>
-                  爱喝橙汁的金智媛(大将)
+                  {props.author}
                 </h5>
                 <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>积分:234</p>
-                     <span className={styles[`${PrefixCls}-author-box-information-info-master`]}>楼主</span>
+                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>积分: 234</p>
+                </div>
+                <div className={styles[`${PrefixCls}-author-box-information-info`]}>
+                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>发帖时间: {props.creates}</p>
                 </div>
               </div>
             </div>
             <div className={styles[`${PrefixCls}-author-box-follow-btn`]}>
-              <Tag selected>关注</Tag>
+                <span className={styles[`${PrefixCls}-author-box-information-info-master`]}>楼主</span>
             </div>
           </div>
           <div>

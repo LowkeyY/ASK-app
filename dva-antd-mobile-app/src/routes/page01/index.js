@@ -15,14 +15,12 @@ function Page01({
 	const {leftContentValue = {text : "经验案例" , value : 1} , queryValues } = page01;
 
 	const queryTypes = [
-		{ text : '秒速五厘米', value : 0} ,
-		{ text : '灌篮高手', value : 1} ,
-		{ text : '七龙珠', value : 2} ,
-		{ text : '海贼王', value : 3} ,
-		{ text : '天空之城', value : 4} ,
-		{ text : '萤火之森', value : 5} ,
-		{ text : '你的名字', value : 6} ,
-		{ text : '千与千寻', value : 7},
+		{ text : '交流论坛', value : 1} ,
+		{ text : '经验案例', value : 2} ,
+		{ text : '设备资料', value : 3} ,
+		{ text : '知识文库', value : 4} ,
+		{ text : '热词', value : 5} ,
+		{ text : '通知公告', value : 6} 
 	], leftContent = "";
 
 	const handleFlexItemClick = (value)=> {
@@ -49,7 +47,7 @@ function Page01({
 		froms : '/page01',
 		leftContent : {a : 1},
       	dispatch ,
-      	rightContent : {icon : "/add.svg" , to : "/creates"},
+      	rightContent : {icon : "/header/add.svg" , to : "/creates"},
   	}
   	const demoProps = {
   		froms : '/page01',

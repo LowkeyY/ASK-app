@@ -5,10 +5,11 @@ import { routerRedux } from 'dva/router';
 import DemoList from '../test/list';
 import { NavBar } from 'antd-mobile';
 import styles from './index.less';
+import EditorBox from 'components/editorbox/index'
 
 
 function Creates({
-  location , creates , loading , dispatch 
+  location , creates , loading , dispatch
 }) {
   const {query : {froms = "/"}} = location , PrefixCls = "creates";
   const goBack = ()=> {
@@ -20,12 +21,14 @@ function Creates({
         <NavBar leftContent="返回"
           mode="light"
           onLeftClick={goBack}
-        ></NavBar>
+        >发帖</NavBar>
       </div>
       <div className={styles[`${PrefixCls}-normal`]}>
         <DemoList/>
       </div>
+      <EditorBox/>
     </div>
+
     );
 }
 

@@ -43,28 +43,30 @@ function Page02({
               <div className={styles[`${PrefixCls}-list-sets-title`]}>
                   <span>系统管理员</span>
               </div>
-              <div className={styles[`${PrefixCls}-sign`]}>
-                  <Button type="primary" inline size="small" style={{ marginRight: '4px',background:"#ff8100" }}>签到+1</Button>
-              </div>
             </div>
           </List.Item>
           <List.Item
-            thumb={require("themes/images/message.png")}
+            thumb={require("themes/images/我的消息.png")}
             arrow="horizontal"
             onClick={handleChange.bind(null , "infos" , "我的消息")}
           >我的消息</List.Item>
           <List.Item
-          thumb={require("themes/images/start.png")}
+          thumb={require("themes/images/收藏案例.png")}
           arrow="horizontal"
-          onClick={handleChange.bind(null , "myStores" , "我的收藏案例")}
-        >我的收藏案例</List.Item>
+          onClick={handleChange.bind(null , "myStores" , "我收藏的案例")}
+        >我收藏的案例</List.Item>
+        <List.Item
+          thumb={require("themes/images/收藏文档.png")}
+          arrow="horizontal"
+          onClick={handleChange.bind(null , "myStores" , "我收藏的文档")}
+        >我收藏的文档</List.Item>
           <List.Item
-            thumb={require("themes/images/send.png")}
+            thumb={require("themes/images/已发布.png")}
             arrow="horizontal"
             onClick={handleChange.bind(null , "mySend" , "我发布的帖子")}
           >我发布的帖子</List.Item>
           <List.Item
-            thumb={require("themes/images/reply.png")}
+            thumb={require("themes/images/已回复.png")}
             arrow="horizontal"
             onClick={handleChange.bind(null , "myreply" , "我回复的帖子")}
           >我回复的帖子</List.Item>
