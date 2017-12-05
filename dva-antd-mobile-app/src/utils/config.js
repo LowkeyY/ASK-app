@@ -9,7 +9,7 @@ module.exports = {
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   CORS: [],
-  openPages: ['/login' , '/search' , '/pagecontent' , '/mylist' , '/mysets' , '/creates' , '/pdfcontent','/fontcontrol','/casedetail','/discuss','/librarydetails','/forumdetails'],
+  openPages: ['/login' , '/search' , '/pagecontent' , '/mylist' , '/mysets' , '/creates' , '/pdfcontent','/fontcontrol','/casedetail','/discuss','/librarydetails','/forumdetails','/noticedetail'],
   apiPrefix: '/api/v1',
   APIV1,
   APIV2,

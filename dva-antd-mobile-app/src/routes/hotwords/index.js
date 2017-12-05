@@ -18,25 +18,38 @@ class HotWords extends React.Component {
     this.setState({enter: !this.state.enter,
     });
   }
-
   render() {
     const hotwords = this.props.hotwords,
+      length=hotwords.length,
       icon= '/page/' + (this.state.enter ? 'up.svg':'down.svg'),
-      realHeight= this.state.enter? {height:'80px'}:{height:'100%'},
-      {height}=realHeight,
-      display=(height==='80px')?"none":"block";
-
+      isShowEnd= this.state.enter?'none':'',
+      isShowBtn=length>7?'':'none',
+      isShowSecond=length>3?'':'none';
     return (
-
       <div className={styles[`${PrefixCls}-container`]}>
-        <div className={styles[`${PrefixCls}-container-head`]} style={realHeight}>
+        <div className={styles[`${PrefixCls}-container-head`]} >
           <span className={styles[`${PrefixCls}-container-head-logo`]}>热词</span>
           {
-            hotwords.map(_ => <Hottag title={_.text}/>)
+            hotwords.slice(0,3).map(_ => <Hottag title={_.text} key={_.text}/>)
           }
           <div
+            style={{display:isShowBtn}}
             onClick={this.toggleDropdown}
             className={styles[`${PrefixCls}-dropdownBtn`]}><Icon type={getLocalIcon(icon)} size="xs" /></div>
+        </div>
+        <div
+          style={{display:isShowSecond}}
+          className={styles[`${PrefixCls}-container-second`]}>
+          {
+            hotwords.slice(3,7).map(_ => <Hottag title={_.text} key={_.text}/>)
+          }
+        </div>
+        <div
+          style={{display:isShowEnd}}
+          className={styles[`${PrefixCls}-container-end`]} >
+          {
+            hotwords.slice(7).map(_ => <Hottag title={_.text} key={_.text}/>)
+          }
         </div>
       </div>
     );

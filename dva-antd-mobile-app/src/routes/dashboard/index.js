@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux , Link} from 'dva/router';
-import { Card, WingBlank, WhiteSpace , Grid , NavBar , Icon , SearchBar , Button , List , NoticeBar , Badge} from 'antd-mobile';
+import {  WhiteSpace , Grid , Icon ,  Modal , List , NoticeBar , Badge} from 'antd-mobile';
 import { Layout } from 'components'
 import styles from './index.less';
 import HotWords from '../hotwords/index';
@@ -11,7 +11,7 @@ function Dashboard({
   location , dashboard , loading , dispatch
 }) {
   const {Header , BaseLine} = Layout , PrefixCls = "dashboard" , hotwords = getHotWord() , infoWord = getInfoWord(0);
-
+  const {isModalShow}=dashboard;
   const getData = (nodes , data , counts = 10)=>{
     const datas = [];
     nodes.map((node , index) =>{
@@ -28,19 +28,45 @@ function Dashboard({
       })
     });
     return datas;
-  }
+  };
 
   const handleItemClick = () =>{
      dispatch(routerRedux.push({pathname:"/forumdetails"}));
+  };
+  const showNotice=(e)=>{
+      e.preventDefault();
+    dispatch({
+      type:'dashboard/updateState' , payload : {isModalShow : true}
+    })
+  };
+  const onClose =()=>{
+    dispatch({
+      type:'dashboard/updateState' , payload : {isModalShow : false}
+    })
+  };
+
+  const onWrapTouchStart = (e) => {
+    // fix touch to scroll background page on iOS
+    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+      return;
+    }
+    const pNode = closest(e.target, '.am-modal-content');
+    if (!pNode) {
+      e.preventDefault();
+    }
   }
 
+  const goNoticeDetail=()=>{
+    dispatch(routerRedux.push({pathname:"/noticedetail"}));
+  };
   const packCards = (datas) => {
     return datas.map((data , index) => {
       const isLast = index === datas.length - 1;
       const Item = List.Item;
       const Brief = Item.Brief;
       return (
-        <div style={isLast ? {marginBottom: ".1rem"}:{}}>
+        <div
+          style={isLast ? {marginBottom: ".1rem"}:{}}>
           <WhiteSpace size="sm" />
           <List renderHeader={() => (<div className={styles[`${PrefixCls}-head-title`]}><img src={data.icon} /><span className={styles[`${PrefixCls}-list-header`]}>{data.title}</span></div>)}>
               {
@@ -91,11 +117,34 @@ function Dashboard({
           dispatch(routerRedux.push({pathname:"/typequery"}))}
         }
       />
+        <WhiteSpace size="sm" />
       <HotWords hotwords={hotwords}/>
       <WhiteSpace size="sm" />
-      <NoticeBar mode="link" icon={<Icon type={getLocalIcon("/page/notes.svg")}/>} marqueeProps={{ loop: true, style: { padding: '0 0.15rem' } }}>
+        <div className={styles[`${PrefixCls}-noticebar-container`]}>
+      <NoticeBar
+        onClick={showNotice}
+        mode="link" icon={<Icon type={getLocalIcon("/page/notes.svg")}/>}
+        marqueeProps={{ loop: true, style: { padding: '0 0.15rem' } }}>
         {infoWord.title}
       </NoticeBar>
+          <Modal
+            visible={isModalShow}
+            transparent
+            maskClosable={false}
+            title="公告"
+            footer={[{ text: '关闭',onPress:()=>{onClose()} }]}
+            wrapProps={{ onTouchStart: onWrapTouchStart }}
+          >
+            <div style={{ height: 200, overflowY: 'scroll' }}>
+              {infoWord.title}
+            </div>
+          </Modal>
+          <div
+            onTouchEnd={goNoticeDetail}
+            className={styles[`${PrefixCls}-noticebar-container-btn`]}>
+            <Icon  type={getLocalIcon('/page/more.svg')}/>
+          </div>
+        </div>
       {packCards(getData([currentData] , getMockData(currentData.id)))}
       <BaseLine />
       </div>

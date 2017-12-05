@@ -6,8 +6,6 @@ import DemoList from '../test/list';
 import { NavBar } from 'antd-mobile';
 import styles from './index.less';
 import EditorBox from 'components/editorbox/index'
-
-
 function Creates({
   location , creates , loading , dispatch
 }) {

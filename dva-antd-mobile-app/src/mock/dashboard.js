@@ -1,10 +1,7 @@
 import { color } from '../utils/theme'
-
 const Mock = require('mockjs')
 const config = require('../utils/config')
-
 const { apiPrefix } = config
-
 const Dashboard = Mock.mock({
   'sales|8': [
     {

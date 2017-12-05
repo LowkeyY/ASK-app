@@ -115,6 +115,15 @@ const Routers = function ({ history, app }) {
             }, 'pagecontent')
           }
         },
+        {
+          path: 'noticedetail',
+          getComponent (nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('models/noticedetail'));
+              cb(null, require('routes/noticedetail/'))
+            }, 'noticedetail')
+          }
+        },
        {
           path: 'typequery',
           getComponent (nextState, cb) {

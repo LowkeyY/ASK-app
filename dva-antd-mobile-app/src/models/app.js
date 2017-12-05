@@ -21,7 +21,7 @@ export default {
       },
     ],
     locationQuery: {},
-    pageFontsize : "normal"
+    pageFontsize:"normal"
   },
   subscriptions: {
     setupHistory ({ dispatch, history }) {

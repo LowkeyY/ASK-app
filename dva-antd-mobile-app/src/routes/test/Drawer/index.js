@@ -13,7 +13,7 @@ import childrenStyles from './list.less';
 
 const RadioItem = Radio.RadioItem;
 const nodes = [
-  {value : 1,text:"交流论坛" , items :[ 
+  {value : 1,text:"交流论坛" , items :[
       {
         title :"版块",
         key : "selectTypes",
@@ -230,15 +230,15 @@ class App1 extends React.Component {
       dispatch(routerRedux.push({pathname:"/search" , query : {froms}}))
     } , getTypeList = ()=>{
       switch(this.state.selectSys){
-        case 1 : 
+        case 1 :
           return <Bbsxlist {...demoProps}/>;
         case 2 :
           return <Caselist {...demoProps}/>;
-        case 3 : 
+        case 3 :
           return <Equipmentlist {...demoProps}/>;
         case 4 :
           return <Lorelist {...demoProps}/>;
-        case 5 : 
+        case 5 :
           return <Hotlist {...demoProps}/>;
         case 6 :
           return <Notelist {...demoProps}/>;
