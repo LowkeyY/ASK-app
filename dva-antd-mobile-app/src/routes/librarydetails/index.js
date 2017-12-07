@@ -6,6 +6,8 @@ import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement
 import WaterMark from '../../components/watermark/index'
 import BaseLine from '../../components/Layout/baseline'
 import DiscussFoot from '../../components/discussfoot/index'
+import Discuss from '../discuss/index'
+import InputFoot from 'components/inputfoot/inputfoot'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import styles from './index.less'
@@ -32,7 +34,7 @@ function LibraryDetails({loading,dispatch,librarydetails}) {
         <CaseContentTitle casecontenttitle={title}/>
       </div>
       <List><Item><SecrecyAgreement/></Item></List>
-  
+
           <List>
             <Item extra={author} wrap>编制者</Item>
             <Item extra={dept} wrap>部门</Item>
@@ -40,20 +42,22 @@ function LibraryDetails({loading,dispatch,librarydetails}) {
             <Item extra={date} wrap>发布时间</Item>
             <Item extra={keywords} wrap>关键索引词</Item>
           </List>
-     
+
       <WhiteSpace size='sm'/>
-     
+
       <List>
         <Item arrow="horizontal" onClick={handleAtt.bind(null , fileUrl)}>{fileName}</Item>
       </List>
-     
+
       <WhiteSpace size='sm'/>
       <div className={styles['casedetail-content']}>
-        <WaterMark/>
+        {/*<WaterMark/>*/}
       </div>
+      <Discuss/>
       <WhiteSpace size='lg'/>
       <BaseLine/>
-      <DiscussFoot goDiscuss={goDiscuss}/>
+      {/*<DiscussFoot goDiscuss={goDiscuss}/>*/}
+       <InputFoot/>
     </div>
   )
 }

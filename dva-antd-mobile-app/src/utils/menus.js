@@ -23,7 +23,7 @@ const menus = [{
 	key : 3,
 	icon : "/footer/test.svg",
 	selectedIcon : '/footer/test-o.svg',
-	route : '/page01'
+	route : '/test'
 },{
 	title : "我的",
 	key : 4,

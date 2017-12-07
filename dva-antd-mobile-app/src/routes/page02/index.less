@@ -25,23 +25,44 @@
       font-size: .3rem;
       padding: .25rem;
       display:flex;
-      &-img{
-        width: 1rem;
-        height: 1rem;
-        margin-right: .2rem;
-        border: 1px solid #2b94de;
-        border-radius: .2rem;
-        & img{
-          width:1rem;
+      justify-content: space-between;
+      &-left{
+        display: flex;
+        justify-content: flex-start;
+        &-img{
+          width: 1rem;
           height: 1rem;
+          margin-right: .2rem;
+          border: 1px solid #2b94de;
           border-radius: .2rem;
+          &>img{
+            width:1rem;
+            height: 1rem;
+            border-radius: .2rem;
+          }
+        }
+        &-title{
+          color: white;
+          display: flex;
+          flex-direction:column;
+          justify-content: space-between;
+          &>p{
+            margin: 0;
+          }
+          &-honor{
+            font-size: 24px;
+          }
+
         }
       }
-      &-title{
-        color: white;
-        display: flex;
-        align-items: flex-end;
+      &-right{
+        &-integral{
+          color:#fff;
+          background: #f76731;
+          padding: 5px 10px;
+        }
       }
+
     }
 }
 
@@ -52,6 +73,64 @@
     padding: .1rem;
     background-color: @bgColor;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .@{PrefixCls}-props{
     font-size: .2rem;

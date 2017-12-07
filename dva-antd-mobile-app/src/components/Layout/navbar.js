@@ -10,7 +10,8 @@ const fix={
  position:'fixed',
   top:'0',
   left:'0',
-  zIndex:'2'
+  zIndex:'3',
+  height:'45px'
 };
 
 function Nav(props) {

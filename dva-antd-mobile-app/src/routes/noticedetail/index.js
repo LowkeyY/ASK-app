@@ -4,6 +4,7 @@ import { routerRedux } from 'dva/router';
 import {List,Icon } from 'antd-mobile';
 import Nav from '../../components/Layout/navbar';
 import NoticeItem from './componenet/noticeitem'
+import BaseLine from 'components/Layout/baseline'
 import {getInfoWord} from 'utils'
 const Item = List.Item , Brief = Item.Brief;
 
@@ -19,11 +20,12 @@ function NoticeDetail({noticedetail,loading,dispatch,app}) {
       <List>
         {
           obj.map((i,index)=>
-            <NoticeItem key={i} obj={obj[index]} pageFontsize={pageFontsize}/>
+            <NoticeItem key={index} obj={obj[index]} pageFontsize={pageFontsize}/>
           )
         }
 
       </List>
+      <BaseLine/>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { List } from 'antd-mobile';
+import { List,WhiteSpace} from 'antd-mobile';
 import Nav from '../../components/Layout/navbar'
 import ForumAuthor from '../../components/forumauthor/index'
 import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
@@ -9,6 +9,8 @@ import WaterMark from '../../components/watermark/index'
 import {getMockData} from '../../utils/index'
 import BaseLine from '../../components/Layout/baseline'
 import DiscussFoot from '../../components/discussfoot/index'
+import InputFoot from 'components/inputfoot/inputfoot'
+import Discuss from '../discuss/index'
 import styles from './index.less'
 import pagestyles from 'themes/content.less'
 
@@ -29,13 +31,16 @@ function ForumDetails({loading , dispatch , forumdetails , app }) {
       <Nav goBack={goBack} title="帖子详情"/>
       <List><Item wrap><h5 className={styles[`${Prefixcls}-title`]}>{title}</h5></Item></List>
       <ForumAuthor {...currentData}/>
+      <DiscussFoot {...currentData} />
       <List><Item><SecrecyAgreement/></Item></List>
-      <div className={`page-content ${pageFontsize}`}>
+      <div className={`page-content ${pageFontsize}`} style={{overflow:'hidden'}}>
         <div dangerouslySetInnerHTML={createMarkup()} />
         <WaterMark/>
       </div>
+      <WhiteSpace size='sm'/>
+      <Discuss/>
       <BaseLine/>
-      <DiscussFoot {...currentData} goDiscuss={goDiscuss}/>
+      <InputFoot/>
     </div>
   )
 }

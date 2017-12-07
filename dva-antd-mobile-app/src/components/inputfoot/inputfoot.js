@@ -7,7 +7,7 @@ function InputFoot() {
   return(
     <div>
       <div className={styles[`${PrefixCls}-input-box`]}>
-      <input className={styles[`${PrefixCls}-input`]} type="text" placeholder="添加评论"/>
+        <input className={styles[`${PrefixCls}-input`]} type="text" placeholder="添加评论"/>
         <div className={styles[`${PrefixCls}-sendbtn`]}>
           {/*<Icon key="1" type={getLocalIcon("/pave/sendbtn.svg")} />*/}
           <Button size="small">发送</Button>

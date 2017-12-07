@@ -20,15 +20,15 @@ const ForumAuthor =(props)=>{
                   {props.author}
                 </h5>
                 <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>积分: 234</p>
-                </div>
-                <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>发帖时间: {props.creates}</p>
+                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>头衔: 将军</p>
                 </div>
               </div>
             </div>
-            <div className={styles[`${PrefixCls}-author-box-follow-btn`]}>
+            <div className={styles[`${PrefixCls}-author-box-information-right`]}>
                 <span className={styles[`${PrefixCls}-author-box-information-info-master`]}>楼主</span>
+              <div className={styles[`${PrefixCls}-author-box-information-info`]}>
+                <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}> {props.creates}</p>
+              </div>
             </div>
           </div>
           <div>

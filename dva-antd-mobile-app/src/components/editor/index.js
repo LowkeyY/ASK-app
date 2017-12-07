@@ -1,6 +1,8 @@
 import React from 'react';
+import { Button, WhiteSpace, WingBlank } from 'antd-mobile';
 import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, } from 'draft-js';
 import Immutable from 'immutable';
+import EditorContainer from 'components/editorbox/index'
 import "draft-js/dist/Draft.css";
 import styles from './index.less'
 const blockRenderMap = Immutable.Map({
@@ -29,7 +31,7 @@ class MyEditor extends React.Component {
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.logState = () => {
+    this.logState = () => {//发送数据
       const content = this.state.editorState.getCurrentContent();
       console.log(convertToRaw(content));
     };
@@ -37,7 +39,7 @@ class MyEditor extends React.Component {
 
     this.addAudio = this._addAudio.bind(this);
     this.addImage = this._addImage.bind(this);
-    this.addVideo = this._addVideo.bind(this);
+    // this.addVideo = this._addVideo.bind(this);
     this.confirmMedia = this._confirmMedia.bind(this);
     this.pasteMedia = this._pasteImage.bind(this);
     this.onChange = (editorState) => this.setState({ editorState });
@@ -154,9 +156,9 @@ class MyEditor extends React.Component {
     this._promptForMedia('image');
   }
 
-  _addVideo() {
-    this._promptForMedia('video');
-  }
+  // _addVideo() {
+  //   this._promptForMedia('video');
+  // }
 
   render() {
     const {editorState} = this.state;
@@ -190,29 +192,29 @@ class MyEditor extends React.Component {
     }
     return (
       <div style={styles2.root}>
-        <div style={{ marginBottom: 10 }}>
-          Use the buttons to add audio, image, or video.
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          Here are some local examples that can be entered as a URL:
-          <ul>
-            <li>media.mp3</li>
-            <li>media.png</li>
-            <li>media.mp4</li>
-          </ul>
-        </div>
-        <div style={styles2.buttons}>
-          <button onMouseDown={this.addAudio} style={{ marginRight: 10 }}>
-            Add Audio
-          </button>
-          <button onMouseDown={this.addImage} style={{ marginRight: 10 }}>
-            Add Image
-          </button>
-          <button onMouseDown={this.addVideo} style={{ marginRight: 10 }}>
-            Add Video
-          </button>
-        </div>
-        {urlInput}
+        {/*<div style={{ marginBottom: 10 }}>*/}
+          {/*Use the buttons to add audio, image, or video.*/}
+        {/*</div>*/}
+        {/*<div style={{ marginBottom: 10 }}>*/}
+          {/*Here are some local examples that can be entered as a URL:*/}
+          {/*<ul>*/}
+            {/*<li>media.mp3</li>*/}
+            {/*<li>media.png</li>*/}
+            {/*<li>media.mp4</li>*/}
+          {/*</ul>*/}
+        {/*</div>*/}
+        {/*<div style={styles2.buttons}>*/}
+          {/*<button onMouseDown={this.addAudio} style={{ marginRight: 10 }}>*/}
+            {/*Add Audio*/}
+          {/*</button>*/}
+          {/*<button onMouseDown={this.addImage} style={{ marginRight: 10 }}>*/}
+            {/*Add Image*/}
+          {/*</button>*/}
+          {/*<button onMouseDown={this.addVideo} style={{ marginRight: 10 }}>*/}
+            {/*Add Video*/}
+          {/*</button>*/}
+        {/*</div>*/}
+        {/*{urlInput}*/}
         <div className={styles["RichEditor-root"]}>
           <BlockStyleControls
             editorState={editorState}
@@ -235,19 +237,17 @@ class MyEditor extends React.Component {
               handleDroppedFiles={this.pasteMedia}
               onChange={this.onChange}
               onTab={this.onTab}
-              placeholder="Tell a story..."
+              placeholder="请输入..."
               ref='editor'
               spellCheck={true}
               onPaste={(value) => (console.log('paste', value))}
             />
           </div>
         </div>
-        <input
-          onClick={this.logState}
-          style={styles2.button}
-          type="button"
-          value="Log State"
-        />
+        {/*<Button type="primary" inline size="small" style={{ marginRight: '4px' }}*/}
+                {/*onClick={this.logState}*/}
+        {/*>发送</Button>*/}
+        <EditorContainer />
       </div>
     );
   }
@@ -259,6 +259,7 @@ const styleMap = {
     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
     fontSize: 16,
     padding: 2,
+    width:'100%'
   },
 };
 
@@ -290,7 +291,6 @@ class StyleButton extends React.Component {
     if (this.props.active) {
       className += ' ' + styles['RichEditor-activeButton'];
     }
-
     return (
       <span className={className} onMouseDown={this.onToggle}>
                 {this.props.label}
@@ -298,13 +298,12 @@ class StyleButton extends React.Component {
     );
   }
 }
-
 const BLOCK_TYPES = [
   { label: 'H1', style: 'header-one' },
-  { label: 'H2', style: 'header-two' },
+  // { label: 'H2', style: 'header-two' },
   { label: 'H3', style: 'header-three' },
-  { label: 'H4', style: 'header-four' },
-  { label: 'H5', style: 'header-five' },
+  // { label: 'H4', style: 'header-four' },
+  // { label: 'H5', style: 'header-five' },
   { label: 'H6', style: 'header-six' },
   { label: 'Blockquote', style: 'blockquote' },
   { label: 'left', style: 'left' },
@@ -382,9 +381,9 @@ const Image = (props) => {
   return <img src={props.src} style={styles2.media} />;
 };
 
-const Video = (props) => {
-  return <iframe style={styles2.media} src={props.src} frameBorder="0" allowFullScreen></iframe>;
-};
+// const Video = (props) => {
+//   return <iframe style={styles2.media} src={props.src} frameBorder="0" allowFullScreen></iframe>;
+// };
 
 const Media = (props) => {
   const entity = Entity.get(props.block.getEntityAt(0));
@@ -406,8 +405,8 @@ const Media = (props) => {
 const styles2 = {
   root: {
     fontFamily: '\'Georgia\', serif',
-    padding: 20,
-    width: 600,
+    padding: 0,
+    width: '100%',
   },
   buttons: {
     marginBottom: 10,
@@ -423,7 +422,7 @@ const styles2 = {
   editor: {
     border: '1px solid #ccc',
     cursor: 'text',
-    minHeight: 80,
+    minHeight: 200,
     padding: 10,
   },
   button: {

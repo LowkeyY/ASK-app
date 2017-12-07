@@ -5,8 +5,10 @@ import CaseContentTitle from '../../components/contenttitle/contenttitle'
 import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
 import WaterMark from '../../components/watermark/index'
 import BaseLine from '../../components/Layout/baseline'
-import DiscussFoot from '../../components/discussfoot/index'
+// import DiscussFoot from '../../components/discussfoot/index'
+import Discuss from '../discuss/index'
 import { connect } from 'dva';
+import InputFoot from 'components/inputfoot/inputfoot'
 import { routerRedux } from 'dva/router';
 import styles from './index.less'
 import pagecontentstyles from 'themes/content.less'
@@ -34,6 +36,7 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
       <div>
         <CaseContentTitle casecontenttitle={title}/>
       </div>
+      {/*<DiscussFoot />*/}
       <List><Item><SecrecyAgreement/></Item></List>
       <Accordion className="my-accordion">
         <Accordion.Panel header="案例信息">
@@ -58,12 +61,14 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
         </Accordion.Panel>
       </Accordion>
       <WhiteSpace size='sm'/>
-      <div className={`page-content ${pageFontsize}`}>
+      <div className={`page-content ${pageFontsize}`} style={{overflow:'hidden'}}>
         <div dangerouslySetInnerHTML={createMarkup()} />
         <WaterMark/>
       </div>
+      <WhiteSpace size='sm'/>
+      <Discuss />
       <BaseLine/>
-      <DiscussFoot goDiscuss={goDiscuss}/>
+      <InputFoot/>
     </div>
   )
 }

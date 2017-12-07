@@ -26,10 +26,6 @@ const DiscussFoot =(props)=>{
                 <span>收藏文档</span>
               </Tag>*/}
        </div>
-      <div className={styles[`${PrefixCls}-box-btns-discuss`]} onClick={props.goDiscuss}>
-        <Icon type="info-circle" size="xs" />
-        <span>评论({props.replys || 0})</span>
-      </div>
       </div>
     </div>
   )

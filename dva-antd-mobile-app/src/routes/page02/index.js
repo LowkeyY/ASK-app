@@ -37,11 +37,19 @@ function Page02({
             onClick={handleChange.bind(null , "sets")}
           >
             <div className={styles[`${PrefixCls}-list-sets`]}>
-              <div className={styles[`${PrefixCls}-list-sets-img`]}>
+              <div className={styles[`${PrefixCls}-list-sets-left`]}>
+              <div className={styles[`${PrefixCls}-list-sets-left-img`]}>
                   <img src={defaultImgSrc} alt="icon" />
               </div>
-              <div className={styles[`${PrefixCls}-list-sets-title`]}>
-                  <span>系统管理员</span>
+              <div className={styles[`${PrefixCls}-list-sets-left-title`]}>
+                  <p>系统管理员</p>
+                  <p className={styles[`${PrefixCls}-list-sets-left-title-honor`]}>头衔 <span>将军</span></p>
+              </div>
+              </div>
+              <div className={styles[`${PrefixCls}-list-sets-right`]}>
+              <div className={styles[`${PrefixCls}-list-sets-right-integral`]}>
+                  积分 <span>235</span>
+              </div>
               </div>
             </div>
           </List.Item>
