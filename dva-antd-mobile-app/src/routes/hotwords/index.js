@@ -21,7 +21,7 @@ class HotWords extends React.Component {
   render() {
     const hotwords = this.props.hotwords,
       length=hotwords.length,
-      icon= '/page/' + (this.state.enter ? 'up.svg':'down.svg'),
+      icon= '/page/' + (this.state.enter ? 'dropup.svg':'dropdown.svg'),
       isShowEnd= this.state.enter?'none':'',
       isShowBtn=length>7?'':'none',
       isShowSecond=length>3?'':'none';

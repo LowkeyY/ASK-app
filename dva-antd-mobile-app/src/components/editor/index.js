@@ -1,15 +1,13 @@
 import React from 'react';
-import { Button, WhiteSpace, WingBlank } from 'antd-mobile';
+import {Button} from 'antd-mobile';
 import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, } from 'draft-js';
 import Immutable from 'immutable';
-import EditorContainer from 'components/editorbox/index'
+import MediaControls from './component/mediabox'
+import InlineStyleControls from './component/inlinebox'
+import BlockStyleControls from './component/blockbox'
 import "draft-js/dist/Draft.css";
 import styles from './index.less'
 const blockRenderMap = Immutable.Map({
-  'header-two': {
-    element: 'h2',
-    aliasedElements: ['p'],
-  },
   'left': {
     element: 'div',
   },
@@ -26,6 +24,7 @@ class MyEditor extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(),
       showURLInput: false,
+      showEditor:true,//控制display
       url: '',
       urlType: '',
     };
@@ -33,13 +32,11 @@ class MyEditor extends React.Component {
     this.focus = () => this.refs.editor.focus();
     this.logState = () => {//发送数据
       const content = this.state.editorState.getCurrentContent();
+      alert(convertToRaw(content).blocks[0].text);
       console.log(convertToRaw(content));
     };
     this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
-
-    this.addAudio = this._addAudio.bind(this);
     this.addImage = this._addImage.bind(this);
-    // this.addVideo = this._addVideo.bind(this);
     this.confirmMedia = this._confirmMedia.bind(this);
     this.pasteMedia = this._pasteImage.bind(this);
     this.onChange = (editorState) => this.setState({ editorState });
@@ -148,21 +145,13 @@ class MyEditor extends React.Component {
     });
   }
 
-  _addAudio() {
-    this._promptForMedia('audio');
-  }
-
   _addImage() {
     this._promptForMedia('image');
   }
 
-  // _addVideo() {
-  //   this._promptForMedia('video');
-  // }
-
   render() {
     const {editorState} = this.state;
-
+    const  display=this.props.isShowEditor?{display:'block'}:{display:'none'};
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = styles['RichEditor-editor'];
@@ -191,40 +180,9 @@ class MyEditor extends React.Component {
         </div>;
     }
     return (
-      <div style={styles2.root}>
-        {/*<div style={{ marginBottom: 10 }}>*/}
-          {/*Use the buttons to add audio, image, or video.*/}
-        {/*</div>*/}
-        {/*<div style={{ marginBottom: 10 }}>*/}
-          {/*Here are some local examples that can be entered as a URL:*/}
-          {/*<ul>*/}
-            {/*<li>media.mp3</li>*/}
-            {/*<li>media.png</li>*/}
-            {/*<li>media.mp4</li>*/}
-          {/*</ul>*/}
-        {/*</div>*/}
-        {/*<div style={styles2.buttons}>*/}
-          {/*<button onMouseDown={this.addAudio} style={{ marginRight: 10 }}>*/}
-            {/*Add Audio*/}
-          {/*</button>*/}
-          {/*<button onMouseDown={this.addImage} style={{ marginRight: 10 }}>*/}
-            {/*Add Image*/}
-          {/*</button>*/}
-          {/*<button onMouseDown={this.addVideo} style={{ marginRight: 10 }}>*/}
-            {/*Add Video*/}
-          {/*</button>*/}
-        {/*</div>*/}
-        {/*{urlInput}*/}
+      <div style={display} >
         <div className={styles["RichEditor-root"]}>
-          <BlockStyleControls
-            editorState={editorState}
-            onToggle={this.toggleBlockType}
-          />
-          <InlineStyleControls
-            editorState={editorState}
-            onToggle={this.toggleInlineStyle}
-          />
-          <div className={className} onClick={this.focus}>
+          <div className={className} onClick={this.focus} >
             <Editor
               blockStyleFn={getBlockStyle}
               blockRendererFn={mediaBlockRenderer}
@@ -243,11 +201,27 @@ class MyEditor extends React.Component {
               onPaste={(value) => (console.log('paste', value))}
             />
           </div>
+          <div className={styles["RichEditor-control"]}>
+            <div className={styles["RichEditor-control-box"]}>
+              <MediaControls/>
+              <InlineStyleControls
+                editorState={editorState}
+                onToggle={this.toggleInlineStyle}
+              />
+              <BlockStyleControls
+                editorState={editorState}
+                onToggle={this.toggleBlockType}
+              />
+            </div>
+            <div className={styles["RichEditor-control-sendbtn"]}>
+              <Button
+                type="primary" inline size="small"
+                style={{padding:'5px 5px',lineHeight:'1.6em'}}
+                onTouchEnd={this.logState}
+                >发送</Button>
+            </div>
+          </div>
         </div>
-        {/*<Button type="primary" inline size="small" style={{ marginRight: '4px' }}*/}
-                {/*onClick={this.logState}*/}
-        {/*>发送</Button>*/}
-        <EditorContainer />
       </div>
     );
   }
@@ -257,7 +231,7 @@ const styleMap = {
   CODE: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-    fontSize: 16,
+    fontSize: 50,
     padding: 2,
     width:'100%'
   },
@@ -265,8 +239,6 @@ const styleMap = {
 
 function getBlockStyle(block) {
   switch (block.getType()) {
-    case 'blockquote':
-      return styles['RichEditor-blockquote'];
     case 'left':
       return styles['align-left'];
     case 'center':
@@ -276,91 +248,6 @@ function getBlockStyle(block) {
     default: return null;
   }
 }
-
-class StyleButton extends React.Component {
-  constructor() {
-    super();
-    this.onToggle = (e) => {
-      e.preventDefault();
-      this.props.onToggle(this.props.style);
-    };
-  }
-
-  render() {
-    let className = styles['RichEditor-styleButton'];
-    if (this.props.active) {
-      className += ' ' + styles['RichEditor-activeButton'];
-    }
-    return (
-      <span className={className} onMouseDown={this.onToggle}>
-                {this.props.label}
-            </span>
-    );
-  }
-}
-const BLOCK_TYPES = [
-  { label: 'H1', style: 'header-one' },
-  // { label: 'H2', style: 'header-two' },
-  { label: 'H3', style: 'header-three' },
-  // { label: 'H4', style: 'header-four' },
-  // { label: 'H5', style: 'header-five' },
-  { label: 'H6', style: 'header-six' },
-  { label: 'Blockquote', style: 'blockquote' },
-  { label: 'left', style: 'left' },
-  { label: 'right', style: 'right' },
-  { label: 'center', style: 'center' },
-  // { label: 'UL', style: 'unordered-list-item' },
-  // { label: 'OL', style: 'ordered-list-item' },
-  // { label: 'Code Block', style: 'code-block' },
-];
-
-const BlockStyleControls = (props) => {
-  const {editorState} = props;
-  const selection = editorState.getSelection();
-  const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
-
-  return (
-    <div className={styles["RichEditor-controls"]}>
-      {BLOCK_TYPES.map((type) =>
-        <StyleButton
-          key={type.label}
-          active={type.style === blockType}
-          label={type.label}
-          onToggle={props.onToggle}
-          style={type.style}
-        />
-      )}
-    </div>
-  );
-};
-
-var INLINE_STYLES = [
-  { label: 'Bold', style: 'BOLD' },
-  { label: 'Italic', style: 'ITALIC' },
-  { label: 'Underline', style: 'UNDERLINE' },
-  { label: 'Monospace', style: 'CODE' },
-];
-
-const InlineStyleControls = (props) => {
-  var currentStyle = props.editorState.getCurrentInlineStyle();
-  return (
-    <div className={styles["RichEditor-controls"]}>
-      {INLINE_STYLES.map(type =>
-        <StyleButton
-          key={type.label}
-          active={currentStyle.has(type.style)}
-          label={type.label}
-          onToggle={props.onToggle}
-          style={type.style}
-        />
-      )}
-    </div>
-  );
-};
-
 
 function mediaBlockRenderer(block) {
   if (block.getType() === 'atomic') {
@@ -373,17 +260,11 @@ function mediaBlockRenderer(block) {
   return null;
 }
 
-const Audio = (props) => {
-  return <audio controls src={props.src} style={styles2.media} />;
-};
 
 const Image = (props) => {
   return <img src={props.src} style={styles2.media} />;
 };
 
-// const Video = (props) => {
-//   return <iframe style={styles2.media} src={props.src} frameBorder="0" allowFullScreen></iframe>;
-// };
 
 const Media = (props) => {
   const entity = Entity.get(props.block.getEntityAt(0));
@@ -433,7 +314,6 @@ const styles2 = {
     width: '100%',
   },
 };
-
 
 MyEditor.propTypes = {
 };

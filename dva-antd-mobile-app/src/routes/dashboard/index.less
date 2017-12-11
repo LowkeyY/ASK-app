@@ -32,16 +32,6 @@
       padding-left: 10px;
       margin-left : 0;
     }
-    .am-list-body .am-badge .am-badge-corner{
-      background-image: -webkit-linear-gradient(0deg, rgba(200,152,69,.6) 30%, #fff 50%, rgba(200,152,69, 0.6) 70%);
-      background-blend-mode: hard-light;
-      background-size:200%;
-      -webkit-animation: shine 1s infinite;
-      @-webkit-keyframes shine {
-        from {background-color: #fff;}
-        to {background-color: #000;}
-      }
-    }
   }
 }
 
@@ -63,9 +53,12 @@
   &-header {
     color : #1284d6;
     font-size : 0.32rem;
-    border-left:5px solid #1284d6;
     vertical-align:middle;
     padding-left:10px;
+  }
+  &-more{
+    color: #1284d6;
+    float: right;
   }
   &-body {
     font-size : 0.3rem;

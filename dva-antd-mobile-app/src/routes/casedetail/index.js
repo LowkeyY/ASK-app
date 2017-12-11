@@ -5,6 +5,7 @@ import CaseContentTitle from '../../components/contenttitle/contenttitle'
 import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
 import WaterMark from '../../components/watermark/index'
 import BaseLine from '../../components/Layout/baseline'
+import MyEditor from 'components/editor/index'
 // import DiscussFoot from '../../components/discussfoot/index'
 import Discuss from '../discuss/index'
 import { connect } from 'dva';
@@ -29,7 +30,8 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
   goDiscuss=()=>{
     dispatch(routerRedux.push({ pathname: '/discuss' }))
   },
-  createMarkup=()=> { return {__html: content}; };
+  createMarkup=()=> { return {__html: content}; }
+
   return(
     <div>
       <Nav goBack={goBack} title=" 案例详情"/>
@@ -37,7 +39,7 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
         <CaseContentTitle casecontenttitle={title}/>
       </div>
       {/*<DiscussFoot />*/}
-      <List><Item><SecrecyAgreement/></Item></List>
+      <List style={{position:'relative',zIndex:1}}><Item><SecrecyAgreement/></Item></List>
       <Accordion className="my-accordion">
         <Accordion.Panel header="案例信息">
       <List>
@@ -68,7 +70,8 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
       <WhiteSpace size='sm'/>
       <Discuss />
       <BaseLine/>
-      <InputFoot/>
+      <InputFoot />
+      <MyEditor isShowEditor={true}/>
     </div>
   )
 }

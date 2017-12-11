@@ -3,7 +3,8 @@ import styles from './inputfoot.less'
 import { Button, Icon} from 'antd-mobile';
 import { getLocalIcon } from 'utils'
 const PrefixCls='inputfoot';
-function InputFoot() {
+function InputFoot(props) {
+
   return(
     <div>
       <div className={styles[`${PrefixCls}-input-box`]}>

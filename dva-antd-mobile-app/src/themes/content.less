@@ -18,13 +18,32 @@
 			font-size: 30px !important;
 		}
 	}
-	.@{PrefixCls}.small{
+  .@{PrefixCls}.small{
+    & *{
+      line-height:2em;
+      font-size: 28px !important;
+    }
+    & p{
+      padding: 15px 0 0;
+    }
+  }
+  .@{PrefixCls}.min{
+    & *{
+      line-height:2em;
+      font-size: 22px !important;
+    }
+    & p{
+      padding:20px 0 0;
+    }
+  }
+	.@{PrefixCls}.max{
 		& *{
-			line-height:1em;
-			font-size: 20px !important;
+			line-height:2em;
+			font-size: 50px !important;
 		}
 		& p{
-			padding: 15px 0 0;
+      line-height: 2em;
+			padding: 40px 0 0;
 		}
 	}
 	.@{PrefixCls}.large{

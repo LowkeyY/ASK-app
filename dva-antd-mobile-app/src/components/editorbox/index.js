@@ -57,56 +57,56 @@ class  EditorBox extends React.Component{
     })
   }
   render(){
-    const active={
-      background:'#888'
-    },
-    style=this.state.isActive?active:{};
     return(
       <EditorContainer>
+        <Photo />
+        <Camera />
+        <Emjoy />
         <Bold />
         <Italic />
         <TextCenter />
         <Justify />
-        <Emjoy />
-        <Photo />
-        <Camera />
         {/*<div*/}
-          {/*onTouchStart={this.ActiveBold}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/加粗.svg')}/>*/}
+        {/*onTouchStart={this.ActiveBold}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/加粗.svg')}/>*/}
         {/*</div>*/}
         {/*<div*/}
-          {/*onTouchStart={this.ActiveItalic}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/斜体.svg')}/>*/}
+        {/*onTouchStart={this.ActiveItalic}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/斜体.svg')}/>*/}
         {/*</div>*/}
         {/*<div*/}
-          {/*onTouchStart={this.activeCenter}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/居中.svg')}/>*/}
+        {/*onTouchStart={this.activeCenter}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/居中.svg')}/>*/}
         {/*</div>*/}
         {/*<div*/}
-          {/*onTouchStart={this.activeJustify}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/两端对齐.svg')}/>*/}
+        {/*onTouchStart={this.activeJustify}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/两端对齐.svg')}/>*/}
         {/*</div>*/}
         {/*<div*/}
-          {/*onTouchStart={this.activeE}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/表情.svg')}/>*/}
+        {/*onTouchStart={this.activeE}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/表情.svg')}/>*/}
         {/*</div>*/}
         {/*<div*/}
-          {/*onTouchStart={this.activePhoto}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/上传图片.svg')}/>*/}
+        {/*onTouchStart={this.activePhoto}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/上传图片.svg')}/>*/}
         {/*</div>*/}
         {/*<div*/}
-          {/*onTouchStart={this.activeCamera}*/}
-          {/*className={styles[`${Css}-box-item`]}>*/}
-          {/*<Icon type={getLocalIcon('/editor/相机.svg')}/>*/}
+        {/*onTouchStart={this.activeCamera}*/}
+        {/*className={styles[`${Css}-box-item`]}>*/}
+        {/*<Icon type={getLocalIcon('/editor/相机.svg')}/>*/}
         {/*</div>*/}
-    </EditorContainer>
+      </EditorContainer>
     )
+    const active={
+      background:'#888'
+    },
+    style=this.state.isActive?active:{};
   }
 
 }
