@@ -21,7 +21,9 @@ export default {
       },
     ],
     locationQuery: {},
-    pageFontsize:"normal"
+    pageFontsize:"normal",
+    isShowEditor:false,
+    isShowInputFoot:true
   },
   subscriptions: {
     setupHistory ({ dispatch, history }) {

@@ -1,6 +1,7 @@
 import React from 'react';
-import {Button} from 'antd-mobile';
-import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, } from 'draft-js';
+import {Button,Icon} from 'antd-mobile';
+import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState} from 'draft-js';
+import {getLocalIcon} from 'utils'
 import Immutable from 'immutable';
 import MediaControls from './component/mediabox'
 import InlineStyleControls from './component/inlinebox'
@@ -23,8 +24,8 @@ class MyEditor extends React.Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      showURLInput: false,
       showEditor:true,//控制display
+      disabled:true,
       url: '',
       urlType: '',
     };
@@ -148,7 +149,12 @@ class MyEditor extends React.Component {
   _addImage() {
     this._promptForMedia('image');
   }
-
+  hiddenEditor=()=>{
+    console.log(this.props)
+   this.props.dispatch({
+      type:'app/updateState' , payload : {isShowInputFoot : true,isShowEditor:false}
+    })
+  }
   render() {
     const {editorState} = this.state;
     const  display=this.props.isShowEditor?{display:'block'}:{display:'none'};
@@ -162,32 +168,18 @@ class MyEditor extends React.Component {
       }
     }
 
-    let urlInput;
-    if (this.state.showURLInput) {
-      urlInput =
-        <div style={styles2.urlInputContainer}>
-          <input
-            onChange={this.onURLChange}
-            ref="url"
-            style={styles2.urlInput}
-            type="text"
-            value={this.state.urlValue}
-            onKeyDown={this.onURLInputKeyDown}
-          />
-          <button onMouseDown={this.confirmMedia}>
-            Confirm
-          </button>
-        </div>;
-    }
     return (
-      <div style={display} >
+      <div style={display} className={styles["RichEditor-box"]}>
+        <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
+          <Icon type={getLocalIcon('/editor/关闭.svg')}/>
+        </div>
         <div className={styles["RichEditor-root"]}>
           <div className={className} onClick={this.focus} >
             <Editor
               blockStyleFn={getBlockStyle}
               blockRendererFn={mediaBlockRenderer}
               blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}
-              customStyleMap={styleMap}
+
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
               handlePastedText={(value) => (console.log('paste', value))}
@@ -215,6 +207,7 @@ class MyEditor extends React.Component {
             </div>
             <div className={styles["RichEditor-control-sendbtn"]}>
               <Button
+                disabled={!contentState.hasText()}
                 type="primary" inline size="small"
                 style={{padding:'5px 5px',lineHeight:'1.6em'}}
                 onTouchEnd={this.logState}
@@ -225,17 +218,11 @@ class MyEditor extends React.Component {
       </div>
     );
   }
+  static defaultProps={
+    isShowEditor:false
+  };
 }
 
-const styleMap = {
-  CODE: {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-    fontSize: 50,
-    padding: 2,
-    width:'100%'
-  },
-};
 
 function getBlockStyle(block) {
   switch (block.getType()) {
@@ -313,8 +300,10 @@ const styles2 = {
   media: {
     width: '100%',
   },
-};
+}
+
 
 MyEditor.propTypes = {
-};
+}
+
 export default MyEditor;

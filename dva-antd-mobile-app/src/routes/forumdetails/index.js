@@ -8,6 +8,7 @@ import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement
 import WaterMark from '../../components/watermark/index'
 import {getMockData} from '../../utils/index'
 import BaseLine from '../../components/Layout/baseline'
+import MyEditor from 'components/editor/index'
 import DiscussFoot from '../../components/discussfoot/index'
 import InputFoot from 'components/inputfoot/inputfoot'
 import Discuss from '../discuss/index'
@@ -16,16 +17,17 @@ import pagestyles from 'themes/content.less'
 
 const currentData = getMockData(1);
 const {title,date,author,dept,content,wtype,stype,keywords,snum,isnew} = currentData;
+
 const Item = List.Item;
 function ForumDetails({loading , dispatch , forumdetails , app }) {
-  const {pageFontsize} = app;
+  const {pageFontsize} = app,Prefixcls ='forumdetails';
+  const { isShowEditor,isShowInputFoot} = app;
   const goBack = ()=> {
     dispatch(routerRedux.goBack())
   }, goDiscuss=()=>{
     dispatch(routerRedux.push({ pathname: '/discuss' }))
   },
     createMarkup=()=> { return {__html: content}; };
-  const Prefixcls ='forumdetails';
   return(
     <div>
       <Nav goBack={goBack} title="帖子详情"/>
@@ -39,8 +41,9 @@ function ForumDetails({loading , dispatch , forumdetails , app }) {
       </div>
       <WhiteSpace size='sm'/>
       <Discuss/>
-      <BaseLine/>
-      <InputFoot/>
+      <BaseLine />
+      <InputFoot isShowInputFoot={isShowInputFoot} dispatch={dispatch}/>
+      <MyEditor isShowEditor={isShowEditor} dispatch={dispatch}/>
     </div>
   )
 }

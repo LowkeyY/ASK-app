@@ -8,13 +8,15 @@ import BaseLine from '../../components/Layout/baseline'
 import DiscussFoot from '../../components/discussfoot/index'
 import Discuss from '../discuss/index'
 import InputFoot from 'components/inputfoot/inputfoot'
+import MyEditor from 'components/editor/index'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import styles from './index.less'
 import {getMockData} from 'utils/index'
-function LibraryDetails({loading,dispatch,librarydetails}) {
+function LibraryDetails({loading,dispatch,librarydetails,app}) {
   // const  {currentPage:{title}} = librarydetails;
   const {title,date,author, dept, fileName, fileUrl,keywords , stype}=getMockData(4)
+  const { isShowEditor,isShowInputFoot} = app;
   const Item = List.Item;
   const Brief = Item.Brief;
   const datas = [];
@@ -57,9 +59,10 @@ function LibraryDetails({loading,dispatch,librarydetails}) {
       <WhiteSpace size='lg'/>
       <BaseLine/>
       {/*<DiscussFoot goDiscuss={goDiscuss}/>*/}
-       <InputFoot/>
+      <InputFoot isShowInputFoot={isShowInputFoot} dispatch={dispatch}/>
+      <MyEditor isShowEditor={isShowEditor} dispatch={dispatch}/>
     </div>
   )
 }
 
-export default connect(({ librarydetails, loading }) => ({ librarydetails, loading }))(LibraryDetails);
+export default connect(({ librarydetails, loading,app }) => ({ librarydetails, loading,app }))(LibraryDetails);

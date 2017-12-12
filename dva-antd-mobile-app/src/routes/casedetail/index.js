@@ -14,10 +14,11 @@ import { routerRedux } from 'dva/router';
 import styles from './index.less'
 import pagecontentstyles from 'themes/content.less'
 import {getMockData} from 'utils/index'
-function CaseDetail({loading,dispatch,casedetail , app}) {
+function CaseDetail({loading,dispatch,casedetail,app}) {
   const { title, date, author, dept, content, wtype, stype, keywords, snum, isnew } = getMockData(2);
   const { pageFontsize } = app;
-  // const { currentPage: { content, title, imgs } } = casedetail;
+  const { isShowEditor,isShowInputFoot} = app;
+  const prop={isShowEditor,dispatch}
   const Item = List.Item;
   const Brief = Item.Brief;
   const datas = [];
@@ -31,7 +32,6 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
     dispatch(routerRedux.push({ pathname: '/discuss' }))
   },
   createMarkup=()=> { return {__html: content}; }
-
   return(
     <div>
       <Nav goBack={goBack} title=" 案例详情"/>
@@ -70,8 +70,8 @@ function CaseDetail({loading,dispatch,casedetail , app}) {
       <WhiteSpace size='sm'/>
       <Discuss />
       <BaseLine/>
-      <InputFoot />
-      <MyEditor isShowEditor={true}/>
+      <InputFoot isShowInputFoot={isShowInputFoot} dispatch={dispatch}/>
+      <MyEditor isShowEditor={isShowEditor} dispatch={dispatch} />
     </div>
   )
 }

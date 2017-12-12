@@ -5,7 +5,8 @@ export default modelExtend(pageModel, {
   state: {
     currentPage : {
       title : "正铲挖掘机与反铲挖掘机的区别",
-    }
-
+    },
+    isShowEditor:false,
+    isShowInputFoot:true
   }
 })

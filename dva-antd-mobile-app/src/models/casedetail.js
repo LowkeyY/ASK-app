@@ -8,7 +8,8 @@ export default modelExtend(pageModel, {
       title : "共享手机现身昆明:年租金近4000元不如直接买一台",
       comments : [],
       imgs : ['http://i0.cnfolimg.com/uploads/img/25821/abig_2_201709121014061303.jpeg']
-    }
-
-  }
+    },
+    isShowEditor:false,
+    isShowInputFoot:true
+  },
 })

@@ -19,6 +19,7 @@ function Discuss ({dispatch}) {
 
                 </div>
                 <p className={styles['discuss-head-text']}>
+                  <a id="discuss"></a>
                   评论
                   <span className={styles['discuss-head-text-total']}>28</span>
                 </p>
