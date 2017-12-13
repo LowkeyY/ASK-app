@@ -43,7 +43,7 @@ function Page02({
               </div>
               <div className={styles[`${PrefixCls}-list-sets-left-title`]}>
                   <p>系统管理员</p>
-                  <p className={styles[`${PrefixCls}-list-sets-left-title-honor`]}>头衔 <span>将军</span></p>
+                  <p className={styles[`${PrefixCls}-list-sets-left-title-honor`]}>身份 <span>将军</span></p>
               </div>
               </div>
               <div className={styles[`${PrefixCls}-list-sets-right`]}>

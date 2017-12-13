@@ -92,6 +92,11 @@ class Bbsxinfo extends React.Component {
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
       });
+      if(this.state.dataSource.length > 20){
+        this.setState({
+          hasMore: false,
+        });
+      }
     }, 1000);
   };
   handleItemClick = () =>{
@@ -127,9 +132,14 @@ class Bbsxinfo extends React.Component {
             <Brief>{`${obj.author} - (${obj.date})`}</Brief>
             <div className={"content"}>
               <div>
-                <Icon type="info-circle" size="xs" />
-                <span>{`${obj.views || "0"} / ${obj.replys || "0"}`}</span>
+                <Icon type={getLocalIcon("/page/浏览.svg")} size="xs" />
+                <span>{`${obj.views || "0"}`}</span>
               </div>
+              <div>
+                <Icon type={getLocalIcon("/page/评论.svg")} size="xs" />
+              <span>{`${obj.replys || "0"}`}</span>
+              </div>
+
               <div>
                 <Icon type={getLocalIcon("/page/板块.svg")} size="xs" />
                 <span>{`${obj.plates || "其它"}`}</span>

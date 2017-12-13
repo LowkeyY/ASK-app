@@ -8,12 +8,14 @@ import Hotlist from './hotinfo';
 import Lorelist from './loreinfo';
 import Notelist from './noteinfo';
 import styles from './index.less';
-import childrenStyles from './list.less';
+import './list.less';
+import {Filterview , Headersearch} from 'components/Layout';
+
 
 
 const RadioItem = Radio.RadioItem;
 const nodes = [
-  {value : 1,text:"交流论坛" , items :[
+  {value : 1,text:"交流论坛" , items :[ 
       {
         title :"版块",
         key : "selectTypes",
@@ -181,6 +183,18 @@ class App1 extends React.Component {
     nodes.find( _ => (_.value === this.state.selectSys))
   )
 
+  getAllSelects = () =>{
+      const children = this.getSelectSys() , values = [children.text];
+      children.items.map(items => {
+        const key = items.key;
+        items.items.map(_ => {
+          if(_.value === this.state[key])
+            values.push(_.text)
+        })
+      })
+      return values;
+  }
+
   packSelects = ()=>{
     const children = this.getSelectSys() , badgeStyles = {
       marginLeft: 12,
@@ -230,42 +244,36 @@ class App1 extends React.Component {
       dispatch(routerRedux.push({pathname:"/search" , query : {froms}}))
     } , getTypeList = ()=>{
       switch(this.state.selectSys){
-        case 1 :
+        case 1 : 
           return <Bbsxlist {...demoProps}/>;
         case 2 :
           return <Caselist {...demoProps}/>;
-        case 3 :
+        case 3 : 
           return <Equipmentlist {...demoProps}/>;
         case 4 :
           return <Lorelist {...demoProps}/>;
-        case 5 :
+        case 5 : 
           return <Hotlist {...demoProps}/>;
         case 6 :
           return <Notelist {...demoProps}/>;
       }
       return "";
     }
+    const headerProps = {
+      dispatch : this.props.dispatch,
+      leftContent :{
+        icon : "/header/filter.svg",
+        onClick : this.onOpenChange.bind(this),
+      },
+      rightContent :{
+        to : '/creates',
+        icon : '/header/add.svg',
+      }
+    }
     return (<div>
-      <div className={styles["navbar-fixed"]}>
-        <div className={styles["navbar-fixed-left"]}>
-            <span style={{color: "white"}} onClick={this.onOpenChange}>
-              <Icon key="1" type={getLocalIcon("/header/filter.svg")} />
-            </span>
-        </div>
-        <div className={styles["navbar-fixed-center"]}>
-          <Button className={`btn ${styles.search}`} inline size="small" icon="search" onClick = {goSearch}>
-            请输入搜索内容
-          </Button>
-        </div>
-        <div className={styles["navbar-fixed-right"]}>
-            <Link to={"/creates"}>
-              <span style={{color: "white"}}>
-                <Icon key="1" type={getLocalIcon("/header/add.svg")} />
-              </span>
-            </Link>
-        </div>
-      </div>
+      <Headersearch {...headerProps}/>
       <div style={{marginTop : "1rem"}}>
+        <Filterview values={this.getAllSelects()}/>
         <Drawer
           className={styles["my-drawer"]}
           style={{ height: document.documentElement.clientHeight - 100}}
@@ -277,9 +285,6 @@ class App1 extends React.Component {
           open={this.state.open}
           onOpenChange={this.onOpenChange}
         >
-          <List className={styles["my-tag"]}>
-            {this.packSelects()}
-          </List>
           {getTypeList()}
         </Drawer>
       </div>

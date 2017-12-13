@@ -1,13 +1,11 @@
+
 import React from 'react'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { List,WhiteSpace} from 'antd-mobile';
-import Nav from '../../components/Layout/navbar'
 import ForumAuthor from '../../components/forumauthor/index'
-import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
-import WaterMark from '../../components/watermark/index'
+import {WaterMark , Warnings , BaseLine , Headertitle,Nav} from 'components/Layout'
 import {getMockData} from '../../utils/index'
-import BaseLine from '../../components/Layout/baseline'
 import MyEditor from 'components/editor/index'
 import DiscussFoot from '../../components/discussfoot/index'
 import InputFoot from 'components/inputfoot/inputfoot'
@@ -21,20 +19,15 @@ const {title,date,author,dept,content,wtype,stype,keywords,snum,isnew} = current
 const Item = List.Item;
 function ForumDetails({loading , dispatch , forumdetails , app }) {
   const {pageFontsize} = app,Prefixcls ='forumdetails';
-  const { isShowEditor,isShowInputFoot} = app;
-  const goBack = ()=> {
-    dispatch(routerRedux.goBack())
-  }, goDiscuss=()=>{
-    dispatch(routerRedux.push({ pathname: '/discuss' }))
-  },
+  const { isShowEditor,isShowInputFoot} = app,
     createMarkup=()=> { return {__html: content}; };
   return(
     <div>
-      <Nav goBack={goBack} title="帖子详情"/>
+      <Nav dispatch={dispatch} title="帖子详情"/>
       <List><Item wrap><h5 className={styles[`${Prefixcls}-title`]}>{title}</h5></Item></List>
       <ForumAuthor {...currentData}/>
       <DiscussFoot {...currentData} />
-      <List><Item><SecrecyAgreement/></Item></List>
+      <Warnings/>
       <div className={`page-content ${pageFontsize}`} style={{overflow:'hidden'}}>
         <div dangerouslySetInnerHTML={createMarkup()} />
         <WaterMark/>

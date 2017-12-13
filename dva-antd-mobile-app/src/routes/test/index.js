@@ -10,36 +10,39 @@ import DemoSwipe from './SwipeAction';
 import { Layout } from 'components'
 import { NavBar } from 'antd-mobile';
 import styles from './index.less';
-import { Accordion , Badge , Modal, List, InputItem, Switch, Stepper, Range, Button, createTooltip , Toast, WhiteSpace, WingBlank , SwipeAction} from 'antd-mobile';
-import CaseDetail from  '../casedetail/index'
+import { Accordion, Badge, Modal, List, InputItem, Switch, Stepper, Range, Button, createTooltip, Toast, WhiteSpace, WingBlank, SwipeAction } from 'antd-mobile';
+import CaseDetail from '../casedetail/index'
 import Discuss from '../discuss/index'
 import DiscussFoot from '../../components/discussfoot/index'
 import LibraryDetails from '../librarydetails/index'
 import ForumDeatils from '../forumdetails/index'
-import Nav from '../../components/Layout/navbar'
 import Login from '../login/index'
 import HotWords from '../hotwords/index'
-import MyEditor from 'components/editor/index'
+import Testdiv from './test'
 const Item = List.Item;
 
 function test() {
 
-  const onChange = (e)=>{
-    console.log(e);
-  }
+    const onChange = (e) => {
+        console.log(e);
+    }
 
 
-  return (
-    <div style={{ marginTop: 10, marginBottom: 10 }}>
-      <MyEditor/>
-    </div>
-  );
+    return (
+        <div>
+          <Testdiv/>
+        </div>
+
+        );
 }
 
 
 test.propTypes = {
-  test: PropTypes.object,
-  loading: PropTypes.object,
+    test: PropTypes.object,
+    loading: PropTypes.object,
 }
 
-export default connect(({ test, loading }) => ({ test, loading }))(test)
+export default connect(({test, loading}) => ({
+    test,
+    loading
+}))(test)

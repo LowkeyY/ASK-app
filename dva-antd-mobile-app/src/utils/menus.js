@@ -1,8 +1,8 @@
 const menus = [{
 	title : "首页",
 	key : 1,
-	icon : "/footer/home.svg",
-	selectedIcon : '/footer/home-o.svg',
+	icon : "/footer/homeV2-o.svg",
+	selectedIcon : '/footer/homeV2.svg',
 	route : '/'
 },{
 	title : "分类检索",
@@ -27,8 +27,8 @@ const menus = [{
 },{
 	title : "我的",
 	key : 4,
-	icon : "/footer/mine.svg",
-	selectedIcon : '/footer/mine-o.svg',
+	icon : "/footer/mineV2-o.svg",
+	selectedIcon : '/footer/mineV2.svg',
 	route : '/page02'
 }]
 

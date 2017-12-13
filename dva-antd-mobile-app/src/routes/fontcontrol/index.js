@@ -3,7 +3,7 @@ import { List,NavBar,Button} from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import FontSlider from './componenet/slider'
 import CaseContentTitle from '../../components/contenttitle/contenttitle'
-import SecrecyAgreement from '../../components/secrecyagreement/secrecyagreement'
+import {Warnings} from 'components/Layout'
 import { connect } from 'dva';
 import styles from './index.less'
 import pagecontentstyles from 'themes/content.less'
@@ -16,7 +16,6 @@ function FontSizePage({loading , dispatch , fontcontrol}) {
     dispatch(routerRedux.goBack())
   };
   const getFontSize=(size)=>{
-      // const newSize = size===100 ? "large" : size===0 ? "small" : "normal";
      let newSize;
     switch (size){
       case 0 :  newSize='min';break
@@ -49,7 +48,7 @@ function FontSizePage({loading , dispatch , fontcontrol}) {
       <div>
         <CaseContentTitle casecontenttitle={'预览字体大小'}/>
       </div>
-      <List><Item><SecrecyAgreement/></Item></List>
+      <Warnings/>
       <div className={`page-content ${fontSize}`}>
         <p>【详情】</p>
         <p>  常记溪亭日暮，</p>

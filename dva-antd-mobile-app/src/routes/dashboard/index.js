@@ -1,39 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'dva';
-import {routerRedux, Link} from 'dva/router';
-import {WhiteSpace, Grid, Icon, Modal, List, NoticeBar, Badge} from 'antd-mobile';
-import {Layout} from 'components'
+import qs from 'qs'
+import { connect } from 'dva';
+import { routerRedux, Link } from 'dva/router';
+import { Card, WingBlank, WhiteSpace, Grid, NavBar, Icon, SearchBar, Button, List, NoticeBar, Badge,Modal } from 'antd-mobile';
+import { Layout } from 'components'
 import styles from './index.less';
 import HotWords from '../hotwords/index';
-import {getLocalIcon, mockGrids, getMockData, getHotWord, getInfoWord} from 'utils'
+import { getLocalIcon, mockGrids, getMockData, getHotWord, getInfoWord } from 'utils'
 
-function Dashboard({
-                     location, dashboard, loading, dispatch
-                   }) {
-  const {Header, BaseLine} = Layout, PrefixCls = "dashboard", hotwords = getHotWord(), infoWord = getInfoWord(0);
-  const {isModalShow} = dashboard;
-  const getData = (nodes, data, counts = 10) => {
-    const datas = [];
-    nodes.map((node, index) => {
-      const list = Array.from(new Array(counts)).map((_, i) => {
-        let newData = Object.assign({}, data);
-        newData.title = newData.title + (i > 0 ? i : "");
-        return newData;
-      });
-      datas.push({
-        title: node.text,
-        key: node.id,
-        list: list,
-        icon: node.icon
-      })
-    });
-    return datas;
-  };
+const Item = List.Item;
+const Brief = Item.Brief;
 
-  const handleItemClick = () => {
-    dispatch(routerRedux.push({pathname: "/forumdetails"}));
-  };
+function Dashboard({dashboard, loading, dispatch}) {
+    const {Headersearch, BaseLine} = Layout,
+        PrefixCls = "dashboard",
+        {hasNews, modules, lists, notes, hotWords} = dashboard,
+        {isModalShow} = dashboard;
+
+    const handleGirdClick = (moduleId) => {
+            //跳转时，开启分类检索页面刷新。
+            dispatch({
+                type: "typequery/updateState",
+                payload: {
+                    refreshing: true
+                }
+            });
+            dispatch(routerRedux.push({
+                pathname: "/typequery",
+                query: {
+                    moduleId
+                }
+            }));
+        },
+        handleListItemClick = (moduleId, pageId) => {
+            dispatch(routerRedux.push({
+                pathname: "/forumdetails",
+                query: {
+                    moduleId,
+                    pageId
+                }
+            }));
+        },
+        handleHotWordChlick = (moduleId, pageId) => {
+            dispatch(routerRedux.push({
+                pathname: "/typequery",
+                query: {
+                    moduleId,
+                    lists: pageId
+                }
+            }));
+        };
   const showNotice = (e) => {
     e.preventDefault();
     dispatch({
@@ -45,9 +62,6 @@ function Dashboard({
       type: 'dashboard/updateState', payload: {isModalShow: false}
     })
   };
-  const godetail =()=>{
-    dispatch(routerRedux.push({pathname: "/typequery"}));
-  };
   const onWrapTouchStart = (e) => {
     // fix touch to scroll background page on iOS
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
@@ -58,119 +72,129 @@ function Dashboard({
       e.preventDefault();
     }
   }
-
-  const goNoticeDetail = () => {
-    dispatch(routerRedux.push({pathname: "/noticedetail"}));
+  const goList =(moduleId)=>{
+    dispatch(routerRedux.push(
+      {
+        pathname: "/typequery",
+        query: {
+          moduleId
+        }
+      }));
   };
-  const packCards = (datas) => {
-    return datas.map((data, index) => {
-      const isLast = index === datas.length - 1;
-      const Item = List.Item;
-      const Brief = Item.Brief;
-      return (
-        <div
-          style={isLast ? {marginBottom: ".1rem"} : {}}>
-          <WhiteSpace size="sm"/>
-          <List renderHeader={() => (
-            <div className={styles[`${PrefixCls}-head-title`]}>
-              <img src={data.icon}/>
-              <span className={styles[`${PrefixCls}-list-header`]}>{data.title}</span>
-              <span
-                onTouchEnd={godetail}
-                className={styles[`${PrefixCls}-list-more`]}>更多</span>
-            </div>)}>
-            {
-              data.list && data.list.map((item, index) => {
-                let isNew = item.isNew === true || index <= 1;
-                let result = (
-                  <Item
-                    arrow="horizontal"
-                    multipleLine
-                    onClick={handleItemClick}
-                    key={`${data.id}-${index}`}
-                    wrap
-                  >
+    const packModuleList = () => {
+        return lists.map((list, index) => {
+            const isLast = index === lists.length - 1;
+            return (
+                <div style={ isLast ? {
+                 marginBottom: ".1rem"
+             } : {} }>
+                  <WhiteSpace size="sm" />
+                  <List renderHeader={ () => (<div className={ styles[`${PrefixCls}-head-title`] }>
+                                                <img src={ list.icon } />
+                    <span className={ styles[`${PrefixCls}-list-header`] }>{ list.text }</span>
                     <span
-                      className={styles[`${PrefixCls}-list-body`] + " " + (isNew ? styles[`${PrefixCls}-list-isNew`] : "")}>{item.title}</span>
-                    <Brief>{`${item.author} - (${item.date})`}</Brief>
-                  </Item>
-                );
+                      onTouchStart={goList.bind(this,list.id)}
+                      className={styles[`${PrefixCls}-list-more`]}>更多
+                      <Icon type={getLocalIcon("/page/更多.svg")}/>
+                    </span>
+                                              </div>) }>
+                    { list.items && list.items.map((item, index) => {
+                          let isNew = item.isNew === true;
+                          let result = (
+                          <Item
+                                arrow="horizontal"
+                                multipleLine
+                                onClick={ handleListItemClick.bind(null, lists.id, item.id) }
+                                key={ `${lists.id}-${index}` }
+                                wrap>
+                            <span className={ styles[`${PrefixCls}-list-body`] + " " + (isNew ? styles[`${PrefixCls}-list-isNew`] : "") }>{ item.title }</span>
+                            <Brief>
+                              { `${item.author} - (${item.date})` }
+                            </Brief>
+                          </Item>
+                          );
 
-                return !isNew ? result :
-                  <Badge text={'新'} corner>
-                    {result}
-                  </Badge>
-              })
-            }
-          </List>
-          {isLast && <WhiteSpace size="sm"/>}
-        </div>
-      )
-    })
-  };
+                          return !isNew ? result :
+                              <Badge key={ `badge-${index}` } text={ '新' } corner>
+                                { result }
+                              </Badge>
+                      }) }
+                  </List>
+                  { isLast && <WhiteSpace size="sm" /> }
+                </div>
+            )
+        })
+    };
 
-  const headerProps = {
-    dispatch
-  };
-
-  const currentData = mockGrids[0];
-  return (
-    <div>
-      <Header {...headerProps}/>
-      <div className={styles[`${PrefixCls}-normal`]}>
-        <Grid
-          data={mockGrids}
-          columnNum={4}
-          hasLine={false}
-          onClick={(_el, index) => {
-            const grid = mockGrids[index];
-            dispatch({type: "typequery/updateState", payload: {selectSys: grid.id}});
-            dispatch(routerRedux.push({pathname: "/typequery"}))
-          }
-          }
-        />
-        <WhiteSpace size="sm"/>
-        <HotWords hotwords={hotwords}/>
-        <WhiteSpace size="sm"/>
-        <div className={styles[`${PrefixCls}-noticebar-container`]}>
-          <NoticeBar
-            onClick={showNotice}
-            mode="link" icon={<Icon type={getLocalIcon("/page/notes.svg")}/>}
-            marqueeProps={{loop: true, style: {padding: '0 0.15rem'}}}>
-            {infoWord.title}
-          </NoticeBar>
-          <Modal
-            visible={isModalShow}
-            transparent
-            maskClosable={false}
-            title="公告"
-            footer={[{
-              text: '关闭', onPress: () => {
-                onClose()
-              }
-            }]}
-            wrapProps={{onTouchStart: onWrapTouchStart}}
-          >
-            <div style={{height: 200, overflowY: 'scroll'}}>
-              {infoWord.title}
+    const headerProps = {
+        dispatch,
+        rightContent: {
+            icon: "/header/news.svg",
+            to: "/mylist"
+        }
+    };
+    return (
+        <div>
+          <Headersearch {...headerProps}/>
+          <div className={ styles[`${PrefixCls}-normal`] }>
+            <Grid
+                  data={ modules }
+                  columnNum={ 4 }
+                  hasLine={ false }
+                  onClick={ (_, index) => {
+                                handleGirdClick(_.id);
+                            } } />
+            <HotWords hotwords={ hotWords } dispatch={ dispatch } handleHotWordChlick={ handleHotWordChlick } />
+            <WhiteSpace size="sm" />
+            <div className={styles[`${PrefixCls}-noticebar-container`]}>
+              <NoticeBar
+                onClick={showNotice}
+                mode="link" icon={<Icon type={getLocalIcon("/page/notes.svg")}/>}
+                marqueeProps={{loop: true, style: {padding: '0 0.15rem'}}}>
+                  {notes.title}
+              </NoticeBar>
+              <Modal
+                visible={isModalShow}
+                transparent
+                maskClosable={false}
+                title="公告"
+                footer={[{
+                  text: '关闭', onPress: () => {
+                    onClose()
+                  }
+                }]}
+                wrapProps={{onTouchStart: onWrapTouchStart}}
+              >
+                <div style={{height: 200, overflowY: 'scroll'}}>
+                  <div className={styles[`${PrefixCls}-noticebar-modal-box`]}>
+                    <div className={styles[`${PrefixCls}-noticebar-modal-box-text`]}>
+                      {notes.title}
+                    </div>
+                    <div className={styles[`${PrefixCls}-noticebar-modal-box-info`]}>
+                      <p>{`${notes.author}-${notes.date}`}</p>
+                    </div>
+                  </div>
+                </div>
+              </Modal>
+              <div
+                // onTouchEnd={goNoticeDetail}
+                className={styles[`${PrefixCls}-noticebar-container-btn`]}>
+                <Icon type={getLocalIcon('./page/more.svg')}/>
+              </div>
             </div>
-          </Modal>
-          <div
-            onTouchEnd={goNoticeDetail}
-            className={styles[`${PrefixCls}-noticebar-container-btn`]}>
-            <Icon type={getLocalIcon('/page/more.svg')}/>
+            { packModuleList() }
+            <BaseLine />
           </div>
         </div>
-        {packCards(getData([currentData], getMockData(currentData.id)))}
-        <BaseLine/>
-      </div>
-    </div>
-  );
+        );
 }
 
 Dashboard.propTypes = {
-  dashboard: PropTypes.object,
-  loading: PropTypes.object,
+    dashboard: PropTypes.object,
+    loading: PropTypes.object,
 }
 
-export default connect(({dashboard, loading}) => ({dashboard, loading}))(Dashboard)
+export default connect(({dashboard, loading}) => ({
+    dashboard,
+    loading
+}))(Dashboard)

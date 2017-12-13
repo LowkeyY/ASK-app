@@ -117,17 +117,12 @@ const mockGrids = [
   hotWords = [
     { id : 'b48a9080-07e2-41f9-8061-fef00611c368', text: '测试测试' },
     { id : '9142094a-a6e5-4283-bad2-ad222387c327', text: '西门西门' },
-    { id : '261ff22f-e095-4bd1-ba78-64a8c167d1da', text: '通讯' },
-    { id : 'b74a031f-6f6f-4211-a818-8d64ccf977e8', text: '测试' },
+    { id : '261ff22f-e095-4bd1-ba78-64a8c167d1da', text: '通讯通讯' },
+    { id : 'b74a031f-6f6f-4211-a818-8d64ccf977e8', text: '测试题题' },
     { id : '90a13857-92b3-497b-8406-e9c017d308f3', text: '液压千斤' },
     { id : '92ab86f2-2b62-46f9-a516-b8ff7fb92172', text: '压力测试' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe1', text: '热搜' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe1', text: '技术' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe2', text: '海贼王' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe3', text: '千与千寻' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe4', text: '你的名字' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe5', text: '超人' },
-    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe67', text: '未闻花名' },
+    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe1', text: '热搜热搜' },
+    { id : '0db7b924-6d16-45bc-b7cf-438ed7f0ebe1', text: '技术专家' }
   ] ,
   infoWords = [
     {
@@ -152,19 +147,19 @@ const mockGrids = [
   ] ,
   mockDatas = {
   "2" : {
-      title : "设备不能正常出束故障",
-      date : "2016-12-07 15:51:38",
-      author :"易欢明",
-      dept : "国内营销服务中心-华东销售服务中心",
-      content : "<h5>【状态监测】</h5><p>&nbsp;</p><p>Wincc界面操作点出束时报扫描中断，无法正常出束，设备又回到就绪状态。查看Wincc报警界面，没有发现任何报警，界面一切显示都正常，后来通过长期观察，故障越来越频繁发现报警界面显示黄灯故障。dias日志显示收到扫描中断命令。</p><p>&nbsp;<img alt='UEditor_snapScreen_tmp1481089050381079668.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089050381079668.jpg'/></p><p>&nbsp;</p><h5>【维修方案】</h5><p>&nbsp;</p><p>引发该故障可能有以下几个原因：</p><p>1、&nbsp;&nbsp;&nbsp; 加速器故障，该故障只是闪烁一下，系统没有保存；</p><p>2、&nbsp;&nbsp;&nbsp; PLC故障，故障只是闪烁一下，系统没有保存；</p><p>3、&nbsp;&nbsp;&nbsp; 安全联锁问题；</p><p>4、&nbsp;&nbsp;&nbsp; WinCC和PLC通讯问题；</p><p>5、&nbsp;&nbsp;&nbsp; PLC和dias通讯问题 。</p><p>电话咨询其它站点及技术主管得知国外有站点出现过类似的情况，那次故障原因是由于档杆被风吹动导致安全联锁未就绪。北仑五期现场检查档杆状态正常，通过检测PLC程序盯着档杆状态，甚至跳接档杆状态点仍无效果，没得到切实的解决办法，准备检查计算机与PLC、DA/CM模块通讯，检查PLC是否工作正常，将设备重启看故障是否会消失。如果仍没发现异常就通过在线监测PLC程序查看出束条件中哪个条件不成立，然后找到出束条件不成立的原因。</p><p>&nbsp;</p><h5>【维修实施】</h5><p>&nbsp;</p><p>1、查看操作界面、触摸屏及AFC触摸屏均未发现有报警，电子枪灯丝电流、电压，磁灯丝电流、电压均正常，检查光纤通讯，更换成备用网线通讯故障仍存在，ping PLC IP地址正常，ping DA/CM IP地址正常。断掉探测器电源，过一分钟再送上通讯模块指示灯闪烁正常。</p><p>2、检查PLC，没有发现异常，各指也均示灯显示正常。</p><p>3、将设备断电重新启动，故障仍存在，经观察发现操作员点出束后，报扫描中断，然后操作台黄灯（就绪灯）会闪烁一下，正常就绪后应该是长亮。怀疑是黄色警灯故障引起的，用笔记本连接PLC程序，在线监测安全联锁里的黄灯故障点M414.1,未发现异常，可能是中断时间较短，程序只是闪烁一下很难观察到，由于现场设备需要急用，不能长时间停机，故将黄色警灯报警信号点M414.1屏蔽，再测试出束可以正常出束，如下图。</p><p>&nbsp;<img alt='UEditor_snapScreen_tmp1481089106865000544.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089106865000544.jpg'/></p><p>跳转到M414.1输出点，如下图</p><p><img alt='UEditor_snapScreen_tmp1481089147878011678.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089147878011678.jpg'/></p><p>由于安调时候，警铃故障报警已经被屏蔽了。所以完全可以断定是由于黄灯故障引起的（后面天气越热，故障率越高，直接一直报黄灯故障，红灯、绿灯故障也陆陆续续的出现）。跳转到黄灯故障M413.4如下图</p><p><img alt='UEditor_snapScreen_tmp1481089187022017899.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089187022017899.jpg'/></p><p>黄灯故障点M413.4是直接由current monitor模块给PLC输入点I13.4信号的。警灯接线图如下图</p><p><img alt='UEditor_snapScreen_tmp1481089230176064210.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089230176064210.jpg'/></p><p>&nbsp;</p><p><img alt='UEditor_snapScreen_tmp1481089251724036350.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089251724036350.jpg'/></p><p><img alt='UEditor_snapScreen_tmp1481089274874081891.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089274874081891.jpg'/></p><p>将黄灯报警屏蔽并测试可以正常出束后，通知操作设备可以正常使用，观察大厅入口、出口黄灯闪烁正常。查看警灯警铃报警模块说明书如下图</p><p><img alt='UEditor_snapScreen_tmp1481089306022044318.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089306022044318.jpg'/></p><p>报警电流设置&nbsp;：</p><p>LED 灯和警铃的报警电流出厂设置为10mA，爆闪灯的报警电流出厂设置为 100mA 。</p><p>用户可以通过按键重新设置。&nbsp;</p><p>打开仪器上盖，电路板左下方有三个按键：</p><p>MOVE&nbsp;&nbsp;&nbsp; ADD &nbsp;&nbsp;&nbsp;ENTER &nbsp;</p><p>1)&nbsp; 点击“Enter”进入设置模式，此时第一位数</p><p>码管将闪烁，显示准备设置的通道。<br/><img alt='UEditor_snapScreen_tmp1481089343934037552.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089343934037552.jpg'/></p><p>2)&nbsp; 点击“Add ”改变准备设置的通道。&nbsp;</p><p>3)&nbsp; 点击“Move”，进入参数调节。&nbsp;</p><p>4)&nbsp; 点击“Add ”、“Move”调节参数，参数最大</p><p>值为500mA 。&nbsp;</p><p>5)&nbsp; 点击“Enter”退出当前通道的参数调节。&nbsp;</p><p>6)&nbsp; 再点击“Enter”，退出参数设置</p><p>4、五期现场目前是将黄、绿、红三个灯的电流设定值由默认的100mA改为60mA，预警及出束警铃电流设定值由默认10mA改为6mA。然后通过在程序中增加计数器来观察报警频率，如下图</p><p><img alt='UEditor_snapScreen_tmp1481089380986053929.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089380986053929.jpg'/></p><p>继续观察了几天发现修改模块设置后效果虽然有点，但故障还是经常出现，而且后面几天红灯、绿灯故障均出现，下午查看模块显示入口绿灯电流最小值既然为0mA，早上八点开机太阳照在出口时入口绿灯电流为600mA，中午12点变为200mA。因此可以怀疑五期现场警灯故障是由于温度较高的原因影响到警灯Current Monitor模块检测的电流，导致警灯故障出现，安全联锁不就绪，设备无法出束。</p><p>对于此类故障处理，为不影响正常过机我们可以先在程序中将报警信号屏蔽或者在current monitor 上将报警信号跳接（既将K1、K2、K3、K4、K5中报警对应的短接），等设备停机时再更换警灯或Current Monitor 模块，利用排除法来排除故障。北仑五期现场先更换了入口警灯观察，无效果，天气炎热的时候入口警灯故障一直报，检测电流直接显示为0。等Current Monitor模块备件到达现场候，更换备件观察发现警灯电流显示500mA左右，未报警灯故障，通过几天观察，警灯故障未再出现。故障排除，将PLC程序复原。</p><h5>【归纳总结】</h5><p>&nbsp;</p><p>此次故障排除也利用了“三板斧”原则，在电话咨询及设备断电重启皆未得到解决的时候，再深入的查找并了解故障。在解决故障过程中也由于备件储备不够充分，为不影响设备正常使用，通过暂时的将故障点屏蔽。故障刚出现时没有明确的故障信息，直观上很难发现故障原因，借鉴自己以前查找故障的经验，从内部PLC程序入手，顺藤摸瓜，方便快速的找到了导致故障的原因（当然随着后面故障的频发，故障信息也表现的明显了）。通过长期观察了解故障特性。最后将原因锁定在警灯和Current Monitor模块上，待备件到达时再通过排除法将故障解决。</p><p>&nbsp;&nbsp;&nbsp; 有什么不足的地方还请多多指点。谢谢！</p><p>&nbsp;</p>",
-      keywords : "设备不能出束",
-      stype : "扫描控制",
-      wtype : "故障维修",
-      snum : "MB1215DE(HS)",
-      isnew : false
+      title2 : "【经验案例】设备不能正常出束故障",
+      date2 : "2016-12-07 15:51:38",
+      author2 :"易欢明",
+      dept2 : "国内营销服务中心-华东销售服务中心",
+      content2 : "<h5>【状态监测】</h5><p>&nbsp;</p><p>Wincc界面操作点出束时报扫描中断，无法正常出束，设备又回到就绪状态。查看Wincc报警界面，没有发现任何报警，界面一切显示都正常，后来通过长期观察，故障越来越频繁发现报警界面显示黄灯故障。dias日志显示收到扫描中断命令。</p><p>&nbsp;<img alt='UEditor_snapScreen_tmp1481089050381079668.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089050381079668.jpg'/></p><p>&nbsp;</p><h5>【维修方案】</h5><p>&nbsp;</p><p>引发该故障可能有以下几个原因：</p><p>1、&nbsp;&nbsp;&nbsp; 加速器故障，该故障只是闪烁一下，系统没有保存；</p><p>2、&nbsp;&nbsp;&nbsp; PLC故障，故障只是闪烁一下，系统没有保存；</p><p>3、&nbsp;&nbsp;&nbsp; 安全联锁问题；</p><p>4、&nbsp;&nbsp;&nbsp; WinCC和PLC通讯问题；</p><p>5、&nbsp;&nbsp;&nbsp; PLC和dias通讯问题 。</p><p>电话咨询其它站点及技术主管得知国外有站点出现过类似的情况，那次故障原因是由于档杆被风吹动导致安全联锁未就绪。北仑五期现场检查档杆状态正常，通过检测PLC程序盯着档杆状态，甚至跳接档杆状态点仍无效果，没得到切实的解决办法，准备检查计算机与PLC、DA/CM模块通讯，检查PLC是否工作正常，将设备重启看故障是否会消失。如果仍没发现异常就通过在线监测PLC程序查看出束条件中哪个条件不成立，然后找到出束条件不成立的原因。</p><p>&nbsp;</p><h5>【维修实施】</h5><p>&nbsp;</p><p>1、查看操作界面、触摸屏及AFC触摸屏均未发现有报警，电子枪灯丝电流、电压，磁灯丝电流、电压均正常，检查光纤通讯，更换成备用网线通讯故障仍存在，ping PLC IP地址正常，ping DA/CM IP地址正常。断掉探测器电源，过一分钟再送上通讯模块指示灯闪烁正常。</p><p>2、检查PLC，没有发现异常，各指也均示灯显示正常。</p><p>3、将设备断电重新启动，故障仍存在，经观察发现操作员点出束后，报扫描中断，然后操作台黄灯（就绪灯）会闪烁一下，正常就绪后应该是长亮。怀疑是黄色警灯故障引起的，用笔记本连接PLC程序，在线监测安全联锁里的黄灯故障点M414.1,未发现异常，可能是中断时间较短，程序只是闪烁一下很难观察到，由于现场设备需要急用，不能长时间停机，故将黄色警灯报警信号点M414.1屏蔽，再测试出束可以正常出束，如下图。</p><p>&nbsp;<img alt='UEditor_snapScreen_tmp1481089106865000544.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089106865000544.jpg'/></p><p>跳转到M414.1输出点，如下图</p><p><img alt='UEditor_snapScreen_tmp1481089147878011678.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089147878011678.jpg'/></p><p>由于安调时候，警铃故障报警已经被屏蔽了。所以完全可以断定是由于黄灯故障引起的（后面天气越热，故障率越高，直接一直报黄灯故障，红灯、绿灯故障也陆陆续续的出现）。跳转到黄灯故障M413.4如下图</p><p><img alt='UEditor_snapScreen_tmp1481089187022017899.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089187022017899.jpg'/></p><p>黄灯故障点M413.4是直接由current monitor模块给PLC输入点I13.4信号的。警灯接线图如下图</p><p><img alt='UEditor_snapScreen_tmp1481089230176064210.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089230176064210.jpg'/></p><p>&nbsp;</p><p><img alt='UEditor_snapScreen_tmp1481089251724036350.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089251724036350.jpg'/></p><p><img alt='UEditor_snapScreen_tmp1481089274874081891.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089274874081891.jpg'/></p><p>将黄灯报警屏蔽并测试可以正常出束后，通知操作设备可以正常使用，观察大厅入口、出口黄灯闪烁正常。查看警灯警铃报警模块说明书如下图</p><p><img alt='UEditor_snapScreen_tmp1481089306022044318.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089306022044318.jpg'/></p><p>报警电流设置&nbsp;：</p><p>LED 灯和警铃的报警电流出厂设置为10mA，爆闪灯的报警电流出厂设置为 100mA 。</p><p>用户可以通过按键重新设置。&nbsp;</p><p>打开仪器上盖，电路板左下方有三个按键：</p><p>MOVE&nbsp;&nbsp;&nbsp; ADD &nbsp;&nbsp;&nbsp;ENTER &nbsp;</p><p>1)&nbsp; 点击“Enter”进入设置模式，此时第一位数</p><p>码管将闪烁，显示准备设置的通道。<br/><img alt='UEditor_snapScreen_tmp1481089343934037552.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089343934037552.jpg'/></p><p>2)&nbsp; 点击“Add ”改变准备设置的通道。&nbsp;</p><p>3)&nbsp; 点击“Move”，进入参数调节。&nbsp;</p><p>4)&nbsp; 点击“Add ”、“Move”调节参数，参数最大</p><p>值为500mA 。&nbsp;</p><p>5)&nbsp; 点击“Enter”退出当前通道的参数调节。&nbsp;</p><p>6)&nbsp; 再点击“Enter”，退出参数设置</p><p>4、五期现场目前是将黄、绿、红三个灯的电流设定值由默认的100mA改为60mA，预警及出束警铃电流设定值由默认10mA改为6mA。然后通过在程序中增加计数器来观察报警频率，如下图</p><p><img alt='UEditor_snapScreen_tmp1481089380986053929.jpg' src='http://ask.nuctech.com/ueditor/jsp/upload/image/20161207/UEditor_snapScreen_tmp1481089380986053929.jpg'/></p><p>继续观察了几天发现修改模块设置后效果虽然有点，但故障还是经常出现，而且后面几天红灯、绿灯故障均出现，下午查看模块显示入口绿灯电流最小值既然为0mA，早上八点开机太阳照在出口时入口绿灯电流为600mA，中午12点变为200mA。因此可以怀疑五期现场警灯故障是由于温度较高的原因影响到警灯Current Monitor模块检测的电流，导致警灯故障出现，安全联锁不就绪，设备无法出束。</p><p>对于此类故障处理，为不影响正常过机我们可以先在程序中将报警信号屏蔽或者在current monitor 上将报警信号跳接（既将K1、K2、K3、K4、K5中报警对应的短接），等设备停机时再更换警灯或Current Monitor 模块，利用排除法来排除故障。北仑五期现场先更换了入口警灯观察，无效果，天气炎热的时候入口警灯故障一直报，检测电流直接显示为0。等Current Monitor模块备件到达现场候，更换备件观察发现警灯电流显示500mA左右，未报警灯故障，通过几天观察，警灯故障未再出现。故障排除，将PLC程序复原。</p><h5>【归纳总结】</h5><p>&nbsp;</p><p>此次故障排除也利用了“三板斧”原则，在电话咨询及设备断电重启皆未得到解决的时候，再深入的查找并了解故障。在解决故障过程中也由于备件储备不够充分，为不影响设备正常使用，通过暂时的将故障点屏蔽。故障刚出现时没有明确的故障信息，直观上很难发现故障原因，借鉴自己以前查找故障的经验，从内部PLC程序入手，顺藤摸瓜，方便快速的找到了导致故障的原因（当然随着后面故障的频发，故障信息也表现的明显了）。通过长期观察了解故障特性。最后将原因锁定在警灯和Current Monitor模块上，待备件到达时再通过排除法将故障解决。</p><p>&nbsp;&nbsp;&nbsp; 有什么不足的地方还请多多指点。谢谢！</p><p>&nbsp;</p>",
+      keywords2 : "设备不能出束",
+      stype2 : "扫描控制",
+      wtype2 : "故障维修",
+      snum2 : "MB1215DE(HS)",
+      isnew2 : false
     },
   "1" : {
-      title :"土耳其mersin港口纠偏系统error0故障小纪",
+      title :"【交流论坛】土耳其mersin港口纠偏系统error0故障小纪",
       date : "2017-09-04 09:36:10",
       creates : '2017-8-31 3:31:15',
       author :"郭强1",
@@ -176,7 +171,7 @@ const mockGrids = [
       isnew : false
   },
   "3" : {
-      title :"Operation Manual for Operation & Inspection Station.pdf",
+      title :"【设备资料】Operation Manual for Operation & Inspection Station.pdf",
       date : "2017-06-26 09:42:04",
       author :"吴玉洁",
       path : "/home/upload/运行检查/Operation Manual for Operation & Inspection Station.pdf",
@@ -185,16 +180,30 @@ const mockGrids = [
       isnew : false
   },
   "4" : {
-      title :"SIMATIC S7-1200 Step7 Basic V10.5使用介绍",
-      date : "2017-01-25 08:48:58",
-      author :"王烁3",
-      dept : "国内营销服务中心-华东销售服务中心",
-      fileName : 'S7-1200__Step7_Basic_V10.5.pdf',
-      stype : '电气控制',
-      keywords :'PLC、1200、西门子、S7-1200、Step7',
-      fileUrl : "http://ask.nuctech.com/ueditor/jsp/upload/file/20170122/S7-1200__Step7_Basic_V10.51485073943461071186.pdf",
-      isnew : false
+      title4 :"【知识文库】SIMATIC S7-1200 Step7 Basic V10.5使用介绍",
+      date4 : "2017-01-25 08:48:58",
+      author4 :"王烁3",
+      dept4 : "国内营销服务中心-华东销售服务中心",
+      fileName4 : 'S7-1200__Step7_Basic_V10.5.pdf',
+      stype4 : '电气控制',
+      keywords4 :'PLC、1200、西门子、S7-1200、Step7',
+      fileUrl4 : "http://ask.nuctech.com/ueditor/jsp/upload/file/20170122/S7-1200__Step7_Basic_V10.51485073943461071186.pdf",
+      isnew4 : false
   }
+}
+
+const isSameEffect =(min , max) =>{
+  let isSame = false;
+  if(min && max){
+    const keys = Object.keys(min);
+    if(keys.length <= Object.keys(max).length){
+      isSame = true;
+      keys.map(att => {
+        isSame &= max.hasOwnProperty(att) && (min[att] == max[att])
+      })
+    }
+  }
+  return isSame;
 }
 
 module.exports = {
@@ -207,6 +216,7 @@ module.exports = {
   arrayToTree,
   timeStamp : () => (new Date()).getTime(),
   isEmptyObject : (obj) => Object.keys(obj).length === 0,
+  isSameEffect,
   mockGrids,
   getMockData : (index) => mockDatas[index] || {},
   getHotWord :(index) => +index > -1 && hotWords[index] || hotWords,

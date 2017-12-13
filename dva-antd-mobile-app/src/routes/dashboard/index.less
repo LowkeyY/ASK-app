@@ -1,11 +1,12 @@
+
 @PrefixCls: dashboard;
 
 .@{PrefixCls}-normal {
   margin-top : 0.9rem;
   :global {
     & .am-grid .am-flexbox .am-flexbox-item .am-grid-item-content .am-grid-item-inner-content .am-grid-icon{
-        width : 60%;
-        height: 60%;
+      width : 60%;
+      height: 60%;
     }
     .am-grid-item{
       min-height: ~'90px;'
@@ -102,32 +103,45 @@
       }
       &:after {
         border : 0 !important;
-       }
+      }
     }
   }
   &-item{
-  min-height: 0.5rem;
-  :global {
-    & .am-list-line{
-       min-height: 0.5rem;
-       & .am-list-content{
-        font-size : 0.25rem;
-       }
-       &:after {
-        border : 0 !important;
-       }
+    min-height: 0.5rem;
+    :global {
+      & .am-list-line{
+        min-height: 0.5rem;
+        & .am-list-content{
+          font-size : 0.25rem;
+        }
+        &:after {
+          border : 0 !important;
+        }
+      }
     }
   }
-}
 }
 .@{PrefixCls}-noticebar-container{
   position: relative;
 }
 .@{PrefixCls}-noticebar-container-btn{
-    position: absolute;
-    color:#f76a24;
-    top: 0;
-    right: 0;
-    padding: 14px 14px;
+  position: absolute;
+  color:#f76a24;
+  top: 0;
+  right: 0;
+  padding: 14px 14px;
 
+}
+.@{PrefixCls}-noticebar-modal-box{
+  &-text{
+    margin-bottom: 20px;
+  }
+  &-info{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 22px;
+    &>p{
+      margin: 0;
+    }
+  }
 }

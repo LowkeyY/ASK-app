@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { NavBar , SearchBar, Button, WhiteSpace, WingBlank } from 'antd-mobile';
-import { Document , Page} from 'react-pdf/build/entry.webpack'
+import { Document , Page} from 'react-pdf';
 import styles from './index.less'
 import pdffile from './sample.pdf'
 
@@ -13,7 +13,7 @@ function pdfcontent({
 }) {
 
   	let {fileUrl = "http://projekty.wojtekmaj.pl/react-pdf/sample.pdf" , pdfProps = {} , numPages} = pdfcontent;
-  	fileUrl = pdffile;
+  	//fileUrl = pdffile;
 	const goBack = ()=> {
 	    dispatch(routerRedux.goBack())
 	} , loadSuccess = (pdf)=>{

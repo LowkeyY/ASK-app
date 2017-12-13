@@ -3,8 +3,8 @@ import { List } from 'antd-mobile';
 import { connect } from 'dva'
 import { routerRedux } from 'dva/router';
 import Dialogue from './component/dialogue'
-import Nav from '../../components/Layout/navbar'
-import BaseLine from '../../components/Layout/baseline'
+import {BaseLine,Nav} from 'components/Layout'
+
 import styles from './index.less'
 const Item = List.Item;
 
@@ -27,7 +27,6 @@ function Discuss ({dispatch}) {
               <List>
                 <Dialogue/>
               </List>
-
             </div>
           )
 }

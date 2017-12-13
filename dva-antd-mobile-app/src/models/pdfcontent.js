@@ -19,8 +19,7 @@ export default modelExtend(pageModel, {
       history.listen(location => {
         let { pathname, query } = location;
         if (pathname.startsWith('/pdfcontent')) {
-          dispatch({ type: 'pdfcontent/updateQuery', payload: {...query}
-          })
+          dispatch({ type: 'updateQuery', payload: {...query}})
         }
       })
     }

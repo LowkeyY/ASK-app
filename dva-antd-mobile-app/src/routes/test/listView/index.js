@@ -136,6 +136,9 @@ class Demo extends React.Component {
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
           {this.state.isLoading ? '加载中...' : '加载完毕'}
         </div>)}
+        renderSectionHeader={sectionData => (
+          <div>{`第 ${sectionData.split(' ')[1]}页`}</div>
+        )}
         renderRow={row}
         renderSeparator={""}
         className="am-list"

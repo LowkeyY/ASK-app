@@ -4,66 +4,45 @@
 import { routerRedux } from 'dva/router'
 import { parse } from 'qs'
 import config from 'config'
-import { query, logout } from 'services/app'
+import { user } from 'services/app'
 
-const { prefix } = config;
+const {prefix} = config;
 
 export default {
-  namespace: 'app',
-  state: {
-    user: {},
-    menu: [
-      {
-        id: 1,
-        icon: 'laptop',
-        name: 'Dashboard',
-        router: '/dashboard',
-      },
-    ],
-    locationQuery: {},
-    pageFontsize:"normal",
-    isShowEditor:false,
-    isShowInputFoot:true
-  },
-  subscriptions: {
-    setupHistory ({ dispatch, history }) {
-      history.listen((location) => {
-        dispatch({
-          type: 'updateState',
-          payload: {
-            locationPathname: location.pathname,
-            locationQuery: location.query,
-          },
-        })
-      })
+    namespace: 'app',
+    state: {
+        user: {},
+        pageFontsize: "normal",
+        isShowEditor:false,
+        isShowInputFoot:true
     },
-
-  },
-  effects: {
-    * query ({
-      payload,
-    }, { call, put, select }) {
-
+    subscriptions: {
+        setup({dispatch, history}) {
+            dispatch({
+                type: 'query'
+            })
+            dispatch({
+                type: 'typequery/query'
+            })
+        },
     },
-
-    * logout ({
-      payload,
-    }, { call, put }) {
-      const data = yield call(logout, parse(payload))
-      if (data.success) {
-        yield put({ type: 'query' })
-      } else {
-        throw (data)
-      }
+    effects: {
+        * query({payload}, {call, put, select}) {
+            const data = yield call(user, payload)
+            if (data) {
+                yield put({
+                    type: 'updateState',
+                    payload: data,
+                })
+            }
+        },
     },
-
-  },
-  reducers: {
-    updateState (state, { payload }) {
-      return {
-        ...state,
-        ...payload,
-      }
+    reducers: {
+        updateState(state, {payload}) {
+            return {
+                ...state,
+                ...payload,
+            }
+        },
     },
-  },
 }

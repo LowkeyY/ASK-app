@@ -15,12 +15,11 @@ const { prefix, openPages } = config;
 let lastHref;
 
 const App = ({ children, dispatch, app, loading, location }) => {
-  let { pathname } = location;
+  let { pathname } = location
   pathname = pathname.startsWith('/') ? pathname : `/${pathname}`;
   pathname = pathname.endsWith('/index.html') ? "/" : pathname;//Android配置首页自启动
   const href = window.location.href
 
-  console.log(children , location , href);
   if (lastHref !== href) {
     NProgress.start();
     if (!loading.global) {

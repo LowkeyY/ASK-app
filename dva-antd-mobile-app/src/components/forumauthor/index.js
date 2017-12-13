@@ -20,7 +20,7 @@ const ForumAuthor =(props)=>{
                   {props.author}
                 </h5>
                 <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>头衔: 将军</p>
+                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>身份: 将军</p>
                 </div>
               </div>
             </div>

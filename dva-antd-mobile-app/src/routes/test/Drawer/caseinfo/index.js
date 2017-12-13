@@ -71,6 +71,8 @@ class Caseinfo extends React.Component {
   };
 
   onRefresh = () => {
+    if(document.documentElement.clientHeight !== this.state.height)
+      this.setState({ height: document.documentElement.clientHeight });
     if (!this.manuallyRefresh) {
       this.setState({ refreshing: true });
     } else {
@@ -102,9 +104,15 @@ class Caseinfo extends React.Component {
       });
     }, 1000);
   };
-  handleItemClick = () =>{
-    this.props.dispatch(routerRedux.push({pathname:"/casedetail"}))
+  handleItemClick = (e) =>{
+      this.props.dispatch(routerRedux.push({pathname:"/casedetail"}))
   };
+  handleTagClick = (isSelect)=>{
+    console.log("isSelect:",isSelect);
+  };
+  stopPropagation = (e) =>{
+    e.stopPropagation();
+  }
 
   render() {
     const separator = (sectionID, rowID) => (
@@ -119,6 +127,7 @@ class Caseinfo extends React.Component {
       />
     );
     const row = (rowData, sectionID, rowID) => {
+
       if (index < 0) {
         index = data.length - 1;
       }
@@ -140,8 +149,8 @@ class Caseinfo extends React.Component {
               <div>
                 <Icon type={getLocalIcon("/page/view.svg")} size="xs"/><span>{obj.yulan || 0}</span>
               </div>
-              <div>
-                <Tag>
+              <div onClick={this.stopPropagation}>
+                <Tag onChange={this.handleTagClick}>
                     <Icon type={getLocalIcon("/page/collection.svg")} size="xs" />
                     <span>收藏案例</span>
                 </Tag>
