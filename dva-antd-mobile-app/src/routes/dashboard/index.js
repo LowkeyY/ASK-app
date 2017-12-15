@@ -7,7 +7,7 @@ import { Card, WingBlank, WhiteSpace, Grid, NavBar, Icon, SearchBar, Button, Lis
 import { Layout } from 'components'
 import styles from './index.less';
 import HotWords from '../hotwords/index';
-import { getLocalIcon, mockGrids, getMockData, getHotWord, getInfoWord } from 'utils'
+import { getLocalIcon} from 'utils'
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -15,8 +15,7 @@ const Brief = Item.Brief;
 function Dashboard({dashboard, loading, dispatch}) {
     const {Headersearch, BaseLine} = Layout,
         PrefixCls = "dashboard",
-        {hasNews, modules, lists, notes, hotWords} = dashboard,
-        {isModalShow} = dashboard;
+        {hasNews, modules, lists, notes, hotWords , isModalShow} = dashboard;
 
     const handleGirdClick = (moduleId) => {
             //跳转时，开启分类检索页面刷新。
@@ -35,10 +34,10 @@ function Dashboard({dashboard, loading, dispatch}) {
         },
         handleListItemClick = (moduleId, pageId) => {
             dispatch(routerRedux.push({
-                pathname: "/forumdetails",
+                pathname: "/details",
                 query: {
                     moduleId,
-                    pageId
+                    id:pageId
                 }
             }));
         },
@@ -50,18 +49,26 @@ function Dashboard({dashboard, loading, dispatch}) {
                     lists: pageId
                 }
             }));
-        };
-  const showNotice = (e) => {
+        },
+      showNotice = (e) => {
     e.preventDefault();
     dispatch({
       type: 'dashboard/updateState', payload: {isModalShow: true}
     })
-  };
-  const onClose = () => {
+  },
+      onClose = () => {
     dispatch({
       type: 'dashboard/updateState', payload: {isModalShow: false}
     })
-  };
+  },
+      goNoticeDetail=(moduleId)=>{
+        dispatch(routerRedux.push({
+          pathname: "/typequery",
+          query: {
+            moduleId
+          }
+        }));
+      }
   const onWrapTouchStart = (e) => {
     // fix touch to scroll background page on iOS
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
@@ -104,7 +111,7 @@ function Dashboard({dashboard, loading, dispatch}) {
                           <Item
                                 arrow="horizontal"
                                 multipleLine
-                                onClick={ handleListItemClick.bind(null, lists.id, item.id) }
+                                onClick={ handleListItemClick.bind(null, list.id, item.id) }
                                 key={ `${lists.id}-${index}` }
                                 wrap>
                             <span className={ styles[`${PrefixCls}-list-body`] + " " + (isNew ? styles[`${PrefixCls}-list-isNew`] : "") }>{ item.title }</span>
@@ -138,6 +145,7 @@ function Dashboard({dashboard, loading, dispatch}) {
           <Headersearch {...headerProps}/>
           <div className={ styles[`${PrefixCls}-normal`] }>
             <Grid
+                  itemStyle={{borderRadius:'20px'}}
                   data={ modules }
                   columnNum={ 4 }
                   hasLine={ false }
@@ -177,7 +185,7 @@ function Dashboard({dashboard, loading, dispatch}) {
                 </div>
               </Modal>
               <div
-                // onTouchEnd={goNoticeDetail}
+                onTouchEnd={goNoticeDetail.bind(null,"6")}
                 className={styles[`${PrefixCls}-noticebar-container-btn`]}>
                 <Icon type={getLocalIcon('./page/more.svg')}/>
               </div>

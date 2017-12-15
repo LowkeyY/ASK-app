@@ -14,13 +14,12 @@
 		.my-drawer{
 			position: relative;
 			overflow: auto;
-			top : 0 - @primary-header-height;
 			-webkit-overflow-scrolling: touch;
 
-			.am-drawer-content{
-				margin-top : @primary-header-height;
+			.am-list-body .am-flexbox:last-child .am-list-line:after{
+				border-bottom: 0;
 			}
-
+			
 			.row{
 				.am-list-line .am-list-brief{
 			    	font-size: @font-size;
@@ -73,6 +72,13 @@
 			}
 		}
 
+		.active{
+			top : 0 - @primary-header-height;
+			.am-drawer-content{
+				margin-top : @primary-header-height;
+			}
+		}
+
 		.filter-list{
 		    .am-list-body {
 		      text-align: left;
@@ -86,6 +92,9 @@
 		    }
 		    .am-list-item .am-list-line .am-list-content{
 		      font-size : 28px;
+		    }
+		    .active .am-list-item .am-list-line .am-list-content{
+		      color: @primary-color;
 		    }
 		}
 	}

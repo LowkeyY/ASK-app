@@ -23,7 +23,7 @@ export async function getLists(data) {
       } else if (moduleId == 6) {
          newData = getInfoWord()
       }
-      
+
       return {
         data: newData,
         totalNumber: total

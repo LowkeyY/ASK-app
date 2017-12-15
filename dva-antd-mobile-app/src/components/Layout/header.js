@@ -13,9 +13,9 @@ function Header({
   };
   const {leftContent = "返回" , leftClick = goBack , rightContent = []} = navbars;
   return (
-      <NavBar 
+      <NavBar
         className={"page-header"}
-        mode="dark"
+        mode="light"
         leftContent={leftContent}
         onLeftClick={leftClick}
         rightContent
@@ -24,7 +24,8 @@ function Header({
 }
 
 Header.propTypes = {
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  moduleId: PropTypes.number.isRequired
 };
 
 export default Header;

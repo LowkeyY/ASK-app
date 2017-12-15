@@ -11,7 +11,7 @@ export async function query(params) {
                 },
                 {
                     value: 2,
-                    text: "经验案例",
+                    // text: "经验案例",
                 },
                 {
                     value: 3,

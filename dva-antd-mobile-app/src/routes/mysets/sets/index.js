@@ -13,9 +13,11 @@ let Sets =({dispatch,loading}) =>{
     <div>
       <List className={`${PrefixCls}-list`}>
         <Item>
-           <p className={"icon-title"}>头像预览</p>
-           <div className={"icon-img-box"}>
-            <img src={defaultImgSrc} alt="icon"/>
+          <div className={"icon-title-box"}>
+            <p className={"icon-title"}>更换头像</p>
+            <div className={"icon-img-box"}>
+              <img src={defaultImgSrc} alt="icon"/>
+            </div>
           </div>
         </Item>
         <Item extra={'系统管理员'}>姓名</Item>

@@ -12,7 +12,7 @@ function pdfcontent({
   location , pdfcontent , loading , dispatch
 }) {
 
-  	let {fileUrl = "http://projekty.wojtekmaj.pl/react-pdf/sample.pdf" , pdfProps = {} , numPages} = pdfcontent;
+  	let {fileUrl = "./sample.pdf" , pdfProps = {} , numPages} = pdfcontent;
   	//fileUrl = pdffile;
 	const goBack = ()=> {
 	    dispatch(routerRedux.goBack())

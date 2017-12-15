@@ -1,19 +1,28 @@
 .dialogue-box{
   border-bottom: 1px solid #e2d8d8;
   padding: 20px;
+}
+.dialogue-title-box{
   display: flex;
   justify-content: flex-start;
+  margin-bottom: 20px;
+}
+.dialogue-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 20px;
 }
 .dialogue-image{
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height:70px;
   border-radius: 50%;
 
 }
 .dialogue-content{
   margin-left: 20px;
 }
-.dialogue-title{
+.dialogue-author{
   margin: 0 0 10px 0;
   color:#0c73c2;
   font-weight: normal;
@@ -22,16 +31,21 @@
   margin: 0 0 20px 0;
   font-size: 30px;
   color: #333;
+  word-break:break-all;
 }
-.dialogue-others{
+.dialogue-btns{
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .dialogue-times{
   color: #999;
   font-size: 26px;
+  margin: 0;
 }
-.dialogue-reply-btn{
+
+.dialogue-reply-btn,.dialogue-delete-btn{
+  margin-left: 20px;
   color:#0c73c2;
   font-size: 26px;
 }

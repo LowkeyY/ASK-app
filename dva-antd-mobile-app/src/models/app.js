@@ -13,8 +13,6 @@ export default {
     state: {
         user: {},
         pageFontsize: "normal",
-        isShowEditor:false,
-        isShowInputFoot:true
     },
     subscriptions: {
         setup({dispatch, history}) {

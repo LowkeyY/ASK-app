@@ -53,9 +53,10 @@ function Typequery({typequery, loading, dispatch}) {
             return (
                 <Flex key={ getKeyIndex("flex") }>
                   { datas && datas.map((i, index) => {
+                        const checked = i.value == filterSelected[types];
                         return (
-                            <Flex.Item key={ getKeyIndex("flex-item") } onClick={ selectChange.bind(null, types, i.value) }>
-                              <RadioItem key={ i.value } checked={ i.value == filterSelected[types] }>
+                            <Flex.Item className={ `${checked ? "active" : ""}` } key={ getKeyIndex("flex-item") } onClick={ selectChange.bind(null, types, i.value) }>
+                              <RadioItem key={ i.value } checked={ checked }>
                                 <span>{ i.text }</span>
                               </RadioItem>
                             </Flex.Item>
@@ -76,21 +77,6 @@ function Typequery({typequery, loading, dispatch}) {
                     return packChildren(datas, types);
                 }
             })
-    }
-
-    const headerProps = {
-        dispatch,
-        leftContent: {
-            icon: "/header/filter.svg",
-            onClick: updateState.bind(null, {
-                menuOpened: !menuOpened,
-                preFilterSelected: !menuOpened ? Object.assign({}, filterSelected) : {}
-            }),
-        },
-        rightContent: {
-            to: '/creates',
-            icon: '/header/add.svg',
-        }
     }
 
     const getSidebars = () => {
@@ -117,19 +103,31 @@ function Typequery({typequery, loading, dispatch}) {
         onOpenChange = (open) => {
             //参数改变时，开启分类检索页面刷新。
             updateState({
-                menuOpened: open,
+                menuOpened: !menuOpened,
                 refreshing: !isSameEffect(preFilterSelected, filterSelected),
-                preFilterSelected: {}
+                preFilterSelected: !menuOpened ? Object.assign({}, filterSelected) : {}
             });
+    }
+
+    const headerProps = {
+        dispatch,
+        leftContent: {
+            icon: "/header/filter.svg",
+            onClick: onOpenChange,
+        },
+        rightContent: {
+            to: '/creates',
+            icon: '/header/add.svg',
+        }
     }
 
     return (
         <div>
           <Headersearch {...headerProps}/>
           <div className={ `${PrefixCls}-body` }>
-            <Filterview values={ getSelectTexts() } />
+            <Filterview values={ getSelectTexts() } onClick={ onOpenChange } lager={ currentMenus.length > 1 } />
             <Drawer
-                    className={ "my-drawer" }
+                    className={ `my-drawer ${menuOpened ? "active" : ""}` }
                     style={ { height: document.documentElement.clientHeight - 90 } }
                     enableDragHandle
                     contentStyle={ { color: '#A6A6A6', textAlign: 'center', paddingTop: 0 } }

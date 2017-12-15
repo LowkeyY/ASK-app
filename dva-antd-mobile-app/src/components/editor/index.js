@@ -152,7 +152,7 @@ class MyEditor extends React.Component {
   hiddenEditor=()=>{
     console.log(this.props)
    this.props.dispatch({
-      type:'app/updateState' , payload : {isShowInputFoot : true,isShowEditor:false}
+      type:'details/updateState' , payload : {isShowInputFoot : true,isShowEditor:false}
     })
   }
   render() {
@@ -169,7 +169,8 @@ class MyEditor extends React.Component {
     }
 
     return (
-      <div style={display} className={styles["RichEditor-box"]}>
+      <div className={styles["RichEditor-box-header"]} style={display}>
+      <div className={styles["RichEditor-box"]}>
         <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
           <Icon type={getLocalIcon('/editor/关闭.svg')}/>
         </div>
@@ -187,7 +188,7 @@ class MyEditor extends React.Component {
               handleDroppedFiles={this.pasteMedia}
               onChange={this.onChange}
               onTab={this.onTab}
-              placeholder="请输入..."
+              placeholder={this.props.placeholder}
               ref='editor'
               spellCheck={true}
               onPaste={(value) => (console.log('paste', value))}
@@ -215,6 +216,7 @@ class MyEditor extends React.Component {
             </div>
           </div>
         </div>
+      </div>
       </div>
     );
   }

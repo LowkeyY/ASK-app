@@ -22,11 +22,12 @@ function Querylist({querylist, typequery, dispatch}) {
         {dataSource, isLoading, hasMore, pageIndex, scrollerTop} = querylist,
         {refreshing, filterSelected, primaryTag, preFilterSelected} = typequery;
     const currentKey = (+(preFilterSelected[primaryTag] || filterSelected[primaryTag]));
-    const handleItemClick = (id, moduleId = currentKey) => {
+    const handleItemClick = (id) => {
             dispatch(routerRedux.push({
                 pathname: "/details",
                 query: {
-                  moduleId
+                    moduleId: currentKey,
+                    id
                 }
             }))
         },
@@ -83,23 +84,22 @@ function Querylist({querylist, typequery, dispatch}) {
               <Brief>
                 { `${obj.author} - (${obj.date})` }
               </Brief>
-              <div className={"content"}>
+              <div className={ "content" }>
                 <div>
-                  <Icon type={getLocalIcon("/page/view.svg")} size="xs" />
-                  <span>{`${obj.views || "0"}`}</span>
+                  <Icon type={ getLocalIcon("/page/view.svg") } size="xs" />
+                  <span>{ `${obj.views || "0"}` }</span>
                 </div>
                 <div>
                   <Icon type="info-circle" size="xs" />
-                  <span>{`${obj.replys || "0"}`}</span>
-                </div>
-
-                <div>
-                  <Icon type={getLocalIcon("/page/板块.svg")} size="xs" />
-                  <span>{`${obj.plates || "其它"}`}</span>
+                  <span>{ `${obj.replys || "0"}` }</span>
                 </div>
                 <div>
-                  <Icon type={getLocalIcon("/page/状态.svg")} size="xs" />
-                  <span>{`${obj.status || "其它"}`}</span>
+                  <Icon type={ getLocalIcon("/page/板块.svg") } size="xs" />
+                  <span>{ `${obj.plates || "其它"}` }</span>
+                </div>
+                <div>
+                  <Icon type={ getLocalIcon("/page/状态.svg") } size="xs" />
+                  <span>{ `${obj.status || "其它"}` }</span>
                 </div>
               </div>
             </Item>
@@ -143,7 +143,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
-                { obj.title }
+                <h3>{ obj.title }</h3>
               </div>
               <Brief>
                 { `${obj.author} - (${obj.date})` }
@@ -223,7 +223,7 @@ function Querylist({querylist, typequery, dispatch}) {
     const renderRow = (rowData, sectionID, rowID) => {
         switch (currentKey) {
         case 4:
-          return layoutBssList(rowData, sectionID, rowID);
+            return layoutBssList(rowData, sectionID, rowID);
         case 1:
             return layoutCaseList(rowData, sectionID, rowID);
         case 2:
