@@ -8,7 +8,7 @@ const DiscussFoot =(props)=>{
     <div className={styles[`${PrefixCls}-box`]}>
       <div className={styles[`${PrefixCls}-box-btns-integral`]}>
         <Icon type={getLocalIcon("/page/积分.svg")} size="xs"/>
-        <span className={styles[`${PrefixCls}-box-btns-integral-count`]}>积分：{props.srcoes || 0}</span>
+        <span className={styles[`${PrefixCls}-box-btns-integral-count`]}>积分：{props.integral || 0}</span>
       </div>
       <div className={styles[`${PrefixCls}-box-btns`]}>
        <div className={styles[`${PrefixCls}-box-btns-collection`]}>

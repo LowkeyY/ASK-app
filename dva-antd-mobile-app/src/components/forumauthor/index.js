@@ -15,19 +15,19 @@ const ForumAuthor =(props)=>{
         >
           <div className={styles[`${PrefixCls}-author-box`]}>
             <div  className={styles[`${PrefixCls}-author-box-information-box`]}>
-              <img className={styles[`${PrefixCls}-author-box-icon`]} src={props.icon||defaultImgSrc} alt=""/>
+              <img className={styles[`${PrefixCls}-author-box-icon`]} src={defaultImgSrc} alt=""/>
               <div className={styles[`${PrefixCls}-author-box-information`]}>
                 <h5 className={styles[`${PrefixCls}-author-box-information-author`]}>
                   {props.author}
                 </h5>
                 <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>身份:{props.grade}</p>
+                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>身份: 将军</p>
                 </div>
               </div>
             </div>
             <div className={styles[`${PrefixCls}-author-box-information-right`]}>
                 <span className={styles[`${PrefixCls}-author-box-information-info-master`]}>
-                  <Icon type={getLocalIcon("/page/楼主.svg")}/>
+                  <Icon type={getLocalIcon("/page/master.svg")}/>
                   &nbsp;楼主
                 </span>
               <div className={styles[`${PrefixCls}-author-box-information-info`]}>

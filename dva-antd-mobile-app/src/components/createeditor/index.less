@@ -1,0 +1,98 @@
+
+.RichEditor-box{
+  width: 100%;
+}
+.RichEditor-box-closebtn{
+  color: #108ee9;
+  position: absolute;
+  padding: 20px 0 20px 30px;
+  top:-20PX;
+  right:0;
+}
+.RichEditor-root {
+  background: #fff;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.RichEditor-editor {
+  padding: 20px;
+  border: 1px solid #ddd;
+  min-height:450px;
+  cursor: pointer;
+  font-size: 30px;
+
+  margin: 10px 0 20px 0;
+}
+
+.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-editor .public-DraftEditor-content {
+  margin: 0 -15px -15px;
+  padding: 15px;
+}
+
+.RichEditor-editor .public-DraftEditor-content {
+  min-height: 100px;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.RichEditor-controls {
+  color: #999999;
+  margin-bottom: 5px;
+  user-select: none;
+  &-item{
+    margin-right: 20px;
+  }
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 2px 0;
+  display: inline-block;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
+
+.align-right div {
+  text-align: right;
+}
+.align-center div {
+  text-align: center;
+}
+.align-left div {
+  text-align: left;
+}
+.RichEditor-control{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-box{
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+

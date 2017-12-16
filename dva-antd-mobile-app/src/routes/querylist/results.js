@@ -12,10 +12,12 @@ class Results extends React.Component {
 
     componentDidMount() {
         setTimeout(() => {
-            const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).offsetTop - 140;
-            this.setState({
-                height: hei,
-            })
+            if (ReactDOM.findDOMNode(this.lv)) {
+                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).offsetTop - 140;
+                this.setState({
+                    height: hei,
+                })
+            }
         }, 0);
 
         this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {

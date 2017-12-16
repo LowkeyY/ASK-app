@@ -19,12 +19,11 @@ const blockRenderMap = Immutable.Map({
     element: 'div',
   },
 });
-class MyEditor extends React.Component {
+class CreateEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      showEditor:true,//控制display
       disabled:true,
       url: '',
       urlType: '',
@@ -33,7 +32,7 @@ class MyEditor extends React.Component {
     this.focus = () => this.refs.editor.focus();
     this.logState = () => {//发送数据
       const content = this.state.editorState.getCurrentContent();
-      console.log(convertToRaw(content).blocks[0].text);
+      alert(convertToRaw(content).blocks[0].text);
       console.log(convertToRaw(content));
     };
     this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
@@ -149,15 +148,10 @@ class MyEditor extends React.Component {
   _addImage() {
     this._promptForMedia('image');
   }
-  hiddenEditor=()=>{
-    console.log(this.props)
-   this.props.dispatch({
-      type:'details/updateState' , payload : {isShowInputFoot : true,isShowEditor:false}
-    })
-  }
+
   render() {
     const {editorState} = this.state;
-    const  display=this.props.isShowEditor?{display:'block'}:{display:'none'};
+    const  display=this.props.editorControl?{display:'block'}:{display:'none'};
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = styles['RichEditor-editor'];
@@ -169,11 +163,7 @@ class MyEditor extends React.Component {
     }
 
     return (
-      <div className={styles["RichEditor-box-header"]} style={display}>
       <div className={styles["RichEditor-box"]}>
-        <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
-          <Icon type={getLocalIcon('/editor/关闭.svg')}/>
-        </div>
         <div className={styles["RichEditor-root"]}>
           <div className={className} onClick={this.focus} >
             <Editor
@@ -206,17 +196,8 @@ class MyEditor extends React.Component {
                 onToggle={this.toggleBlockType}
               />
             </div>
-            <div className={styles["RichEditor-control-sendbtn"]}>
-              <Button
-                disabled={!contentState.hasText()}
-                type="primary" inline size="small"
-                style={{padding:'5px 5px',lineHeight:'1.6em'}}
-                onTouchEnd={this.logState}
-                >发送</Button>
-            </div>
           </div>
         </div>
-      </div>
       </div>
     );
   }
@@ -305,7 +286,7 @@ const styles2 = {
 }
 
 
-MyEditor.propTypes = {
+CreateEditor.propTypes = {
 }
 
-export default MyEditor;
+export default CreateEditor;

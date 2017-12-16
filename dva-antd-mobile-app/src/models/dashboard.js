@@ -15,27 +15,29 @@ export default modelExtend(model, {
     namespace: 'dashboard',
     state: {
         hasNews: false,
-        isModalShow:false,
+        isModalShow: false,
+        hotWordModuleId: "5",
+        noteModuleId: "6",
         modules: [
             {
-                id: 1,
+                id: 4,
                 text: "交流论坛",
                 icon: require("themes/images/交流论坛.png")
             },
             {
-                id: 2,
+                id: 1,
                 text: "经验案例",
                 icon: require("themes/images/经验案例.png")
+            },
+            {
+                id: 2,
+                text: "知识文库",
+                icon: require("themes/images/知识文库.png")
             },
             {
                 id: 3,
                 text: "设备资料",
                 icon: require("themes/images/设备资料.png")
-            },
-            {
-                id: 4,
-                text: "知识文库",
-                icon: require("themes/images/知识文库.png")
             },
         ],
         lists: [],

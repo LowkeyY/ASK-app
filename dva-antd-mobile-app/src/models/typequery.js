@@ -50,16 +50,17 @@ export default modelExtend(pageModel, {
             })
             history.listen(({pathname, query, action}) => {
                 if (pathname === '/typequery') {
-                    if (query && !isEmptyObject(query)) {
-                        dispatch({
-                            type: 'update',
-                            payload: query
-                        })
-                    }
-                    if (action === "PUSH")
+                    if (action === "PUSH") {
+                        if (query && !isEmptyObject(query)) {
+                            dispatch({
+                                type: 'update',
+                                payload: query
+                            })
+                        }
                         dispatch({
                             type: 'query',
                         })
+                    }
                 }
             })
         },

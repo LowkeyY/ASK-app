@@ -79,8 +79,7 @@ function Page02({
             onClick={handleChange.bind(null , "myreply" , "我回复的帖子")}
           >我回复的帖子</List.Item>
         </List>
-        <WhiteSpace size="xl" />
-        <Button type="primary"
+        <Button className={styles[`${PrefixCls}-list-sets-loginout`]}  type="primary"
                onClick={handleLogout.bind(null)}
         >退出登录</Button>
         <WhiteSpace size="xl" />

@@ -32,14 +32,12 @@ function Querylist({querylist, typequery, dispatch}) {
             }))
         },
         onRefresh = () => {
-            if (!refreshing) {
-                dispatch({
-                    type: 'typequery/updateState',
-                    payload: {
-                        refreshing: true
-                    }
-                });
-            }
+            dispatch({
+                type: 'typequery/updateState',
+                payload: {
+                    refreshing: true
+                }
+            });
             dispatch({
                 type: "querylist/resetState"
             });
@@ -94,11 +92,11 @@ function Querylist({querylist, typequery, dispatch}) {
                   <span>{ `${obj.replys || "0"}` }</span>
                 </div>
                 <div>
-                  <Icon type={ getLocalIcon("/page/板块.svg") } size="xs" />
+                  <Icon type={ getLocalIcon("/page/plate.svg") } size="xs" />
                   <span>{ `${obj.plates || "其它"}` }</span>
                 </div>
                 <div>
-                  <Icon type={ getLocalIcon("/page/状态.svg") } size="xs" />
+                  <Icon type={ getLocalIcon("/page/state.svg") } size="xs" />
                   <span>{ `${obj.status || "其它"}` }</span>
                 </div>
               </div>
@@ -177,7 +175,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   <Icon type="info-circle" size="xs" /><span>{ obj.replys || 0 }</span>
                 </div>
                 <div>
-                  <Icon type={ getLocalIcon("/page/下载.svg") } size="xs" />
+                  <Icon type={ getLocalIcon("/page/download.svg") } size="xs" />
                   <span>{ obj.downloads || 0 }</span>
                 </div>
                 <div onClick={ stopPropagation }>

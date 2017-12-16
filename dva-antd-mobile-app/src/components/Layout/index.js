@@ -2,7 +2,7 @@ import Header from './header';
 import PropTypes from 'prop-types';
 import Headersearch from './header-search';
 import Headertitle from './headertitle';
-import { NoticeBar, List, Tag, NavBar,Icon } from 'antd-mobile';
+import { NoticeBar, List, Tag, NavBar, Icon } from 'antd-mobile';
 import { getLocalIcon } from 'utils'
 import { routerRedux } from 'dva/router';
 import markImage from 'themes/images/watermark.png';
@@ -17,9 +17,9 @@ module.exports = {
     Headertitle,
     BaseLine: () => (
         <div className={ `${PrefixCls}-baseline` }>
-          <p>
-            没有更多内容了
-          </p>
+          <div className={ "infos" }>
+            <span>没有更多内容了</span>
+          </div>
         </div>
     ),
     Filterview: ({values = [], onClick = emptyFunc, lager = true}) => {
@@ -50,61 +50,59 @@ module.exports = {
           <img src={ markImage } />
         </div>
     ),
-    Nav: (props) => {
-        let title;
-        const isisCollect=props.isCollect,
-          getTitle=(moduleId)=>{
-          switch (moduleId){
-            case '4' : return title='帖子详情';
-            case '1' : return title='案例详情';
-            case '2': return title='文库详情';
-            default: return title='';
+  Nav: (props) => {
+    let title;
+    const isisCollect=props.isCollect,
+      getTitle=(moduleId)=>{
+        switch (moduleId){
+          case '4' : return title='帖子详情';
+          case '1' : return title='案例详情';
+          case '2': return title='文库详情';
+          default: return title='';
 
 
-          }
-      }
-        const goBack = () => {
-            props.dispatch(routerRedux.goBack())
         }
-
-        const del =()=>{
-          alert()
       }
-        return (
-            <div className={`${PrefixCls}-head-box`}>
-              <div className={ `${PrefixCls}-nav` }>
-                <NavBar mode="light"
-                        leftContent="返回"
-                        onLeftClick={goBack}
-                        rightContent={
-                          props.moduleId==="4"
-                            ?
-                            [<p onTouchEnd={del}>删除</p>]
-                            :
-                            [<Tag selected={isisCollect}><Icon type={getLocalIcon('/page/collection.svg')}/>
-                              {
-                                isisCollect
-                                ?
-                                  <span className={`${PrefixCls}-collection`}>已收藏</span>
-                                  : <span className={`${PrefixCls}-collection`}>收藏</span>
-                              }
-                              </Tag>]
-                        }
-
-                >
-                  <p className={ `${PrefixCls}-nav-title` }>
-                    { getTitle(props.moduleId)}
-                  </p>
-                </NavBar>
-              </div>
-            </div>
-        )
-      Nav.propTypes = {
-        dispatch: PropTypes.func.isRequired,
-        moduleId:PropTypes.number.isRequired
-      };
+    const goBack = () => {
+      props.dispatch(routerRedux.goBack())
     }
 
+    const del =()=>{
+      alert()
+    }
+    return (
+      <div className={`${PrefixCls}-head-box`}>
+        <div className={ `${PrefixCls}-nav` }>
+          <NavBar mode="light"
+                  leftContent="返回"
+                  onLeftClick={goBack}
+                  rightContent={
+                    props.moduleId==="4"
+                      ?
+                      [<p onTouchEnd={del}>删除</p>]
+                      :
+                      [<Tag selected={isisCollect}><Icon type={getLocalIcon('/page/collection.svg')}/>
+                        {
+                          isisCollect
+                            ?
+                            <span className={`${PrefixCls}-collection`}>已收藏</span>
+                            : <span className={`${PrefixCls}-collection`}>收藏</span>
+                        }
+                      </Tag>]
+                  }
 
+          >
+            <p className={ `${PrefixCls}-nav-title` }>
+              { getTitle(props.moduleId)}
+            </p>
+          </NavBar>
+        </div>
+      </div>
+    )
+    Nav.propTypes = {
+      dispatch: PropTypes.func.isRequired,
+      moduleId:PropTypes.number.isRequired
+    };
+  }
 };
 

@@ -9,30 +9,36 @@ import Discuss from '../discuss/index'
 import DetailsComponent from '../detailscomponent/index'
 
 function Details({loading, dispatch, details}) {
-    const {currentContent, currentComments,isShowEditor, isShowInputFoot,placeholder,...props} = details;
-    const {isCollect}=currentContent
+
+    const {currentContent, currentComments,isShowEditor, isShowInputFoot,placeholder, ...props} = details;
+    const {isCollect} = currentContent
+    console.log(isCollect)
     const contentProps = {
             ...props,
-            currentContent
+            currentContent,
+            dispatch
         },
         commendProps = {
             ...props,
-            currentComments
+            currentComments,
+            dispatch
     }
-
     return (
         <div>
-          <Nav dispatch={ dispatch } title="详情" {...props} isCollect={isCollect}/>
+          <Nav
+               dispatch={ dispatch }
+               {...props}
+               isCollect={ isCollect } />
           <DetailsComponent contentProps={ contentProps } />
           <WhiteSpace size='sm' />
-          <Discuss commendProps={commendProps} />
+          <Discuss commendProps={ commendProps } />
           <BaseLine />
-          <InputFoot isShowInputFoot={ isShowInputFoot } dispatch={ dispatch } currentComments={currentComments}/>
+          <InputFoot isShowInputFoot={ isShowInputFoot } dispatch={ dispatch } currentComments={ currentComments } />
           <MyEditor isShowEditor={ isShowEditor } dispatch={ dispatch } placeholder={placeholder}/>
         </div>
     )
 }
 export default connect(({details, loading}) => ({
     details,
-    loading
+    loading,
 }))(Details);

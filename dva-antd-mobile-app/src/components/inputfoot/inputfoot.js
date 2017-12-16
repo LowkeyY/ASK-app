@@ -1,8 +1,6 @@
 import React from 'react';
 import styles from './inputfoot.less'
 import PropTypes from 'prop-types';
-import { Button, Icon,Tag} from 'antd-mobile';
-import { getLocalIcon } from 'utils'
 const PrefixCls='inputfoot';
 class InputFoot extends React.Component{
   constructor(props){

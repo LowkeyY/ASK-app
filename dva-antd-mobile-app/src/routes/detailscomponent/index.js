@@ -1,11 +1,11 @@
 import React from 'react'
-import {connect} from 'dva';
-import {List, WhiteSpace, Accordion} from 'antd-mobile';
+import { connect } from 'dva';
+import { List, WhiteSpace, Accordion } from 'antd-mobile';
 import ForumAuthor from 'components/forumauthor/index'
-import {WaterMark, Warnings, BaseLine, Headertitle, Nav} from 'components/Layout'
+import { WaterMark, Warnings, BaseLine, Headertitle, Nav } from 'components/Layout'
 import DiscussFoot from 'components/discussfoot/index'
 import CaseContentTitle from 'components/contenttitle/contenttitle'
-import {getMockData} from '../../utils/index'
+import { getMockData } from '../../utils/index'
 import styles from './index.less'
 import pagestyles from 'themes/content.less'
 
@@ -15,18 +15,18 @@ const Item = List.Item;
 
 function DetailsComponent({querycontent, contentProps, app, loading}) {
 
-  const {id, moduleId, currentContent} = contentProps
-  const {fpath} = currentContent
-  const {pageFontsize} = app,
-    Prefixcls = 'details-component',
-    createMarkup = () => {
-      return {
-        __html: currentContent.contents
-      };
-    };
-  const handleAtt = () => {
-    dispatch(routerRedux.push({pathname: '/pdfcontent', query: {fileUrl: fpath[0].filePath}}))
-  }
+    const {id,moduleId,currentContent}=contentProps
+    const {fpath}=currentContent
+    const {pageFontsize} = app,
+        Prefixcls = 'details-component',
+        createMarkup = () => {
+            return {
+                __html: currentContent.contents
+            };
+        };
+    const handleAtt = () => {
+      dispatch(routerRedux.push({ pathname: '/pdfcontent' , query : {fileUrl : fpath[0].filePath}}))
+    }
 
   const getCaseFiles = (fpath) => {
     if (fpath && fpath.length > 0) {
@@ -59,120 +59,122 @@ function DetailsComponent({querycontent, contentProps, app, loading}) {
 
     }
   }
-  const forumdetails = () => {
-    return (
-      <div>
+    const forumdetails = () => {
+        return (
+            <div>
+              <div>
+                <List>
+                  <Item wrap>
+                    <h5 className={ styles[`${Prefixcls}-title`] }>{currentContent.title }</h5>
+                  </Item>
+                </List>
+                <ForumAuthor {...currentContent}/>
+                <DiscussFoot {...currentContent} />
+                <Warnings/>
+                <div className={ `page-content ${pageFontsize}` } style={ { overflow: 'hidden',background:'#fff' } }>
+                  <div dangerouslySetInnerHTML={ createMarkup() } />
+                  <WaterMark/>
+                </div>
+              </div>
+            </div>
+        )
+    }
+    const casedetails = () => (
         <div>
-          <List>
-            <Item wrap>
-              <h5 className={styles[`${Prefixcls}-title`]}>{currentContent.title}</h5>
-            </Item>
-          </List>
-          <ForumAuthor {...currentContent}/>
-          <DiscussFoot {...currentContent} />
+          <div>
+            <CaseContentTitle casecontenttitle={ currentContent.title } />
+          </div>
           <Warnings/>
-          <div className={`page-content ${pageFontsize}`} style={{overflow: 'hidden',background:'#fff'}}>
-            <div dangerouslySetInnerHTML={createMarkup()}/>
+          <Accordion className="my-accordion">
+            <Accordion.Panel header="案例信息">
+              <List>
+                <Item extra={ currentContent.organizer} wrap>
+                  编制者
+                </Item>
+                <Item extra={currentContent.author} wrap>
+                  作者
+                </Item>
+                <Item extra={ currentContent.depts } wrap>
+                  部门
+                </Item>
+                <Item extra={ currentContent.stype} wrap>
+                  分系统
+                </Item>
+                <Item extra={  currentContent.ctype } wrap>
+                  所属类型
+                </Item>
+                <Item extra={  currentContent.mtype } wrap>
+                  设备型号
+                </Item>
+                <Item extra={ currentContent.date } wrap>
+                  发布时间
+                </Item>
+                <Item extra={ currentContent.keywords } wrap>
+                  关键索引词
+                </Item>
+              </List>
+            </Accordion.Panel>
+          </Accordion>
+            {getCaseFiles(fpath)}
+          <WhiteSpace size='sm' />
+          <div className={ `page-content ${pageFontsize}` } style={ { overflow: 'hidden',background:'#fff' } }>
+            <div dangerouslySetInnerHTML={ createMarkup() } />
             <WaterMark/>
           </div>
         </div>
-      </div>
     )
-  }
-  const casedetails = () => (
-    <div>
-      <div>
-        <CaseContentTitle casecontenttitle={currentContent.title}/>
-      </div>
-      <Warnings/>
-      <Accordion className="my-accordion">
-        <Accordion.Panel header="案例信息">
-          <List>
-            <Item extra={currentContent.organizer} wrap>
-              编制者
-            </Item>
-            <Item extra={currentContent.author} wrap>
-              作者
-            </Item>
-            <Item extra={currentContent.depts} wrap>
-              部门
-            </Item>
-            <Item extra={currentContent.stype} wrap>
-              分系统
-            </Item>
-            <Item extra={currentContent.ctype} wrap>
-              所属类型
-            </Item>
-            <Item extra={currentContent.mtype} wrap>
-              设备型号
-            </Item>
-            <Item extra={currentContent.date} wrap>
-              发布时间
-            </Item>
-            <Item extra={currentContent.keywords} wrap>
-              关键索引词
-            </Item>
-          </List>
-        </Accordion.Panel>
-      </Accordion>
-      {getCaseFiles(fpath)}
-      <WhiteSpace size='sm'/>
-      <div className={`page-content ${pageFontsize}`} style={{overflow: 'hidden',background:'#fff'}}>
-        <div dangerouslySetInnerHTML={createMarkup()}/>
-        <WaterMark/>
-      </div>
-    </div>
-  )
 
 
-  const librarydetails = () => {
-    return (
-      <div>
-        <CaseContentTitle casecontenttitle={currentContent.title}/>
-        <Warnings/>
-        <List>
-          <Item extra={currentContent.author} wrap>
-            编制者
-          </Item>
-          <Item extra={currentContent.depts} wrap>
-            部门
-          </Item>
-          <Item extra={currentContent.ltype} wrap>
-            所属类型
-          </Item>
-          <Item extra={currentContent.date} wrap>
-            发布时间
-          </Item>
-          <Item extra={currentContent.keywords} wrap>
-            关键索引词
-          </Item>
-        </List>
-        {getLibraryFiles(fpath)}
-      </div>
-    )
-  }
-  const renderComponent = () => {
-
-    switch (moduleId) {
-      case "4":
-        return forumdetails();
-      case "1":
-        return casedetails();
-      case "2":
-        return librarydetails();
-
-      default:
-        return <div style={{display: "none"}}></div>;
+    const librarydetails = () => {
+        return (
+            <div>
+              <CaseContentTitle casecontenttitle={ currentContent.title } />
+              <Warnings/>
+              <List>
+                <Item extra={ currentContent.author } wrap>
+                  编制者
+                </Item>
+                <Item extra={ currentContent.depts } wrap>
+                  部门
+                </Item>
+                <Item extra={ currentContent.ltype } wrap>
+                  所属类型
+                </Item>
+                <Item extra={ currentContent.date} wrap>
+                  发布时间
+                </Item>
+                <Item extra={ currentContent.keywords } wrap>
+                  关键索引词
+                </Item>
+              </List>
+              <List>
+                  {getLibraryFiles(fpath)}
+              </List>
+            </div>
+        )
     }
-  }
-  return (
-    renderComponent()
-  )
+    const renderComponent = () => {
+
+        switch (moduleId) {
+        case "4":
+            return forumdetails();
+        case "1":
+            return casedetails();
+        case "2":
+            return librarydetails();
+
+            default:
+            return <div style={ { display: "none" } }></div>;
+        }
+    }
+    return (
+      renderComponent()
+    )
 
 }
 
 export default connect(({querycontent, app, loading}) => ({
-  querycontent,
-  app,
-  loading
+    querycontent,
+    app,
+    loading
 }))(DetailsComponent);

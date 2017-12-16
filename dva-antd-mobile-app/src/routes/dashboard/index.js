@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import qs from 'qs'
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Card, WingBlank, WhiteSpace, Grid, NavBar, Icon, SearchBar, Button, List, NoticeBar, Badge,Modal } from 'antd-mobile';
+import { Card, WingBlank, WhiteSpace, Grid, NavBar, Icon, SearchBar, Button, List, NoticeBar, Badge, Modal } from 'antd-mobile';
 import { Layout } from 'components'
 import styles from './index.less';
 import HotWords from '../hotwords/index';
-import { getLocalIcon} from 'utils'
+import { getLocalIcon } from 'utils'
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -15,9 +15,9 @@ const Brief = Item.Brief;
 function Dashboard({dashboard, loading, dispatch}) {
     const {Headersearch, BaseLine} = Layout,
         PrefixCls = "dashboard",
-        {hasNews, modules, lists, notes, hotWords , isModalShow} = dashboard;
+        {hasNews, modules, lists, notes, hotWords, isModalShow, hotWordModuleId, noteModuleId} = dashboard;
 
-    const handleGirdClick = (moduleId) => {
+    const handleNeedRefreshing = () => {
             //跳转时，开启分类检索页面刷新。
             dispatch({
                 type: "typequery/updateState",
@@ -25,6 +25,9 @@ function Dashboard({dashboard, loading, dispatch}) {
                     refreshing: true
                 }
             });
+        },
+        handleGirdClick = (moduleId) => {
+            handleNeedRefreshing();
             dispatch(routerRedux.push({
                 pathname: "/typequery",
                 query: {
@@ -37,57 +40,28 @@ function Dashboard({dashboard, loading, dispatch}) {
                 pathname: "/details",
                 query: {
                     moduleId,
-                    id:pageId
+                    id: pageId
                 }
             }));
         },
-        handleHotWordChlick = (moduleId, pageId) => {
-            dispatch(routerRedux.push({
-                pathname: "/typequery",
-                query: {
-                    moduleId,
-                    lists: pageId
+        handleNoticeClick = () => {
+            dispatch({
+                type: 'dashboard/updateState',
+                payload: {
+                    isModalShow: !isModalShow
                 }
-            }));
-        },
-      showNotice = (e) => {
-    e.preventDefault();
-    dispatch({
-      type: 'dashboard/updateState', payload: {isModalShow: true}
-    })
-  },
-      onClose = () => {
-    dispatch({
-      type: 'dashboard/updateState', payload: {isModalShow: false}
-    })
-  },
-      goNoticeDetail=(moduleId)=>{
-        dispatch(routerRedux.push({
-          pathname: "/typequery",
-          query: {
-            moduleId
-          }
-        }));
-      }
-  const onWrapTouchStart = (e) => {
-    // fix touch to scroll background page on iOS
-    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
-      return;
-    }
-    const pNode = closest(e.target, '.am-modal-content');
-    if (!pNode) {
-      e.preventDefault();
-    }
-  }
-  const goList =(moduleId)=>{
-    dispatch(routerRedux.push(
-      {
-        pathname: "/typequery",
-        query: {
-          moduleId
+            })
+        };
+    const onWrapTouchStart = (e) => {
+        // fix touch to scroll background page on iOS
+        if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+            return;
         }
-      }));
-  };
+        const pNode = closest(e.target, '.am-modal-content');
+        if (!pNode) {
+            e.preventDefault();
+        }
+    }
     const packModuleList = () => {
         return lists.map((list, index) => {
             const isLast = index === lists.length - 1;
@@ -96,15 +70,15 @@ function Dashboard({dashboard, loading, dispatch}) {
                  marginBottom: ".1rem"
              } : {} }>
                   <WhiteSpace size="sm" />
-                  <List renderHeader={ () => (<div className={ styles[`${PrefixCls}-head-title`] }>
-                                                <img src={ list.icon } />
-                    <span className={ styles[`${PrefixCls}-list-header`] }>{ list.text }</span>
-                    <span
-                      onTouchStart={goList.bind(this,list.id)}
-                      className={styles[`${PrefixCls}-list-more`]}>更多
-                      <Icon type={getLocalIcon("/page/更多.svg")}/>
-                    </span>
-                                              </div>) }>
+                  <List renderHeader={ () => (
+                                           <div className={ styles[`${PrefixCls}-head-title`] } onClick={ handleNeedRefreshing }>
+                                             <Link to={ `/typequery?moduleId=${list.id}` }>
+                                               <img src={ list.icon } />
+                                               <span className={ styles[`${PrefixCls}-list-header`] }>{ list.text }</span>
+                                               <span className={ styles[`${PrefixCls}-list-more`] }>更多 <Icon type={ getLocalIcon("/page/more.svg") }/></span>
+                                             </Link>
+                                           </div>
+                                       ) }>
                     { list.items && list.items.map((item, index) => {
                           let isNew = item.isNew === true;
                           let result = (
@@ -145,49 +119,47 @@ function Dashboard({dashboard, loading, dispatch}) {
           <Headersearch {...headerProps}/>
           <div className={ styles[`${PrefixCls}-normal`] }>
             <Grid
-                  itemStyle={{borderRadius:'20px'}}
+                  itemStyle={ { borderRadius: '20px' } }
                   data={ modules }
                   columnNum={ 4 }
                   hasLine={ false }
                   onClick={ (_, index) => {
                                 handleGirdClick(_.id);
                             } } />
-            <HotWords hotwords={ hotWords } dispatch={ dispatch } handleHotWordChlick={ handleHotWordChlick } />
+            <HotWords hotwords={ hotWords } handleOnClick={ handleNeedRefreshing } hotWordModuleId={ hotWordModuleId } />
             <WhiteSpace size="sm" />
-            <div className={styles[`${PrefixCls}-noticebar-container`]}>
+            <div className={ styles[`${PrefixCls}-noticebar-container`] }>
               <NoticeBar
-                onClick={showNotice}
-                mode="link" icon={<Icon type={getLocalIcon("/page/notes.svg")}/>}
-                marqueeProps={{loop: true, style: {padding: '0 0.15rem'}}}>
-                  {notes.title}
+                         onClick={ handleNoticeClick }
+                         mode="link"
+                         icon={ <Icon type={ getLocalIcon("/page/notes.svg") } /> }
+                         marqueeProps={ { loop: true, style: { padding: '0 0.15rem' } } }>
+                { notes.title }
               </NoticeBar>
               <Modal
-                visible={isModalShow}
-                transparent
-                maskClosable={false}
-                title="公告"
-                footer={[{
-                  text: '关闭', onPress: () => {
-                    onClose()
-                  }
-                }]}
-                wrapProps={{onTouchStart: onWrapTouchStart}}
-              >
-                <div style={{height: 200, overflowY: 'scroll'}}>
-                  <div className={styles[`${PrefixCls}-noticebar-modal-box`]}>
-                    <div className={styles[`${PrefixCls}-noticebar-modal-box-text`]}>
-                      {notes.title}
+                     visible={ isModalShow }
+                     transparent
+                     maskClosable={ false }
+                     title="公告"
+                     footer={ [{ text: '关闭', onPress: () => { handleNoticeClick() } }] }
+                     wrapProps={ { onTouchStart: onWrapTouchStart } }>
+                <div style={ { height: 240, overflowY: 'scroll' } }>
+                  <div className={ styles[`${PrefixCls}-noticebar-modal-box`] }>
+                    <div className={ styles[`${PrefixCls}-noticebar-modal-box-text`] }>
+                      { notes.title }
                     </div>
-                    <div className={styles[`${PrefixCls}-noticebar-modal-box-info`]}>
-                      <p>{`${notes.author}-${notes.date}`}</p>
+                    <div className={ styles[`${PrefixCls}-noticebar-modal-box-info`] }>
+                      <p>
+                        { `${notes.author}-${notes.date}` }
+                      </p>
                     </div>
                   </div>
                 </div>
               </Modal>
-              <div
-                onTouchEnd={goNoticeDetail.bind(null,"6")}
-                className={styles[`${PrefixCls}-noticebar-container-btn`]}>
-                <Icon type={getLocalIcon('./page/more.svg')}/>
+              <div className={ styles[`${PrefixCls}-noticebar-container-btn`] } onClick={ handleNeedRefreshing }>
+                <Link to={ `/typequery?moduleId=${noteModuleId}` }>
+                  <Icon type={ getLocalIcon('./page/more.svg') } />
+                </Link>
               </div>
             </div>
             { packModuleList() }
