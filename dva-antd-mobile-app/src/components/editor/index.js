@@ -2,6 +2,7 @@ import React from 'react';
 import {Button,Icon} from 'antd-mobile';
 import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState} from 'draft-js';
 import {getLocalIcon} from 'utils'
+import {stateToHTML} from 'draft-js-export-html';
 import Immutable from 'immutable';
 import MediaControls from './component/mediabox'
 import InlineStyleControls from './component/inlinebox'
@@ -19,6 +20,23 @@ const blockRenderMap = Immutable.Map({
     element: 'div',
   },
 });
+let options = {
+  blockStyleFn(block){
+  if (block.getType('center')) {
+    return {
+      attributes: {
+         align:'center'
+      }
+    }
+  }else {
+    return {
+      attributes: {
+        align:''
+      }
+    }
+  }
+}
+}
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -32,9 +50,9 @@ class MyEditor extends React.Component {
 
     this.focus = () => this.refs.editor.focus();
     this.logState = () => {//发送数据
-      const content = this.state.editorState.getCurrentContent();
-      console.log(convertToRaw(content).blocks[0].text);
-      console.log(convertToRaw(content));
+      const content = this.state.editorState;
+      // console.log(stateToHTML(this.state.editorState.getCurrentContent()));
+      console.log(stateToHTML(this.state.editorState.getCurrentContent(),options));
     };
     this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
     this.addImage = this._addImage.bind(this);
@@ -175,12 +193,19 @@ class MyEditor extends React.Component {
           <Icon type={getLocalIcon('/editor/关闭.svg')}/>
         </div>
         <div className={styles["RichEditor-root"]}>
+          <div className={styles["RichEditor-control-sendbtn"]}>
+            <Button
+              disabled={!contentState.hasText()}
+              type="primary" inline size="small"
+              style={{padding:'5px 5px',lineHeight:'1.6em'}}
+              onTouchEnd={this.logState}
+            >发送</Button>
+          </div>
           <div className={className} onClick={this.focus} >
             <Editor
               blockStyleFn={getBlockStyle}
               blockRendererFn={mediaBlockRenderer}
               blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}
-
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
               handlePastedText={(value) => (console.log('paste', value))}
@@ -206,14 +231,6 @@ class MyEditor extends React.Component {
                 onToggle={this.toggleBlockType}
               />
             </div>
-            <div className={styles["RichEditor-control-sendbtn"]}>
-              <Button
-                disabled={!contentState.hasText()}
-                type="primary" inline size="small"
-                style={{padding:'5px 5px',lineHeight:'1.6em'}}
-                onTouchEnd={this.logState}
-                >发送</Button>
-            </div>
           </div>
         </div>
       </div>
@@ -232,8 +249,8 @@ function getBlockStyle(block) {
       return styles['align-left'];
     case 'center':
       return styles['align-center'];
-    case 'right':
-      return styles['align-right'];
+    case 'blockquote':
+      return styles['blockquote'];
     default: return null;
   }
 }
@@ -250,27 +267,6 @@ function mediaBlockRenderer(block) {
 }
 
 
-const Image = (props) => {
-  return <img src={props.src} style={styles2.media} />;
-};
-
-
-const Media = (props) => {
-  const entity = Entity.get(props.block.getEntityAt(0));
-  const {src} = entity.getData();
-  const type = entity.getType();
-
-  let media;
-  if (type === 'audio') {
-    media = <Audio src={src} />;
-  } else if (type === 'image') {
-    media = <Image src={src} />;
-  } else if (type === 'video') {
-    media = <Video src={src} />;
-  }
-
-  return media;
-};
 
 const styles2 = {
   root: {

@@ -4,11 +4,10 @@ import {getLocalIcon} from 'utils'
 import styles from '../index.less'
 
 
-
 const MediaControls=()=>{
   return (
     <div className={styles['RichEditor-controls']}>
-      <span className={styles['RichEditor-controls-item']}><Icon type={getLocalIcon('/editor/sendimg.svg')}/></span>
+      <span className={styles['RichEditor-controls-img-box']}><input type="file" accept="image/*" multiple=""/><Icon type={getLocalIcon('/editor/sendimg.svg')}/></span>
       <span className={styles['RichEditor-controls-item']}><Icon type={getLocalIcon('/editor/camera.svg')}/></span>
       <span className={styles['RichEditor-controls-item']}><Icon type={getLocalIcon('/editor/emjoy.svg')}/></span>
     </div>

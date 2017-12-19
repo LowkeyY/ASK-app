@@ -12,9 +12,10 @@ const BLOCK_TYPES = [
   // { label: 'left', style: 'left' },
   // { label: 'right', style: 'right' },
   // { label: <Icon type={getLocalIcon('/editor/左对齐.svg')}/>, style: 'left' },
+  { label:  <Icon type={getLocalIcon('/editor/blockquote.svg')}/>, style: 'blockquote' },
+  { label: <Icon type={getLocalIcon('/editor/alignleft.svg')}/>, style: 'left' },
   { label: <Icon type={getLocalIcon('/editor/middle.svg')}/>, style: 'center' },
   { label: <Icon type={getLocalIcon('/editor/ul.svg')}/>, style: 'unordered-list-item' },
-  { label: <Icon type={getLocalIcon('/editor/ol.svg')}/>, style: 'ordered-list-item' },
 ];
 
 const BlockStyleControls = (props) => {

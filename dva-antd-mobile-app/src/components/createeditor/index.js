@@ -18,6 +18,7 @@ const blockRenderMap = Immutable.Map({
   'center': {
     element: 'div',
   },
+
 });
 class CreateEditor extends React.Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class CreateEditor extends React.Component {
     this.focus = () => this.refs.editor.focus();
     this.logState = () => {//发送数据
       const content = this.state.editorState.getCurrentContent();
-      alert(convertToRaw(content).blocks[0].text);
+      alert();
       console.log(convertToRaw(content));
     };
     this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
@@ -213,8 +214,8 @@ function getBlockStyle(block) {
       return styles['align-left'];
     case 'center':
       return styles['align-center'];
-    case 'right':
-      return styles['align-right'];
+    case 'blockquote':
+      return styles['blockquote'];
     default: return null;
   }
 }
@@ -290,3 +291,86 @@ CreateEditor.propTypes = {
 }
 
 export default CreateEditor;
+
+
+
+
+
+// import React from 'react';
+// import MonacoEditor from 'react-monaco-editor';
+//
+// class CreateEditor extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       code: '// type your code...',
+//     }
+//   }
+//   editorDidMount(editor, monaco) {
+//     console.log('editorDidMount', editor);
+//     editor.focus();
+//   }
+//   onChange(newValue, e) {
+//     console.log('onChange', newValue, e);
+//   }
+//   render() {
+//     const code = this.state.code;
+//     const options = {
+//       selectOnLineNumbers: true
+//     };
+//     return (
+//       <MonacoEditor
+//         width="800"
+//         height="600"
+//         language="javascript"
+//         theme="vs-dark"
+//         value={code}
+//         options={options}
+//         onChange={::this.onChange}
+//         editorDidMount={::this.editorDidMount}
+//       />
+//     );
+//   }
+// }
+// export default CreateEditor
+
+
+// import React, { Component } from 'react';
+// import Editor from 'draft-js-plugins-editor';
+// import createHashtagPlugin from 'draft-js-hashtag-plugin';
+// import createLinkifyPlugin from 'draft-js-linkify-plugin';
+// import createImagePlugin from 'draft-js-image-plugin';
+// import { EditorState } from 'draft-js';
+// const imagePlugin = createImagePlugin();
+// const hashtagPlugin = createHashtagPlugin();
+// const linkifyPlugin = createLinkifyPlugin();
+//
+// const plugins = [
+//   hashtagPlugin,
+//   linkifyPlugin,
+//   imagePlugin
+// ];
+//
+//  class CreateEditor extends Component {
+//
+//   state = {
+//     editorState: EditorState.createEmpty(),
+//   };
+//
+//   onChange = (editorState) => {
+//     this.setState({
+//       editorState,
+//     });
+//   };
+//
+//   render() {
+//     return (
+//       <Editor
+//         editorState={this.state.editorState}
+//         onChange={this.onChange}
+//         plugins={plugins}
+//       />
+//     );
+//   }
+// }
+// export default CreateEditor

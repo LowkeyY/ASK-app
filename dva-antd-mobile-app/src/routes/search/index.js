@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { SearchBar, Button, WhiteSpace, WingBlank , Flex , Radio , Picker , List} from 'antd-mobile';
+// import SearchList from './component/index'
 import {searchStyles} from './index.less';
 const RadioItem = Radio.RadioItem;
 
 function Search({
-  location , Search , loading , dispatch 
+  location , Search , loading , dispatch
 }) {
 
 	const PrefixCls = "page-search";
@@ -19,9 +20,9 @@ function Search({
 	} , handleFlexItemClick = (key) => {
 		console.log("handleFlexItemClick" , key);
 	}
-
 	const queryValues = 1 ,packQueryparams = (datas) => {
 		return (
+		  <div>
 			<Flex>
 				{datas && datas.map((i ,index) => {
 					return (
@@ -30,9 +31,12 @@ function Search({
 								<span>{i.text}</span>
 							</RadioItem>
 						</Flex.Item>
+
 					)
 				})}
 			</Flex>
+        {/*<SearchList/>*/}
+      </div>
 		)
 	}
 
@@ -42,7 +46,7 @@ function Search({
 		{ text : '设备资料', value : 3} ,
 		{ text : '知识文库', value : 4} ,
 		{ text : '热词', value : 5} ,
-		{ text : '通知公告', value : 6} 
+		{ text : '通知公告', value : 6}
 	];
 
 	let datas = [];
@@ -52,7 +56,7 @@ function Search({
 	    	<WingBlank />
 	    	<SearchBar placeholder={"请输入搜索内容"} focused onClear = {goCancel} onCancel={goBack}/>
 	    	<div className={`${PrefixCls}`}>
-	    		
+
 				{
 					queryTypes && queryTypes.map((i ,index) => {
 						datas.push(i);

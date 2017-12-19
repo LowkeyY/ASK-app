@@ -10,11 +10,11 @@ import styles from './index.less';
 function Mysets({
   location , mysets , loading , dispatch
 }) {
-  console.log(location)
-  const {query : {froms = "/" , title = ""}} = location , PrefixCls = "mysets";
+  const {query : {froms = "/" , title = ""}} = location , PrefixCls = "mysets",{userIcon}=mysets
   const goBack = ()=> {
     dispatch(routerRedux.goBack())
   }
+
   return (
     <div>
       <div className={styles[`${PrefixCls}-header`]}>
@@ -24,7 +24,7 @@ function Mysets({
         >{title}</NavBar>
       </div>
       <div className={styles[`${PrefixCls}-normal`]}>
-        <Sets/>
+        <Sets userIcon={userIcon} dispatch={dispatch} />
       </div>
     </div>
   );

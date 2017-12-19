@@ -48,7 +48,16 @@ const Routers = function({history, app}) {
                         }, 'page02')
                     }
                 },
-                {
+              {
+                path: 'searchuser',
+                getComponent(nextState, cb) {
+                  require.ensure([], require => {
+                    registerModel(app, require('models/searchuser'))
+                    cb(null, require('routes/searchuser/'))
+                  }, 'searchuser')
+                }
+              },
+              {
                     path: 'mylist',
                     getComponent(nextState, cb) {
                         require.ensure([], require => {
