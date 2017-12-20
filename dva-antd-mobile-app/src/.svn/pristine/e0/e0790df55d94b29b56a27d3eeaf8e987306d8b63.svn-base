@@ -1,0 +1,28 @@
+@PrefixCls: bbsedit;
+.selectmenu-box{
+  :global{
+    .am-list-content{
+      font-size: .34rem !important;
+    }
+    .am-list-line{
+      padding-right:.15rem;
+
+    }
+    .am-list-extra{
+      color: red;
+      flex-basis:45% !important;
+    }
+
+    .am-list-body{
+      font-size: 0.34rem;
+    }
+
+  }
+}
+.my-draft-list{
+  padding-left:.15rem;
+}
+
+.@{PrefixCls}-preview-btn{
+  float: right;
+}

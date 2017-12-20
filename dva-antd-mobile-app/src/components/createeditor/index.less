@@ -5,16 +5,16 @@
 .RichEditor-root {
   background: #fff;
   font-family: 'Georgia', serif;
-  font-size: 14px;
-  padding: 10px;
+  font-size: 30px;
 }
 
 .RichEditor-editor {
   padding: 20px;
   border: 1px solid #ddd;
-  min-height:450px;
+  min-height:720px;
   cursor: pointer;
   font-size: 30px;
+  overflow-y: scroll;
   margin: 10px 0 20px 0;
 }
 
@@ -55,10 +55,23 @@
   margin-bottom: 5px;
   user-select: none;
   &-item{
-    margin-right: 30px;
+    margin-right:40px;
   }
   &-img-box{
-    margin-right: 30px;
+    margin-right: 40px;
+    position: relative;
+    overflow: hidden;
+    & input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+    }
+  }
+  &-camera-box{
+    margin-right: 40px;
     position: relative;
     overflow: hidden;
     & input{
@@ -75,9 +88,8 @@
 .RichEditor-styleButton {
   color: #999;
   cursor: pointer;
-  margin-right: 20px;
+  margin-right: 30px;
   padding: 2px 0;
-  display: inline-block;
 }
 
 .RichEditor-activeButton {
@@ -93,17 +105,30 @@
 .align-left div {
   text-align: left;
 }
-
+.blockquote {
+  margin: 10px 0;
+}
 .blockquote div{
   background: #ddd;
+
 }
 .RichEditor-control{
+  background: #ffffff;
+  //width: 100%;
+  //position: fixed;
+  //left:0;
+  //bottom: 0;
+  z-index:10;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   &-box{
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
+    align-items: center;
   }
 }
+
+
+
 

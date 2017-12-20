@@ -1,0 +1,24 @@
+.row {
+  padding: 0 0.3rem;
+  background-color: white;
+}
+.row-title {
+  color: #888;
+  font-size: 0.3rem;
+  :global{
+  	.am-list-line-multiple{
+  		padding : 0.15rem 0.2rem 0.15rem 0 !important;
+  	}
+  	.am-list-line{
+  		min-height: 0.68rem;
+  	}
+  	.am-list-content{
+  		font-size : 0.3rem !important;
+  	}
+  }
+}
+.row-text {
+  display: inline-block;
+  font-size: 0.32rem;
+  line-height: 1;
+}

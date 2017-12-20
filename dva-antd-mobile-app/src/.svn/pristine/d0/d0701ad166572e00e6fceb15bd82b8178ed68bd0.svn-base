@@ -1,0 +1,12 @@
+@Prefixcls:forumdetails;
+.@{Prefixcls}-title{
+  margin: 10px 0;
+  font-size: 30px;
+}
+.@{Prefixcls}-content{
+  background-color: #fff;
+  padding: 30px;
+  font-size: 36px;
+  line-height:1.5em;
+}
+

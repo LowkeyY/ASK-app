@@ -26,6 +26,7 @@ class CreateEditor extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(),
       disabled:true,
+      isShowController:false,
       url: '',
       urlType: '',
     };
@@ -149,10 +150,19 @@ class CreateEditor extends React.Component {
   _addImage() {
     this._promptForMedia('image');
   }
-
+  showController(){
+    this.setState({
+      isShowController:true
+    })
+  }
+  hiddenController(){
+    this.setState({
+      isShowController:false
+  })
+  }
   render() {
     const {editorState} = this.state;
-    const  display=this.props.editorControl?{display:'block'}:{display:'none'};
+    const  display=this.state.isShowController?{display:'block'}:{display:'none'};
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = styles['RichEditor-editor'];
@@ -166,37 +176,52 @@ class CreateEditor extends React.Component {
     return (
       <div className={styles["RichEditor-box"]}>
         <div className={styles["RichEditor-root"]}>
-          <div className={className} onClick={this.focus} >
+          <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
+            {/*<Icon type={getLocalIcon('/editor/close.svg')}/>*/}
+            {/*<Button*/}
+            {/*type="primary"*/}
+            {/*inline*/}
+            {/*size="small"*/}
+            {/*style={ { padding: '5px 5px', lineHeight: '1.6em' } }>*/}
+            {/*取消*/}
+            {/*</Button>*/}
+          </div>
+          <div className={className} onClick={this.focus}>
             <Editor
               blockStyleFn={getBlockStyle}
               blockRendererFn={mediaBlockRenderer}
               blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}
-
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
               handlePastedText={(value) => (console.log('paste', value))}
               handlePastedFiles={this.pasteMedia}
               handleDroppedFiles={this.pasteMedia}
               onChange={this.onChange}
+              onFocus={this.showController.bind(this)}
+              onBlur={this.hiddenController.bind(this)}
               onTab={this.onTab}
-              placeholder={this.props.placeholder}
+              placeholder='请输入...'
               ref='editor'
               spellCheck={true}
-              onPaste={(value) => (console.log('paste', value))}
-            />
+              onPaste={(value) => (console.log('paste', value))}/>
           </div>
-          <div className={styles["RichEditor-control"]}>
-            <div className={styles["RichEditor-control-box"]}>
-              <MediaControls/>
-              <InlineStyleControls
-                editorState={editorState}
-                onToggle={this.toggleInlineStyle}
-              />
-              <BlockStyleControls
-                editorState={editorState}
-                onToggle={this.toggleBlockType}
-              />
-            </div>
+        </div>
+        <div className={styles["RichEditor-control"]} >
+          <div className={styles["RichEditor-control-box"]}>
+            <MediaControls/>
+            <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle}/>
+            <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType}/>
+          </div>
+          <div className={styles["RichEditor-control-sendbtn"]}>
+            <Button
+              disabled={!contentState.hasText()}
+              type="primary"
+              inline
+              size="small"
+              style={{padding: '5px 5px', lineHeight: '1.6em'}}
+              onTouchEnd={this.logState}>
+              发送
+            </Button>
           </div>
         </div>
       </div>
@@ -374,3 +399,4 @@ export default CreateEditor;
 //   }
 // }
 // export default CreateEditor
+

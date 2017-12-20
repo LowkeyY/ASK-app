@@ -1,0 +1,150 @@
+
+@PrefixCls: dashboard;
+
+.@{PrefixCls}-normal {
+  margin-top : 0.9rem;
+  & img{
+    border-radius: 20px;
+  }
+  :global {
+    & .am-grid .am-flexbox .am-flexbox-item .am-grid-item-content .am-grid-item-inner-content .am-grid-icon{
+      width : 60%;
+      height: 60%;
+    }
+    .am-grid-item{
+      min-height: ~'90px;'
+    }
+    .special-badge .am-list-line .am-list-extra {
+      padding: 0;
+      height: 44px;
+      flex-basis: 10%;
+    }
+    .am-list-header{
+      background:#ffffff;
+    }
+    .am-icon-md{
+      vertical-align:middle;
+    }
+    .am-list-body .am-badge.am-badge-corner-wrapper{
+      width:100%;
+    }
+    .am-notice-bar-icon{
+      padding-left : 30px;
+      margin-left : 0;
+    }
+    .am-notice-bar-icon + div {
+      padding-left: 10px;
+      margin-left : 0;
+    }
+  }
+}
+
+.@{PrefixCls}-grid{
+  &-img{
+    width: .9rem;
+    height: .9rem;
+    border-radius: 0.2rem;
+  }
+  &-title{
+    color: #888;
+    font-size: 0.25rem;
+    margin-top: 0.1rem;
+
+  }
+}
+
+.@{PrefixCls}-list{
+  &-header {
+    color : #1284d6;
+    font-size : 0.32rem;
+    vertical-align:middle;
+    padding-left:10px;
+  }
+  &-more{
+    color: #1284d6;
+    float: right;
+  }
+  &-body {
+    font-size : 0.3rem;
+  }
+  &-isNew {
+    color :#ff5b05;
+  }
+}
+
+
+.@{PrefixCls}-head-title{
+  & img {
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+  }
+}
+
+.@{PrefixCls}-notes{
+  :global {
+    & .am-list-body{
+      border : 0;
+      & .am-list-item{
+        min-height: 0.5rem;
+        padding-left: 0.2rem;
+        & .am-list-thumb {
+          margin-right : 0;
+          & img {
+            width: 0.5rem;
+            height: 0.5rem;
+          }
+        }
+        & .am-list-line {
+          min-height: 0.5rem;
+          padding-right: 0.2rem;
+          & .am-list-extra{
+            flex-basis : 10%;
+            font-size : 0.25rem;
+          }
+        }
+      }
+      &:after {
+        border : 0 !important;
+      }
+    }
+  }
+  &-item{
+    min-height: 0.5rem;
+    :global {
+      & .am-list-line{
+        min-height: 0.5rem;
+        & .am-list-content{
+          font-size : 0.25rem;
+        }
+        &:after {
+          border : 0 !important;
+        }
+      }
+    }
+  }
+}
+.@{PrefixCls}-noticebar-container{
+  position: relative;
+}
+.@{PrefixCls}-noticebar-container-btn{
+  position: absolute;
+  color:#f76a24;
+  top: 0;
+  right: 0;
+  padding: 14px 14px;
+
+}
+.@{PrefixCls}-noticebar-modal-box{
+  &-text{
+    margin-bottom: 20px;
+  }
+  &-info{
+    display: flex;
+    justify-content: flex-end;
+    font-size: 22px;
+    &>p{
+      margin: 0;
+    }
+  }
+}

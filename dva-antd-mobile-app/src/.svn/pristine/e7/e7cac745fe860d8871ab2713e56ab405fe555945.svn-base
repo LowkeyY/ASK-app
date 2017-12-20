@@ -1,0 +1,60 @@
+@navbarPrefixCls: navbar-fixed;
+@navbar-height: 90px;
+
+.@{navbarPrefixCls}{
+  display: flex;
+  width : 100%;
+  height: @navbar-height;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  margin-bottom:@navbar-height ;
+  &-left , &-center , &-right {
+    display: flex;
+    height : 100%;
+    align-items: center;
+    color : white;
+  }
+  &-left {
+    margin-left: 0.32rem;
+    font-size: .3rem;
+    flex : 4;
+  }
+  &-center {
+    margin: 0 0.1rem 0 0.3rem;
+    flex : 18;
+  }
+  &-right {
+    margin-right: 0.32rem;
+    flex : 1;
+    :global{
+      .am-badge {
+        color : white;
+        & .am-icon-md{
+          width : 0.5rem;
+          height : 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.search {
+    width : 98%;
+    color: white;
+    justify-content : flex-start;
+    background-color: #006dbc;
+    border: 1PX solid #1a72b9;
+    :global{
+      & svg{
+        width: 0.36rem;
+        height: 0.36rem;
+        opacity: .9;
+      }
+      & span{
+        font-size:0.3rem;
+        opacity: .9;
+      }
+    }
+}

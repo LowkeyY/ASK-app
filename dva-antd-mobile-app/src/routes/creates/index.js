@@ -66,11 +66,11 @@ function Creates({
                            overlayStyle={{color: 'currentColor'}}
                     // visible={this.state.visible}
                            overlay={[
-                             (<Item key="4" value="scan"
-                                    data-seed="logId">
-                               <div className={styles[`${PrefixCls}-send-btn-box`]}><Icon
-                                 type={getLocalIcon('/page/sendup.svg')}/><span>发送</span></div>
-                             </Item>),
+                             // (<Item key="4" value="scan"
+                             //        data-seed="logId">
+                             //   <div className={styles[`${PrefixCls}-send-btn-box`]}><Icon
+                             //     type={getLocalIcon('/page/sendup.svg')}/><span>发送</span></div>
+                             // </Item>),
                              (<Item key="5" value="special"
                                     style={{whiteSpace: 'nowrap'}}>
                                <div className={styles[`${PrefixCls}-send-btn-box`]}><Icon

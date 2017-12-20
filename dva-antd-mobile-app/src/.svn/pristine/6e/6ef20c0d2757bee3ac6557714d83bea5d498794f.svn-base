@@ -1,0 +1,15 @@
+
+.case-title-box{
+  margin-top: 10px;
+  display: flex;
+  justify-content:start;
+}
+.case-title-box>.case-icom{
+  width: 100px;
+  height: 100px;
+}
+.case-title{
+  font-size: 30px;
+  padding-left: 30px;
+  margin-top: 0;
+}

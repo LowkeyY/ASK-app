@@ -1,64 +1,83 @@
 import React from 'react';
-import {Button,Icon} from 'antd-mobile';
-import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState} from 'draft-js';
+import {Button, Icon} from 'antd-mobile';
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  DefaultDraftBlockRenderMap,
+  AtomicBlockUtils,
+  convertToRaw,
+  Entity,
+  ContentState
+} from 'draft-js';
 import {getLocalIcon} from 'utils'
-import {stateToHTML} from 'draft-js-export-html';
+//import {stateToHTML} from 'draft-js-export-html';
 import Immutable from 'immutable';
 import MediaControls from './component/mediabox'
 import InlineStyleControls from './component/inlinebox'
 import BlockStyleControls from './component/blockbox'
 import "draft-js/dist/Draft.css";
 import styles from './index.less'
+
 const blockRenderMap = Immutable.Map({
   'left': {
     element: 'div',
   },
-  'right': {
-    element: 'div',
-  },
   'center': {
     element: 'div',
-  },
+  }
 });
-let options = {
-  blockStyleFn(block){
-  if (block.getType('center')) {
-    return {
-      attributes: {
-         align:'center'
+let options = { // 转换Html
+  blockStyleFn(block) {
+    if (block.getType() === 'center') {
+      return {
+        attributes: {
+          align: 'center'
+        }
       }
-    }
-  }else {
-    return {
-      attributes: {
-        align:''
+    } else if (block.getType() === 'left') {
+      return {
+        attributes: {
+          align: 'left'
+        }
+      }
+    } else if (block.getType() === 'blockquote') {
+      return {
+        attributes: {
+          background: '#ddd',
+          margin: '10px 0'
+        }
       }
     }
   }
 }
-}
+
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      showEditor:true,//控制display
-      disabled:true,
+      showEditor: true, //控制display
+      disabled: true,
       url: '',
       urlType: '',
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.logState = () => {//发送数据
+    this.logState = () => { //发送数据
       const content = this.state.editorState;
       // console.log(stateToHTML(this.state.editorState.getCurrentContent()));
-      console.log(stateToHTML(this.state.editorState.getCurrentContent(),options));
+      console.log(stateToHTML(this.state.editorState.getCurrentContent(), options));
     };
-    this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
+    this.onURLChange = (e) => this.setState({
+      urlValue: e.target.value
+    });
     this.addImage = this._addImage.bind(this);
     this.confirmMedia = this._confirmMedia.bind(this);
     this.pasteMedia = this._pasteImage.bind(this);
-    this.onChange = (editorState) => this.setState({ editorState });
+    this.onChange = (editorState) => this.setState({
+      editorState
+    });
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
     this.onURLInputKeyDown = this._onURLInputKeyDown.bind(this);
     this.onTab = (e) => this._onTab(e);
@@ -102,7 +121,9 @@ class MyEditor extends React.Component {
   _confirmMedia(e) {
     e.preventDefault();
     const {editorState, urlValue, urlType} = this.state;
-    const entityKey = Entity.create(urlType, 'IMMUTABLE', { src: urlValue })
+    const entityKey = Entity.create(urlType, 'IMMUTABLE', {
+      src: urlValue
+    })
 
     this.setState({
       editorState: AtomicBlockUtils.insertAtomicBlock(
@@ -118,7 +139,7 @@ class MyEditor extends React.Component {
   }
 
   _pasteImage(files) {
-    console.log('files',files);
+    console.log('files', files);
     const {editorState} = this.state;
     let _self = this;
     for (var i = 0; i < files.length; i++) {
@@ -129,7 +150,9 @@ class MyEditor extends React.Component {
         reader.readAsDataURL(blob);
         reader.onloadend = function () {
           let base64data = reader.result;
-          const entityKey = Entity.create('image', 'IMMUTABLE', { src: base64data })
+          const entityKey = Entity.create('image', 'IMMUTABLE', {
+            src: base64data
+          })
 
           _self.setState({
             editorState: AtomicBlockUtils.insertAtomicBlock(
@@ -167,15 +190,25 @@ class MyEditor extends React.Component {
   _addImage() {
     this._promptForMedia('image');
   }
-  hiddenEditor=()=>{
+
+  hiddenEditor = () => {
     console.log(this.props)
-   this.props.dispatch({
-      type:'details/updateState' , payload : {isShowInputFoot : true,isShowEditor:false}
+    this.props.dispatch({
+      type: 'details/updateState',
+      payload: {
+        isShowInputFoot: true,
+        isShowEditor: false
+      }
     })
   }
+
   render() {
     const {editorState} = this.state;
-    const  display=this.props.isShowEditor?{display:'block'}:{display:'none'};
+    const display = this.props.isShowEditor ? {
+      display: 'block'
+    } : {
+      display: 'none'
+    };
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = styles['RichEditor-editor'];
@@ -188,57 +221,61 @@ class MyEditor extends React.Component {
 
     return (
       <div className={styles["RichEditor-box-header"]} style={display}>
-      <div className={styles["RichEditor-box"]}>
-        <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
-          <Icon type={getLocalIcon('/editor/关闭.svg')}/>
-        </div>
-        <div className={styles["RichEditor-root"]}>
-          <div className={styles["RichEditor-control-sendbtn"]}>
-            <Button
-              disabled={!contentState.hasText()}
-              type="primary" inline size="small"
-              style={{padding:'5px 5px',lineHeight:'1.6em'}}
-              onTouchEnd={this.logState}
-            >发送</Button>
-          </div>
-          <div className={className} onClick={this.focus} >
-            <Editor
-              blockStyleFn={getBlockStyle}
-              blockRendererFn={mediaBlockRenderer}
-              blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}
-              editorState={editorState}
-              handleKeyCommand={this.handleKeyCommand}
-              handlePastedText={(value) => (console.log('paste', value))}
-              handlePastedFiles={this.pasteMedia}
-              handleDroppedFiles={this.pasteMedia}
-              onChange={this.onChange}
-              onTab={this.onTab}
-              placeholder={this.props.placeholder}
-              ref='editor'
-              spellCheck={true}
-              onPaste={(value) => (console.log('paste', value))}
-            />
-          </div>
-          <div className={styles["RichEditor-control"]}>
-            <div className={styles["RichEditor-control-box"]}>
-              <MediaControls/>
-              <InlineStyleControls
+        <div className={styles["RichEditor-box"]}>
+          <div className={styles["RichEditor-root"]}>
+            <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
+              <Icon type={getLocalIcon('/editor/close.svg')}/>
+              {/*<Button*/}
+              {/*type="primary"*/}
+              {/*inline*/}
+              {/*size="small"*/}
+              {/*style={ { padding: '5px 5px', lineHeight: '1.6em' } }>*/}
+              {/*取消*/}
+              {/*</Button>*/}
+            </div>
+            <div className={className} onClick={this.focus}>
+              <Editor
+                blockStyleFn={getBlockStyle}
+                blockRendererFn={mediaBlockRenderer}
+                blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}
                 editorState={editorState}
-                onToggle={this.toggleInlineStyle}
-              />
-              <BlockStyleControls
-                editorState={editorState}
-                onToggle={this.toggleBlockType}
-              />
+                handleKeyCommand={this.handleKeyCommand}
+                handlePastedText={(value) => (console.log('paste', value))}
+                handlePastedFiles={this.pasteMedia}
+                handleDroppedFiles={this.pasteMedia}
+                onChange={this.onChange}
+                onTab={this.onTab}
+                placeholder={this.props.placeholder}
+                ref='editor'
+                spellCheck={true}
+                onPaste={(value) => (console.log('paste', value))}/>
+            </div>
+            <div className={styles["RichEditor-control"]}>
+              <div className={styles["RichEditor-control-box"]}>
+                <MediaControls/>
+                <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle}/>
+                <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType}/>
+              </div>
+              <div className={styles["RichEditor-control-sendbtn"]}>
+                <Button
+                  disabled={!contentState.hasText()}
+                  type="primary"
+                  inline
+                  size="small"
+                  style={{padding: '5px 5px', lineHeight: '1.6em'}}
+                  onTouchEnd={this.logState}>
+                  发送
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
     );
   }
-  static defaultProps={
-    isShowEditor:false
+
+  static defaultProps = {
+    isShowEditor: false
   };
 }
 
@@ -251,7 +288,8 @@ function getBlockStyle(block) {
       return styles['align-center'];
     case 'blockquote':
       return styles['blockquote'];
-    default: return null;
+    default:
+      return null;
   }
 }
 
@@ -265,7 +303,6 @@ function mediaBlockRenderer(block) {
 
   return null;
 }
-
 
 
 const styles2 = {
@@ -301,7 +338,6 @@ const styles2 = {
 }
 
 
-MyEditor.propTypes = {
-}
+MyEditor.propTypes = {}
 
 export default MyEditor;

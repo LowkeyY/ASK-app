@@ -1,0 +1,117 @@
+
+.RichEditor-box{
+  width: 100%;
+}
+.RichEditor-root {
+  background: #fff;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.RichEditor-editor {
+  padding: 20px;
+  border: 1px solid #ddd;
+  min-height:450px;
+  cursor: pointer;
+  font-size: 30px;
+  margin: 10px 0 20px 0;
+}
+
+.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-editor .public-DraftEditor-content {
+  margin: 0 -15px -15px;
+  padding: 15px;
+}
+
+.RichEditor-editor .public-DraftEditor-content {
+  min-height: 100px;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.RichEditor-controls {
+  display: flex;
+  align-items: center;
+  color: #999999;
+  margin-bottom: 5px;
+  user-select: none;
+  &-item{
+    margin-right: 30px;
+  }
+  &-img-box{
+    margin-right: 30px;
+    position: relative;
+    overflow: hidden;
+    & input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+    }
+  }
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 20px;
+  padding: 2px 0;
+  display: inline-block;
+  :global {
+    & .am-icon-md{
+      width : 35px;
+      height : 35px;
+    }
+  }
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
+
+.align-right div {
+  text-align: right;
+}
+.align-center div {
+  text-align: center;
+}
+.align-left div {
+  text-align: left;
+}
+.blockquote {
+  margin: 10px 0;
+}
+.blockquote div{
+  background: #ddd;
+}
+.RichEditor-control{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  &-box{
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
