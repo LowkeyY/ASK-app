@@ -5,12 +5,15 @@ import { routerRedux } from 'dva/router';
 import { SearchBar, Button, WhiteSpace, WingBlank, SegmentedControl, List, Radio, NavBar } from 'antd-mobile';
 import { Layout } from 'components'
 import styles from './index.less'
-const RadioItem = Radio.RadioItem;
-const {BaseLine, Nav} = Layout;
+import Singleuser from './singleuser'
+import Multiuser from './multiuser'
+
+const {BaseLine, Nav} = Layout,
+    RadioItem = Radio.RadioItem,
+    PrefixCls = "page-search-user";
 
 function Searchuser({searchuser, loading, dispatch}) {
-    const {textQuery, queryusers, selectedUsers, selectedUserValues, tragetState, selectedIndex} = searchuser,
-        PrefixCls = "page-search-user";
+    const {textQuery, queryusers, selectedUsers, selectedUserValues, tragetState, selectedIndex, isSingle, tragetStateKey} = searchuser;
     const updateState = (payload) => {
             dispatch({
                 type: "searchuser/updateState",
@@ -20,6 +23,8 @@ function Searchuser({searchuser, loading, dispatch}) {
             })
         },
         goBack = () => {
+            if (isSingle)
+                handleOnSubmit();
             dispatch(routerRedux.goBack());
         },
         onSubmit = () => {
@@ -35,14 +40,18 @@ function Searchuser({searchuser, loading, dispatch}) {
         },
         handleOnSubmit = () => {
             if (tragetState) {
+                const payload = {};
+                if (tragetStateKey && tragetStateKey != "")
+                    payload[tragetStateKey] = selectedUsers
+                else
+                    payload["selectedUsers"] = selectedUsers
                 dispatch({
-                    type: `${tragetState}/updateState`,
-                    payload: {
-                        selectedUsers
-                    }
+                    type: `${tragetState}/updateUser`,
+                    payload
                 })
             }
-            goBack();
+            if (!isSingle)
+                goBack();
         };
 
     const onChange = (value) => {
@@ -68,6 +77,13 @@ function Searchuser({searchuser, loading, dispatch}) {
                 isDelete = selectedUserValues.includes(value),
                 currentSelectedUsers = [],
                 currentSelectedUserValues = [];
+            if (isSingle) {
+                updateState({
+                    selectedUsers: [data],
+                    selectedUserValues: [value]
+                })
+                return;
+            }
             if (!isDelete) { //添加选择用户,已选择用户不存在这种情况
                 updateState({
                     selectedUsers: [...selectedUsers, data],
@@ -89,41 +105,28 @@ function Searchuser({searchuser, loading, dispatch}) {
             })
         };
 
-    const layoutItems = () => {
-            const datas = selectedIndex == 0 ? queryusers : selectedUsers;
-            return (
-                <List>
-                  { datas && datas.map(data => layoutItem(data)) }
-                </List>
-            )
+    const rightContent = [];
+    if (!isSingle) {
+        rightContent.push(<Button
+                                  onClick={ handleOnSubmit }
+                                  type="ghost"
+                                  size="small"
+                                  inline>
+                            保存
+                          </Button>);
+    }
+
+    const singleProps = {
+            users: queryusers,
+            selecteds: selectedUserValues,
+            onSubmit: handleItemClick
         },
-        layoutItem = (data) => {
-            switch (selectedIndex) {
-            case 0: {
-                const checked = selectedUserValues.includes(data.value);
-                return (
-                    <List.Item onClick={ handleItemClick.bind(null, data) }>
-                      <RadioItem key={ data.value } checked={ checked }>
-                        <span>{ data.text }</span>
-                      </RadioItem>
-                    </List.Item>
-                )
-            }
-            case 1: {
-                const checked = true;
-                return (
-                    <List.Item onClick={ handleItemClick.bind(null, data) }>
-                      <RadioItem key={ data.value } checked={ checked }>
-                        <span>{ data.text }</span>
-                      </RadioItem>
-                    </List.Item>
-                )
-            }
-            }
-    }
-    const navProps = {
-        title: "选择用户"
-    }
+        multiProps = {
+            ...singleProps,
+            selectedDatas: selectedUsers,
+            selectedIndex,
+            onChange: handleControlChange
+        };
     return (<div className={ styles[`${PrefixCls}`] }>
               <div className={ styles[`${PrefixCls}-header-box`] }>
                 <div className={ styles[`${PrefixCls}-header`] }>
@@ -131,34 +134,22 @@ function Searchuser({searchuser, loading, dispatch}) {
                           mode="light"
                           leftContent={ "返回" }
                           onLeftClick={ goBack }
-                          rightContent={ [<Button onClick={ handleOnSubmit } type="ghost" size="small" inline> 保存 </Button>] }>
+                          rightContent={ rightContent }>
                     { "选择用户" }
                   </NavBar>
                   <div className={ styles[`${PrefixCls}-searchbar-box`] }>
                     <SearchBar
                                value={ textQuery }
                                placeholder={ "请输入用户名称或者登陆名" }
-                               onClear={ onClear }
-                               onSubmit={ onSubmit }
+                               onClear={onClear}
+                               onSubmit={onSubmit}
                                showCancelButton={ true }
                                onChange={ onChange } />
                   </div>
-                  <SegmentedControl
-                                    selectedIndex={ selectedIndex }
-                                    values={ ['搜索结果', '已选用户'] }
-                                    onChange={ handleControlChange }
-                                    style={ { padding: '.2rem' } } />
                 </div>
               </div>
-              <div className={ styles[`${PrefixCls}-search-menu`] }>
-                <WingBlank size="sm">
-                  <div>
-                    { layoutItems() }
-                  </div>
-                </WingBlank>
-                <BaseLine/>
-              </div>
-            </div>);
+              { isSingle ? <Singleuser {...singleProps}/> : <Multiuser {...multiProps}/> }
+            </div>)
 }
 
 Searchuser.propTypes = {

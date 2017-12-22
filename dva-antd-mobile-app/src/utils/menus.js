@@ -10,18 +10,20 @@ const menus = [{
 	icon : "/footer/types.svg",
 	selectedIcon : '/footer/types-o.svg',
 	route : '/typequery'
-},{
-	title : "测试",
-	key : 3,
-	icon : "/footer/test.svg",
-	selectedIcon : '/footer/test-o.svg',
-	route : '/test'
-},{
+}
+//,{
+// 	title : "测试",
+// 	key : 3,
+// 	icon : "/footer/test.svg",
+// 	selectedIcon : '/footer/test-o.svg',
+// 	route : '/test'
+// },
+  ,{
 	title : "我的",
 	key : 4,
 	icon : "/footer/mine.svg",
 	selectedIcon : '/footer/mine-o.svg',
-	route : '/page02'
+	route : '/mine'
 }]
 
 export default menus

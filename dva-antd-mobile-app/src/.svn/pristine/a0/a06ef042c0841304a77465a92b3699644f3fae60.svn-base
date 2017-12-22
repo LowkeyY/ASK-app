@@ -1,0 +1,26 @@
+@PrefixCls: mysets;
+
+:global{
+	.@{PrefixCls}-list{
+		& .am-list-item .am-list-line .am-list-extra{
+			flex-basis : 70%;
+		}
+
+		& .icon-title{
+			float: left;
+  			margin:20px 0 0 0;
+      vertical-align: middle;
+		}
+
+		& .icon-img-box{
+			float: right;
+			& img{
+			  width: 100px;
+			  height:100px;
+			}
+		}
+	}
+}
+
+
+
