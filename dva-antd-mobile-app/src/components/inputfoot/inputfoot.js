@@ -16,6 +16,9 @@ class InputFoot extends React.Component{
   if(anchorElement) { anchorElement.scrollIntoView(); }
 }
   hiddenINputFoot=()=>{
+    setTimeout(function(){
+      document.documentElement.scrollTop = document.body.scrollHeight;
+    },300);
       let anchorElement = document.getElementById('discuss');
       if(anchorElement) { anchorElement.scrollIntoView();}
     this.props.dispatch({
@@ -24,10 +27,11 @@ class InputFoot extends React.Component{
   }
   render(){
     const isShowInputFoot=this.props.isShowInputFoot?{display:"block"}:{display:"none"}
-    const discussLength=this.props.currentComments.length;
+    const currentComments=this.props.currentComments||[];
+    const discussLength=currentComments.length;
     let replyLength=0;
     {
-      this.props.currentComments.map((data)=>{
+      currentComments.map((data)=>{
         if(typeof (data.items)==='Array')
         replyLength += data.items.length
       }

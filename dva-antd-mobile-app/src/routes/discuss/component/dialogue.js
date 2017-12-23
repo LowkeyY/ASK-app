@@ -1,13 +1,14 @@
 import React from 'react'
+import {Modal} from 'antd-mobile';
 import Replay from './reply'
 import styles from './dialogue.less'
 import pagecontentstyles from 'themes/content.less'
 
 const defaultImgSrc = require("themes/images/user.png");
-
+const alert = Modal.alert;
 function Dialogue(props, dispatch) {
   const {items = []} = props,
-    children = [];
+    children = []
   const createMarkup = () => {
     return {
       __html: props.contents
@@ -26,7 +27,17 @@ function Dialogue(props, dispatch) {
     })
   }
   getChildren(items, children);
-
+  const delDisscuss=()=>{
+    const alertInstance = alert('', '确定删除此条评论?', [
+      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+      { text: '确定', onPress:props.handleDeleteClick.bind(null, props.id) },
+    ]);
+    setTimeout(() => {
+      // 可以调用close方法以在外部close
+      console.log('auto close');
+      alertInstance.close();
+    },10000);
+  }
   return (
     <div className={styles['dialogue-box']}>
       <div className={styles['dialogue-title-box']}>
@@ -50,7 +61,7 @@ function Dialogue(props, dispatch) {
           })}
         </div>
         <div className={styles[`dialogue-btns`]}>
-          <a onClick={props.handleDeleteClick.bind(null, props.id)} className={styles['dialogue-delete-btn']}>删除</a>
+          <a onClick={delDisscuss} className={styles['dialogue-delete-btn']}>删除</a>
           <a className={styles['dialogue-reply-btn']} onTouchEnd={makeDiscuss.bind(null, `回复：${props.name}`)}>回复</a>
         </div>
       </div>

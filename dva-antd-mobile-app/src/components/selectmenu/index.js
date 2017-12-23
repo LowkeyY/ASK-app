@@ -26,7 +26,9 @@ class SelectMenu extends React.Component {
                 top += el.offsetTop + el.clientTop;
             }
         }
+      console.log(top)
         return top + hei;
+
     }
 
     onOk = (value) => {
@@ -55,7 +57,7 @@ class SelectMenu extends React.Component {
                 data.label = data.text;
         })
         const top = this.getTop();
-        return (
+      return (
             <div style={ { top: top } } className={ `${PrefixCls}` }>
               <Menu
                     className={ `${PrefixCls}-menu` }

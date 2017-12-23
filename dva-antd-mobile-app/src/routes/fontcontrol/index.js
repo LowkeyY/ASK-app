@@ -1,5 +1,5 @@
 import React from 'react';
-import { List,NavBar,Button} from 'antd-mobile';
+import { List,NavBar,Button,Toast} from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import FontSlider from './componenet/slider'
 import CaseContentTitle from '../../components/contenttitle/contenttitle'

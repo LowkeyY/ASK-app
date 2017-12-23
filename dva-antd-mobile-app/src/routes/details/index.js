@@ -12,7 +12,7 @@ function Details({loading, dispatch, details}) {
 
     const {currentContent, currentComments,isShowEditor, isShowInputFoot,placeholder, ...props} = details;
     const {isCollect=false} = currentContent
-    console.log(isCollect)
+    console.log(details )
     const contentProps = {
             ...props,
             currentContent,

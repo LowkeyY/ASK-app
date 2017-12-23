@@ -164,7 +164,7 @@ function Filters(filters) {
                      onClear={ onChange }
                      onSubmit={ onSubmit }
                      showCancelButton={ true }
-                     onChange={ onChange }
+                     onChange={onChange}
                      onCancel={ goBack } />
           <div className={ `${PrefixCls}-module` }>
             { layoutModules() }

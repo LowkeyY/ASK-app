@@ -31,7 +31,7 @@ function Discuss({dispatch, commendProps,app}) {
             </p>
           </div>
           <List>
-            { currentComments.map((data) => (
+            { currentComments&&currentComments.map((data) => (
                   <Dialogue {...data} dispatch={ dispatch } handleDeleteClick={ handleDeleteClick } pageFontsize={pageFontsize}/>
               )) }
           </List>

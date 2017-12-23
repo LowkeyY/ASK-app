@@ -2,14 +2,14 @@ import Header from './header';
 import PropTypes from 'prop-types';
 import Headersearch from './header-search';
 import Headertitle from './headertitle';
-import { NoticeBar, List, Tag, NavBar, Icon } from 'antd-mobile';
+import { NoticeBar, List, Tag, NavBar, Icon,Modal} from 'antd-mobile';
 import { getLocalIcon } from 'utils'
 import { routerRedux } from 'dva/router';
 import markImage from 'themes/images/watermark.png';
 import { emptyFunc } from 'utils'
 import './index.less';
 
-const PrefixCls = "page-content";
+const PrefixCls = "page-content",alert = Modal.alert;
 
 module.exports = {
     Header,
@@ -70,9 +70,16 @@ module.exports = {
         const goBack = () => {
             props.dispatch(routerRedux.goBack())
         }
-
-        const del = () => {
-            alert()
+        const del=()=>{
+          const alertInstance = alert('删除', '确定删除???', [
+            { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+            { text: '确定', onPress: () => console.log('ok') },
+          ]);
+          setTimeout(() => {
+            // 可以调用close方法以在外部close
+            console.log('auto close');
+            alertInstance.close();
+          },10000);
         }
         return (
             <div className={ `${PrefixCls}-head-box` }>
@@ -83,7 +90,7 @@ module.exports = {
                         onLeftClick={ goBack }
                         rightContent={ props.moduleId === "4"
                                        ?
-                                       [<p onTouchEnd={ del }>
+                                       [<p onClick={del}>
                                           删除
                                         </p>]
                                        :

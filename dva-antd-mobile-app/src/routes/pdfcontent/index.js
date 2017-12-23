@@ -60,16 +60,16 @@ function pdfcontent({location, pdfcontent, loading, dispatch}) {
         <div>
           <div className={ styles[`${PrefixCls}-header`] }>
             <NavBar leftContent="返回" mode="light" onLeftClick={ goBack }></NavBar>
-            <div className={styles[`${PrefixCls}-silder-box`]} style={{display:isShowScale?'block':'none'}}>
+            <div className={styles[`${PrefixCls}-silder-box`]} /*style={{display:isShowScale?'block':'none'}}*/>
               <div className={styles[`${PrefixCls}-font-small`]}><Icon size="xs" type={getLocalIcon('/page/scaledown.svg')}/></div>
               <div className={styles[`${PrefixCls}-font-big`]}><Icon size="xs" type={getLocalIcon('/page/scaleup.svg')}/></div>
                   <Slider
                     style={{ marginLeft: 30, marginRight: 30 }}
                     defaultValue={1}
                     min={1}
-                    max={2.5}
-                    step={0.1}
-                    handleStyle={{background:'#108ee9',zIndex:'3'}}
+                    max={2}
+                    step={0.2}
+                    handleStyle={{width:'20px',height:'20px',background:'#108ee9',zIndex:'3'}}
                     trackStyle={{background:'#888'}}
                     onChange={onScale}
                   />

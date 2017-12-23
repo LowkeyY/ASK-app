@@ -145,6 +145,7 @@ function Searchuser({searchuser, loading, dispatch}) {
                                onSubmit={onSubmit}
                                showCancelButton={ true }
                                onChange={ onChange } />
+                    <div className={styles[`${PrefixCls}-searchbar-box-notice`]}>*请输入尽可能详细的关键字查询更多内容</div>
                   </div>
                 </div>
               </div>

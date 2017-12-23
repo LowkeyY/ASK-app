@@ -22,14 +22,45 @@ function Querylist({querylist, typequery, dispatch}) {
         {dataSource, isLoading, hasMore, pageIndex, scrollerTop} = querylist,
         {refreshing, filterSelected, primaryTag, preFilterSelected , defalutHeight} = typequery;
     const currentKey = (+(preFilterSelected[primaryTag] || filterSelected[primaryTag]));
-    const handleItemClick = (id) => {
-            dispatch(routerRedux.push({
-                pathname: "/details",
-                query: {
-                    moduleId: currentKey,
-                    id
-                }
-            }))
+    const handleItemClick = (id,currentKey) => {
+      console.log(currentKey)
+         if(currentKey===3){
+      dispatch(routerRedux.push({
+        pathname: "/pdfcontent",
+        query: {
+          moduleId: currentKey,
+          id
+        }
+      }))
+    }else {
+      dispatch(routerRedux.push({
+        pathname: "/details",
+        query: {
+          moduleId: currentKey,
+          id
+        }
+      }))
+    }
+        },
+      handleHotWordsClick=(id,moduleId)=>{
+         if(moduleId==='3'){
+           dispatch(routerRedux.push({
+             pathname: "/pdfcontent",
+             query: {
+               moduleId: moduleId,
+               id
+             }
+           }))
+         }else {
+           dispatch(routerRedux.push({
+             pathname: "/details",
+             query: {
+               moduleId: moduleId,
+               id
+             }
+           }))
+         }
+
         },
         onRefresh = () => {
             dispatch({
@@ -73,11 +104,14 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id) }
+                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
-                <h3>{ obj.title }</h3>
+                <h3>
+                  {obj.istop===''?'':<Badge text="置顶" style={{marginRight:10, padding: '0 3px', backgroundColor: '#f00', borderRadius: 3 }} />}
+                  { obj.title }
+                  </h3>
               </div>
               <Brief>
                 { `${obj.author} - (${obj.date})` }
@@ -107,7 +141,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id) }
+                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -137,7 +171,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id) }
+                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -161,7 +195,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id) }
+                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -192,7 +226,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id, obj.moduleId) }
+                  onClick={ handleHotWordsClick.bind(null, obj.id,obj.moduleId) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
