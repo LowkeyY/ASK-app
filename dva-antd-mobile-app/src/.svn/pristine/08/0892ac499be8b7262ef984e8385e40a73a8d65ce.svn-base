@@ -1,0 +1,66 @@
+/* global window */
+/* global document */
+/* global location */
+import { routerRedux } from 'dva/router'
+import { parse } from 'qs'
+import config from 'config'
+import { user, userDatas } from 'services/app'
+
+const {prefix} = config;
+
+export default {
+    namespace: 'app',
+    state: {
+        user: {},
+        userData: {}
+    },
+    subscriptions: {
+        setup({dispatch, history}) {
+            dispatch({
+                type: 'query'
+            })
+            dispatch({
+                type: 'typequery/query'
+            })
+        },
+    },
+    effects: {
+        * query({payload}, {call, put, select}) {
+            const data = yield call(user, payload)
+            if (data) {
+                yield put({
+                    type: 'updateState',
+                    payload: data,
+                })
+            }
+        },
+        * userData({payload}, {call, put, select}) {
+            const data = yield call(userDatas, {
+                opts: "userdata",
+                optId: payload.value
+            })
+            if (data) {
+                const {user, userData} = yield select(_ => _.app);
+                yield put({
+                    type: 'updateState',
+                    payload: {
+                        ...user,
+                        userData: {
+                            ...userData,
+                            pageFontsize: payload.value
+                        }
+                    },
+                })
+            }
+        }
+
+    },
+    reducers: {
+        updateState(state, {payload}) {
+            return {
+                ...state,
+                ...payload,
+            }
+        },
+    },
+}

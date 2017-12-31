@@ -1,0 +1,26 @@
+@PrefixCls: mysets;
+@navbar-height: 90px;
+@bgColor : white;
+
+.@{PrefixCls}-header {
+
+	width : 100%;
+	height: @navbar-height;
+	:global{
+		.am-navbar-title{
+			color : #108ee9;
+			font-size: .3rem;
+		}
+	}
+}
+
+.@{PrefixCls}-normal {
+	:global {
+		.am-input-label{
+			font-size : .3rem;
+		}
+		.am-list-item .am-input-control input {
+			font-size : 0.3rem;
+		}
+	}
+}

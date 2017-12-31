@@ -1,0 +1,11 @@
+import { request, config, getMockData, getInfoWord } from 'utils'
+
+const {api : {querylist}} = config
+
+export async function getLists(data) {
+    return request({
+        url: querylist,
+        method: 'get',
+        data,
+    })
+}

@@ -1,0 +1,115 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import { NavBar } from 'antd-mobile';
+import { List, Badge, Icon, Button, Accordion, Tag } from 'antd-mobile';
+import { _bbsx, _case, _lore, _hotword } from 'utils/row'
+import ListViews from 'components/listviews';
+
+import styles from './index.less';
+const Item = List.Item,
+    PrefixCls = "mylist";
+
+function Mylist({mylist, loading, dispatch}) {
+    const {currentType, currentTitle, defalutHeight, resultProps} = mylist,
+        {isLoading, hasMore, pagination, pageIndex} = resultProps;
+    const update = (payload) => {
+            dispatch({
+                type: "mylist/updateResult",
+                payload
+            })
+        },
+        goBack = () => {
+            dispatch(routerRedux.goBack())
+        },
+        onRefresh = () => {
+            dispatch({
+                type: "mylist/resetResult",
+                payload: {
+                    refreshing: true
+                }
+            })
+        },
+        onEndReached = (event, st = 0) => {
+            if (isLoading || !hasMore)
+                return;
+            const adds = {};
+            if (!isNaN(st) && st > 0)
+                adds[st] = pageIndex;
+            update({
+                isLoading: true,
+                pagination: {
+                    ...pagination,
+                    ...adds
+                }
+            });
+            dispatch({
+                type: "mylist/query"
+            })
+        },
+        updateScrollerTop = (scrollerTop) => {
+            update({
+                scrollerTop
+            })
+        },
+        handleItemClick = (id) => {
+            dispatch(routerRedux.push({
+                pathname: "/details",
+                query: {
+                    moduleId: "4",
+                    id
+                }
+            }))
+        },
+        handleTagClick = () => {
+
+        };
+
+    const renderRow = (rowData, sectionID, rowID) => {
+        switch (+currentType) {
+        case 4:
+            return _bbsx(rowData, sectionID, rowID, handleItemClick);
+        case 1:
+            return _case(rowData, sectionID, rowID, handleItemClick, handleTagClick);
+        case 2:
+            return _lore(rowData, sectionID, rowID, handleItemClick, handleTagClick);
+        default:
+            return _hotword(rowData, sectionID, rowID, handleItemClick);
+        }
+    };
+
+    const listviewsProps = {
+        ...resultProps,
+        onRefresh,
+        onEndReached,
+        renderRow,
+        initialListSize: resultProps.dataSource.getRowCount() || 10,
+        updateScrollerTop,
+        defalutHeight,
+    }
+    return (
+        <div>
+          <div className={ styles[`${PrefixCls}-header`] }>
+            <NavBar leftContent="返回" mode="light" onLeftClick={ goBack }>
+              { currentTitle }
+            </NavBar>
+          </div>
+          <div className={ styles[`${PrefixCls}-normal`] }>
+            <ListViews {...listviewsProps}/>
+          </div>
+        </div>
+        );
+}
+
+Mylist.propTypes = {
+    mylist: PropTypes.object,
+    loading: PropTypes.object,
+};
+
+export default connect(({mylist, loading}) => ({
+    mylist,
+    loading
+}))(Mylist);
+
+

@@ -1,0 +1,21 @@
+
+.RichEditor-emjoy-box{
+  height: 300px;
+  width: 97%;
+  padding: 10px;
+  background: #fff;
+  overflow-y: scroll;
+  & ul{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap:wrap;
+    list-style: none;
+    & li{
+      padding: 0 10px;
+    }
+  }
+
+}
+
