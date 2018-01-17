@@ -10,6 +10,10 @@
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 
+		.am-badge{
+			width : 100%;
+		}
+
 		.am-list-body .am-flexbox:last-child .am-list-line:after{
 			border-bottom: 0;
 		}
@@ -64,5 +68,22 @@
 		    	}
 		    }
 		}
+	}
+	.comp-view-pagination {
+	    position: fixed;
+	    bottom: 10px;
+	    left: 40%;
+	    background-color: rgba(0, 0, 0, 0.5);
+	    border-radius: 20px;
+	    width: 20%;
+	    text-align: center;
+	    line-height:30px;
+	    &>span{
+	    	color:white;
+	    	font-size : 20px;
+	    }
+	}
+	.tabbar {
+		bottom: 110px;
 	}
 }

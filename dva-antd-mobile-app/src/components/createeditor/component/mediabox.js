@@ -3,21 +3,26 @@ import {Icon} from 'antd-mobile';
 import {getLocalIcon} from 'utils'
 import styles from '../index.less'
 
-const MediaControls = (props) => {
+class MediaControls extends React.Component {
+  constructor() {
+    super()
+  }
 
-  return (
-    <div className={styles['RichEditor-controls']}>
-      <span className={styles['RichEditor-controls-img-box']}>
+  render() {
+    return (
+      <div className={styles['RichEditor-controls-media']}>
+      <span className={styles['RichEditor-controls-media-img-box']}>
         <input type="file" accept="image/*" multiple=""
-               onChange={props.handleFileInput}/><Icon
-        type={getLocalIcon('/editor/sendimg.svg')} size="xxs"/></span>
-      <span className={styles['RichEditor-controls-camera-box']}>
-        <input type="file" accept="image/*" capture='camera' multiple=""
-               onChange={props.handleFileInput}/> <Icon
-        type={getLocalIcon('/editor/camera.svg')} size="xxs"/></span>
-      <span className={styles['RichEditor-controls-item']}><Icon type={getLocalIcon('/editor/emjoy.svg')}
-                                                                 size="xxs"/></span>
-    </div>
-  )
+               onChange={this.props.handleFileInput}
+        /><Icon type={getLocalIcon('/editor/sendimg.svg')} size="xs"/></span>
+        <span className={styles['RichEditor-controls-media-camera-box']}><input onChange={this.props.handleFileInput} type="file" accept="image/*" capture='camera'
+                                                                            multiple=""/> <Icon
+          type={getLocalIcon('/editor/camera.svg')} size="xs"/></span>
+        <span className={styles['RichEditor-controls-media-item']} onClick={this.props.toggleEmojiBox}><Icon type={getLocalIcon('/editor/emjoy.svg')} size="xs"/></span>
+      </div>
+    )
+  }
+
 }
+
 export default MediaControls

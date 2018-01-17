@@ -1,15 +1,18 @@
 import modelExtend from 'dva-model-extend'
 import { pageModel } from './common'
 import { ListView } from 'antd-mobile';
-import { querysearchatt, querysearchlist } from 'services/querys'
+import { querysearchatt, querysearchlist, userDatas } from 'services/querys'
 
 //选择器配置
 const defaultFilterProps = {
         isShow: false,
+        defaultFocus: true,
         currentKey: "",
         currentValue: {},
         currentItems: [],
-        refs: {},
+        startDate:null,
+        endDate:null,
+        refs: {}
     },
     defaultResultProps = {
         refreshing: false,
@@ -22,7 +25,12 @@ const defaultFilterProps = {
         pageIndex: 0,
         totalCount: 0,
         scrollerTop: 0,
-    } , defalutClientHeight = document.documentElement.clientHeight;
+        pagination: {
+            0: 0
+        },
+    },
+    defalutClientHeight = document.documentElement.clientHeight,
+    cloneObj = (obj) => JSON.parse(JSON.stringify(obj));
 
 export default modelExtend(pageModel, {
     namespace: 'search',
@@ -33,12 +41,15 @@ export default modelExtend(pageModel, {
         moduleMenu: {},
         currentModuleId: "4",
         currentFilter: {},
-        defalutHeight : defalutClientHeight,
-
+        defalutHeight: defalutClientHeight,
         isSearch: false,
         textQuery: "",
-        resultProps: Object.assign({}, defaultResultProps),
-        filterProps: Object.assign({}, defaultFilterProps)
+        //记录每次查询参数 ， object.assign 只是浅拷贝
+        // resultProps: Object.assign({}, defaultResultProps),
+        // filterProps: Object.assign({}, defaultFilterProps)
+        //每次都重置查询参数
+        resultProps: cloneObj(defaultResultProps),
+        filterProps: cloneObj(defaultFilterProps)
     },
     subscriptions: {
         setup({dispatch, history}) {
@@ -50,13 +61,23 @@ export default modelExtend(pageModel, {
                             payload: {
                                 isSearch: false,
                                 textQuery: "",
-                                currentParams: {},
-                                resultProps: Object.assign({}, defaultResultProps),
-                                filterProps: Object.assign({}, defaultFilterProps)
+                                defaultHasFocus: true,
+                                currentModuleId: "4", //默认搜索模块
+                                currentFilter: {},
+                                resultProps: cloneObj(defaultResultProps),
+                                filterProps: cloneObj(defaultFilterProps)
                             }
                         })
                         dispatch({ //查询可选参数项
                             type: 'query',
+                        })
+                    } else {
+                        //关闭选项卡
+                        dispatch({
+                            type: 'updateFilter',
+                            payload: {
+                                isShow: false
+                            }
                         })
                     }
                 }
@@ -106,14 +127,39 @@ export default modelExtend(pageModel, {
                 type: 'search'
             });
         },
+        * collect({payload}, {call, put, select}) {
+            const {id, value} = payload;
+            const data = yield call(userDatas, {
+                opts: "collect",
+                optId: id,
+                types: value
+            })
+            if (data) {
+                yield put({
+                    type: 'updateItemState',
+                    payload: {
+                        itemId: id,
+                        itemValue: {
+                            isCollect: value === 1
+                        }
+                    },
+                })
+            }
+        }
     },
     reducers: {
         updateFilter(state, {payload}) {
-            const {filterProps} = state;
+
+            const {filterProps} = state,
+                others = {},
+                {isShow = null} = payload;
+            if (isShow != null)
+                others.defaultFocus = !isShow;
             return {
                 ...state,
                 filterProps: {
                     ...filterProps,
+                    ...others,
                     ...payload
                 }
             }
@@ -138,16 +184,66 @@ export default modelExtend(pageModel, {
             }
         },
         updateUser(state, {payload = {}}) {
-            const {filterProps = {}} = state,
+          console.log(state);
+            const {filterProps = {}, currentFilter = {}} = state,
                 {currentValue = {}} = filterProps;
             return {
                 ...state,
+                currentFilter: {
+                    ...currentFilter,
+                    ...payload
+                },
                 filterProps: {
                     ...filterProps,
                     currentValue: {
                         ...currentValue,
                         ...payload
                     }
+                }
+            }
+        },
+        updateItemState(state, {payload}) {
+            const {itemId = "", itemValue = {}} = payload,
+                {resultProps} = state;
+            let {currentData, dataSource} = resultProps;
+            if (itemId && currentData.length) {
+                currentData = currentData.map(item => {
+                    if (item.id === itemId)
+                        item = {
+                            ...item,
+                            ...itemValue
+                        };
+                    return item;
+                });
+                dataSource = dataSource.cloneWithRows(currentData);
+            }
+            return {
+                ...state,
+                resultProps: {
+                    ...resultProps,
+                    currentData,
+                    dataSource
+                }
+            }
+        },
+        deleteItemById(state, {payload}) {
+            const {itemId = ""} = payload,
+                {resultProps} = state,
+                newData = [];
+            let {currentData = [], dataSource} = resultProps;
+            if (itemId && currentData.length) {
+                currentData.map(item => {
+                    if (item.id != itemId)
+                        newData.push(item)
+                });
+                dataSource = dataSource.cloneWithRows(newData);
+            }
+            return {
+                ...state,
+                resultProps: {
+                    ...resultProps,
+                    currentData: newData,
+                    dataSource
                 }
             }
         },

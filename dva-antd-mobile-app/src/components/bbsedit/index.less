@@ -1,4 +1,29 @@
+@import '../../themes/default.less';
 @PrefixCls: bbsedit;
+.@{PrefixCls}-preview-btn{
+  float: right;
+}
+.@{PrefixCls}-send-btn-box{
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  & span{
+    margin-left: 10px;
+  }
+}
+.@{PrefixCls}-header {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  width : 100%;
+  height: @primary-header-height;
+  :global{
+    .am-navbar-title{
+      font-size: 32px;
+      color: #108ee9;
+    }
+  }
+}
 .selectmenu-box{
   :global{
     .am-list-content{
@@ -10,11 +35,14 @@
     }
     .am-list-extra{
       color: red;
-      flex-basis:45% !important;
+      flex-basis:60% !important;
     }
 
     .am-list-body{
       font-size: 0.34rem;
+    }
+    .am-list-item .am-list-line .am-list-extra{
+      color: #000;
     }
 
   }
@@ -25,4 +53,7 @@
 
 .@{PrefixCls}-preview-btn{
   float: right;
+}
+.@{PrefixCls}-top{
+  height: 100%;
 }

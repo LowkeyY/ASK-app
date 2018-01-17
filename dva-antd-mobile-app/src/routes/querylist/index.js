@@ -19,47 +19,49 @@ function Querylist({querylist, typequery, dispatch}) {
     }
 
     let PrefixCls = "query-list",
-        {dataSource, isLoading, hasMore, pageIndex, scrollerTop} = querylist,
-        {refreshing, filterSelected, primaryTag, preFilterSelected , defalutHeight} = typequery;
+        fromModal = "querylist",
+        {dataSource, isLoading, hasMore, pageIndex, scrollerTop, pagination, totalCount} = querylist,
+        {refreshing, filterSelected, primaryTag, preFilterSelected, defalutHeight} = typequery;
     const currentKey = (+(preFilterSelected[primaryTag] || filterSelected[primaryTag]));
-    const handleItemClick = (id,currentKey) => {
-      console.log(currentKey)
-         if(currentKey===3){
-      dispatch(routerRedux.push({
-        pathname: "/pdfcontent",
-        query: {
-          moduleId: currentKey,
-          id
-        }
-      }))
-    }else {
-      dispatch(routerRedux.push({
-        pathname: "/details",
-        query: {
-          moduleId: currentKey,
-          id
-        }
-      }))
-    }
+    const handleItemClick = (id, currentKey) => {
+            if (currentKey === 3) {
+                dispatch(routerRedux.push({
+                    pathname: "/pdfcontent",
+                    query: {
+                        moduleId: currentKey,
+                        id
+                    }
+                }))
+            } else {
+                dispatch(routerRedux.push({
+                    pathname: "/details",
+                    query: {
+                        moduleId: currentKey,
+                        id,
+                        fromModal
+                    }
+                }))
+            }
         },
-      handleHotWordsClick=(id,moduleId)=>{
-         if(moduleId==='3'){
-           dispatch(routerRedux.push({
-             pathname: "/pdfcontent",
-             query: {
-               moduleId: moduleId,
-               id
-             }
-           }))
-         }else {
-           dispatch(routerRedux.push({
-             pathname: "/details",
-             query: {
-               moduleId: moduleId,
-               id
-             }
-           }))
-         }
+        handleHotWordsClick = (id, moduleId) => {
+            if (moduleId === '3') {
+                dispatch(routerRedux.push({
+                    pathname: "/pdfcontent",
+                    query: {
+                        moduleId: moduleId,
+                        id
+                    }
+                }))
+            } else {
+                dispatch(routerRedux.push({
+                    pathname: "/details",
+                    query: {
+                        moduleId: moduleId,
+                        id,
+                        fromModal
+                    }
+                }))
+            }
 
         },
         onRefresh = () => {
@@ -73,11 +75,18 @@ function Querylist({querylist, typequery, dispatch}) {
                 type: "querylist/resetState"
             });
         },
-        onEndReached = (event) => {
-            if (isLoading || !hasMore)
+        onEndReached = (event, st = 0) => {
+            if (isLoading || !hasMore || (st < 100 && pageIndex > 0))
                 return;
+            const adds = {};
+            if (!isNaN(st) && st > 0 && pageIndex > 0)
+                adds[st] = pageIndex;
             updateState({
-                isLoading: true
+                isLoading: true,
+                pagination: {
+                    ...pagination,
+                    ...adds
+                }
             });
             dispatch({
                 type: "querylist/query",
@@ -95,8 +104,14 @@ function Querylist({querylist, typequery, dispatch}) {
         stopPropagation = (e) => {
             e.stopPropagation();
         },
-        handleTagClick = () => {
-
+        handleTagClick = (isCollect, id) => {
+            dispatch({
+                type: 'querylist/collect',
+                payload: {
+                    value: isCollect ? 0 : 1,
+                    id: id
+                }
+            })
         };
 
     const layoutBssList = (obj, sectionID, rowID) => (
@@ -104,14 +119,11 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
+                  onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
-                <h3>
-                  {obj.istop===''?'':<Badge text="置顶" style={{marginRight:10, padding: '0 3px', backgroundColor: '#f00', borderRadius: 3 }} />}
-                  { obj.title }
-                  </h3>
+                <h3>{ obj.istop === '' ? '' : <Badge text="置顶" style={ { marginRight: 10, padding: '0 3px', backgroundColor: '#108ee9', borderRadius: 3 } } /> } { obj.title }</h3>
               </div>
               <Brief>
                 { `${obj.author} - (${obj.date})` }
@@ -141,7 +153,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
+                  onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -158,9 +170,12 @@ function Querylist({querylist, typequery, dispatch}) {
                   <Icon type={ getLocalIcon("/page/view.svg") } size="xs" /><span>{ obj.views || 0 }</span>
                 </div>
                 <div onClick={ stopPropagation }>
-                  <Tag onChange={ handleTagClick }>
+                  <Tag selected={ obj.isCollect } onChange={ handleTagClick.bind(null, obj.isCollect, obj.id) }>
                     <Icon type={ getLocalIcon("/page/collection.svg") } size="xs" />
-                    <span>收藏案例</span>
+                    { obj.isCollect
+                      ?
+                      <span className={ `${PrefixCls}-collection` }>已收藏</span>
+                      : <span className={ `${PrefixCls}-collection` }>收藏案例</span> }
                   </Tag>
                 </div>
               </div>
@@ -171,7 +186,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
+                  onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -195,7 +210,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleItemClick.bind(null, obj.id,currentKey) }
+                  onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -213,9 +228,12 @@ function Querylist({querylist, typequery, dispatch}) {
                   <span>{ obj.downloads || 0 }</span>
                 </div>
                 <div onClick={ stopPropagation }>
-                  <Tag onChange={ handleTagClick }>
+                  <Tag selected={ obj.isCollect } onChange={ handleTagClick.bind(null, obj.isCollect, obj.id) }>
                     <Icon type={ getLocalIcon("/page/collection.svg") } size="xs" />
-                    <span>收藏文档</span>
+                    { obj.isCollect
+                      ?
+                      <span className={ `${PrefixCls}-collection` }>已收藏</span>
+                      : <span className={ `${PrefixCls}-collection` }>收藏文档</span> }
                   </Tag>
                 </div>
               </div>
@@ -226,7 +244,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   className={ "row" }
                   arrow="horizontal"
                   multipleLine
-                  onClick={ handleHotWordsClick.bind(null, obj.id,obj.moduleId) }
+                  onClick={ handleHotWordsClick.bind(null, obj.id, obj.moduleId) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
               <div className={ "title" }>
@@ -238,11 +256,7 @@ function Querylist({querylist, typequery, dispatch}) {
             </Item>
         ),
         layoutNotesList = (obj, sectionID, rowID) => (
-            <Item
-                  className={ "row" }
-                  multipleLine
-                  key={ `${sectionID} - ${rowID}` }
-                  wrap>
+            <Item className={ "row" } multipleLine key={ `${sectionID} - ${rowID}` } wrap>
               <div className={ "title" }>
                 <h3>{ obj.title }</h3>
               </div>
@@ -280,7 +294,10 @@ function Querylist({querylist, typequery, dispatch}) {
         defalutHeight,
         initialListSize: dataSource.getRowCount() || 10,
         scrollerTop,
-        updateScrollerTop
+        updateScrollerTop,
+        pagination,
+        totalCount,
+        pageIndex
     }
 
     return (

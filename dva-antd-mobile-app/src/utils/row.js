@@ -167,13 +167,14 @@ module.exports = {
               arrow="horizontal"
               multipleLine
               onClick={ onClick.bind(null, obj.id, obj.pageId, obj.message_type) }
-              wrap>
+              wrap
+        >
           <div className={ `title ${isNew ? "news" : ""}` }>
             <h3>{ obj.title }</h3>
           </div>
           <div dangerouslySetInnerHTML={ { __html: obj.content } } />
-          <Brief>
-            { `${obj.sender} - (${obj.sendtime})` }
+          <Brief >
+            { `(${obj.sendtime})` }
           </Brief>
         </Item>
         );

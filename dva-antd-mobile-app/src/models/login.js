@@ -3,16 +3,32 @@ import { login } from 'services/login'
 
 import modelExtend from 'dva-model-extend'
 import { pageModel } from './common'
-
+import { setLoginIn } from 'utils'
 
 export default modelExtend(pageModel, {
-  namespace: 'login',
+    namespace: 'login',
 
-  state:true,
-  reducers:{
-    'disabled'(state){
-     return state= !state;
+    state: true,
+
+
+    effects: {
+        * login({payload}, {call, put, select}) {
+            const {from = "/", ...params} = payload;
+            const data = yield call(login, params);
+            if (data) {
+                setLoginIn({
+                    ...data,
+                    ...params
+                });
+                yield put(routerRedux.push({
+                    pathname: from
+                }))
+            }
+        },
+    },
+    reducers: {
+        'disabled'(state) {
+            return state = !state;
+        }
     }
-  }
 })
-

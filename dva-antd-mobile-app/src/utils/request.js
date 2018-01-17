@@ -1,11 +1,12 @@
 import axios from 'axios'
 import qs from 'qs'
-import { YQL, CORS, baseURL, ajaxTimeout, notRedirectSign } from './config'
+import { CORS, baseURL, ajaxTimeout, notRedirectSign, accessToken } from './config'
 import jsonp from 'jsonp'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
-import { message } from 'antd'
+import { Toast } from 'antd-mobile'
 import { routerRedux } from 'dva/router'
+import { _cg } from './cookie'
 
 axios.defaults.baseURL = baseURL
 // axios.defaults.headers.common["Content-Type"] = "application/json";
@@ -37,6 +38,7 @@ const fetch = (options) => {
 
     const cloneData = lodash.cloneDeep(data)
     cloneData[notRedirectSign] = 'true';
+    cloneData[accessToken] = _cg(accessToken);
 
     try {
         let domin = ''
@@ -53,7 +55,7 @@ const fetch = (options) => {
         }
         url = domin + url
     } catch ( e ) {
-        message.error(e.message)
+        Toast.offline(e.message)
     }
 
     if (fetchType === 'JSONP') {
@@ -73,10 +75,6 @@ const fetch = (options) => {
                 })
             })
         })
-    } else if (fetchType === 'YQL') {
-        isAsync = false;
-        url = `http://query.yahooapis.com/v1/public/yql?q=select * from json where url='${options.url}?${qs.stringify(options.data)}'&format=json`
-        data = null
     }
 
     if (isAsync)
@@ -147,8 +145,6 @@ export default function request(options) {
         if (window.location.origin !== origin) {
             if (CORS && CORS.indexOf(origin) > -1) {
                 options.fetchType = 'CORS'
-            } else if (YQL && YQL.indexOf(origin) > -1) {
-                options.fetchType = 'YQL'
             } else {
                 options.fetchType = 'JSONP'
             }
@@ -160,43 +156,42 @@ export default function request(options) {
     return fetch(options).then((response) => {
         // console.log('untils/request:default -> then : ' , options.url , response);
         const {statusText, status} = response
-        let data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data
+        let data = response.data;
         typeof (data) === "string" && (data = doDecode(data));
-        if (data.success === false) {
+        const {success, message = "", ...results} = data;
+        if (success === true)
+
             return {
-                success: false,
+                ...results,
+            };
+        else
+            throw {
+                success,
                 status,
-                message: data.message || "发生未知错误。"
-            }
-        } else
-            return {
-                success: true,
-                message: statusText,
-                status,
-                ...data,
-        }
+                response: {
+                    message
+                }
+            };
     }).catch((error) => {
         // console.log('untils/request:default -> error :' , options.url , error);
-        const {response} = error
-        let msg
-        let status
-        let otherData = {}
-        if (response) {
+        const {response = {}} = error;
+        let {message = "", status, ...otherData} = response;
+        if (message !== "") {
+            status = 600;
+        } else {
             const {data, statusText} = response
             otherData = data
             status = response.status
-            msg = getResponeseErrMsg(status) || data.message || statusText
+            message = getResponeseErrMsg(status) || data.message || statusText
             if (status === 401) {
-                window.location = `${location.origin}/login?from=${location.pathname}`
+                window.location.replace(`${location.origin}/login?from=${location.pathname}`);
+                return;
             }
-        } else {
-            status = 600
-            msg = '网络连接错误，请稍后重试。'
         }
-        return {
+        throw {
             success: false,
             status,
-            message: msg,
+            message,
             ...otherData
         }
     })

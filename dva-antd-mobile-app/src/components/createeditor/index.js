@@ -1,25 +1,19 @@
 import React from 'react';
-import {Button,Icon} from 'antd-mobile';
-import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState} from 'draft-js';
-import {getLocalIcon} from 'utils'
+import { Button, Icon ,Toast} from 'antd-mobile';
+import { Editor, Modifier, EditorState, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState } from 'draft-js';
+import { getLocalIcon } from 'utils'
+import EmojiBox from 'components/emoji/index'
 import Immutable from 'immutable';
-import {stateToHTML} from 'draft-js-export-html';
+import { stateToHTML } from 'draft-js-export-html';
 import MediaControls from './component/mediabox'
 import InlineStyleControls from './component/inlinebox'
 import BlockStyleControls from './component/blockbox'
 import "draft-js/dist/Draft.css";
 import styles from './index.less'
 const blockRenderMap = Immutable.Map({
-  'left': {
-    element: 'div',
-  },
-  'right': {
-    element: 'div',
-  },
   'center': {
     element: 'div',
-  },
-
+  }
 });
 let options = { // 转换Html
   blockStyleFn(block) {
@@ -29,7 +23,7 @@ let options = { // 转换Html
           align: 'center'
         }
       }
-    }else if (block.getType() === 'blockquote') {
+    } else if (block.getType() === 'blockquote') {
       return {
         attributes: {
           background: '#ddd',
@@ -40,7 +34,6 @@ let options = { // 转换Html
   },
   entityStyleFn: (entity) => {
     const entityType = entity.get('type').toLowerCase();
-    console.log(entityType)
     if (entityType === 'atomic') {
       const data = entity.getData();
       return {
@@ -59,43 +52,65 @@ class CreateEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty(),
-      disabled:true,
-      isShowController:false,
-      url: '',
-      urlType: '',
+      editorState:EditorState.createEmpty(),
+      disabled: true,
+      isShowController: false,
+      isShowEmojiBox: false
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.logState = () => {//发送数据
-      const content = this.state.editorState.getCurrentContent();
-      console.log(stateToHTML(this.state.editorState.getCurrentContent(), options));
+    this.logState = () => { //发送数据
+      this.props.onSubmit && this.props.onSubmit(stateToHTML(this.state.editorState.getCurrentContent(), options));
     };
-    this.onURLChange = (e) => this.setState({ urlValue: e.target.value });
-    this.confirmMedia = this._confirmMedia.bind(this);
-    this.onChange = (editorState) => this.setState({ editorState });
-    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
-    this.onTab = (e) => this._onTab(e);
+    this.onChange = (editorState) =>{
+      this.setState({
+        editorState
+      });
+      this.props.dispatch({//保存editorState状态
+        type: 'creates/updateState',
+        payload:{
+          editorState,
+        }
+      })
+      this.props.dispatch({//同步编辑器内容
+        type: 'preview/updateState',
+        payload:{
+            contents:stateToHTML(this.state.editorState.getCurrentContent(), options)
+        }
+      })
+    }
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
     this.insertImage = (file) => this._insertImage(file);
-    this.handleFileInput=this._handleFileInput.bind(this)
+    this.insertEmoji = (emoji) => this._insertEmoji(emoji)
+    this.handleFileInput = this._handleFileInput.bind(this)
     this.handleUploadImage = () => this._handleUploadImage();
   }
-
-  _handleKeyCommand(command) {
-    const {editorState} = this.state;
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      this.onChange(newState);
-      return true;
-    }
-    return false;
+  getPreviewValue(){//回显
+    this.props.dispatch({
+     type: 'creates/updateState',
+      payload:{
+        currentParams:{
+          ...this.props.currentParams,
+          theContents:stateToHTML(this.props.editorState.getCurrentContent(), options)
+        },
+        preivewPlate:this.props.preivewPlate
+      }
+    })
   }
+  createEditorReset(){//重置状态
 
-  _onTab(e) {
-    const maxDepth = 4;
-    this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
+      this.props.dispatch({
+        type: 'creates/updateState',
+        payload:{
+          editorState:EditorState.createEmpty(),
+        }
+      })
+  }
+  toggleEmojiBox() {
+    this.setState({
+      isShowEmojiBox: !this.state.isShowEmojiBox
+    })
   }
 
   _toggleBlockType(blockType) {
@@ -116,26 +131,9 @@ class CreateEditor extends React.Component {
     );
   }
 
-  _confirmMedia(e) {
-    e.preventDefault();
-    const {editorState, urlValue, urlType} = this.state;
-    const entityKey = Entity.create(urlType, 'IMMUTABLE', { src: urlValue })
-
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
-        editorState,
-        entityKey,
-        ' '
-      ),
-      showURLInput: false,
-      urlValue: '',
-    }, () => {
-      setTimeout(() => this.focus(), 0);
-    });
-  }
 
   _insertImage(file) { //插入图片
-    const  fileSrc =  typeof file == "object" ? URL.createObjectURL(file) : file;
+    const fileSrc = typeof file == "object" ? URL.createObjectURL(file) : file;
     const entityKey = Entity.create('atomic', 'IMMUTABLE', {
       src: fileSrc,
     });
@@ -144,8 +142,51 @@ class CreateEditor extends React.Component {
       entityKey,
       ' '
     ));
-    console.log(fileSrc)
   }
+  _insertEmoji(emoji) { //插入表情
+    const contentState = this.state.editorState.getCurrentContent();
+    const contentStateWithEntity = contentState
+      .createEntity('emoji', 'IMMUTABLE', {
+        src: emoji
+      });
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const currentSelectionState = this.state.editorState.getSelection();
+    let emojiAddedContent;
+    let emojiEndPos = 0;
+    let blockSize = 0;
+    // deciding on the position to insert emoji
+    const targetSelection = contentState.getSelectionAfter();
+    emojiAddedContent = Modifier.insertText(
+      contentState,
+      targetSelection,
+      emoji,
+      null,
+      entityKey,
+    );
+    emojiEndPos = targetSelection.getAnchorOffset();
+    const blockKey = targetSelection.getAnchorKey();
+    blockSize = contentState.getBlockForKey(blockKey).getLength();
+    emojiAddedContent = Modifier.insertText(
+      emojiAddedContent,
+      emojiAddedContent.getSelectionAfter(),
+      ' ',
+    );
+    const newEditorState = EditorState.push(
+      this.state.editorState,
+      emojiAddedContent,
+      'insert-emoji',
+    );
+    return EditorState.forceSelection(newEditorState, emojiAddedContent.getSelectionAfter());
+  // const entityKey = Entity.create('emoji', 'IMMUTABLE', {
+  //   src: emoji,
+  // });
+  // this.onChange(AtomicBlockUtils.insertAtomicBlock(
+  //   this.state.editorState,
+  //   entityKey,
+  //   ' '
+  // ));
+  }
+  ;
   // uploadImg(file, callback) {
   //   callback("http://tupian.enterdsk.com/2013/lxy/12/9/3/1.jpg")
   // };
@@ -162,72 +203,27 @@ class CreateEditor extends React.Component {
   _handleUploadImage() {
     this.refs.fileInput.click();
   }
-  // _pasteImage(files) {
-  //   console.log('files',files);
-  //   const {editorState} = this.state;
-  //   let _self = this;
-  //   for (var i = 0; i < files.length; i++) {
-  //     if (files[i].type.indexOf("image") !== -1) {
-  //       // We need to represent the image as a file,
-  //       var blob = files[i];
-  //       let reader = new FileReader();
-  //       reader.readAsDataURL(blob);
-  //       reader.onloadend = function () {
-  //         let base64data = reader.result;
-  //         const entityKey = Entity.create('image', 'IMMUTABLE', { src: base64data })
-  //
-  //         _self.setState({
-  //           editorState: AtomicBlockUtils.insertAtomicBlock(
-  //             editorState,
-  //             entityKey,
-  //             ' '
-  //           ),
-  //           showURLInput: false,
-  //           urlValue: '',
-  //         }, () => {
-  //           setTimeout(() => _self.focus(), 0);
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
 
-  // _onURLInputKeyDown(e) {
-  //   if (e.which === 13) {
-  //     this._confirmMedia(e);
-  //   }
-  // }
-
-  // _promptForMedia(type) {
-  //   const {editorState} = this.state;
-  //   this.setState({
-  //     showURLInput: true,
-  //     urlValue: '',
-  //     urlType: type,
-  //   }, () => {
-  //     setTimeout(() => this.refs.url.focus(), 0);
-  //   });
-  // }
-
-  // _addImage() {
-  //   this._promptForMedia('image');
-  // }
-  showController(){
-    setTimeout(function(){
-      document.documentElement.scrollTop = document.body.scrollHeight;
-    },300);
+  showController() {
+    // setTimeout(function() {
+    //   document.documentElement.scrollTop = document.body.scrollHeight;
+    // }, 300);
     this.setState({
-      isShowController:true
+      isShowController: true
     })
   }
-  hiddenController(){
+  hiddenController() {
     this.setState({
-      isShowController:false
-  })
+      isShowController: false
+    })
   }
   render() {
     const {editorState} = this.state;
-    const  display=this.state.isShowController?{display:'block'}:{display:'none'};
+    const display = this.state.isShowController ? {
+      display: 'block'
+    } : {
+      display: 'none'
+    };
     let className = styles['RichEditor-editor'];
     var contentState = editorState.getCurrentContent();
     if (!contentState.hasText()) {
@@ -237,55 +233,69 @@ class CreateEditor extends React.Component {
     }
 
     return (
-      <div className={styles["RichEditor-box"]}>
-        <div className={styles["RichEditor-root"]}>
-          <div className={styles["RichEditor-box-closebtn"]} onTouchEnd={this.hiddenEditor}>
+      <div className={ styles["RichEditor-box"] }>
+        <div className={ styles["RichEditor-root"] }>
+          <div
+               className={ styles["RichEditor-box-closebtn"] }
+               onTouchEnd={ this.hiddenEditor }>
           </div>
-          <div className={className} onClick={this.focus}>
+          <div
+               style={{height:`${this.props.height}px`}}
+               className={ className }
+               onClick={ this.focus }>
             <Editor
-              blockStyleFn={getBlockStyle}
-              blockRendererFn={mediaBlockRenderer}
-              blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}
-              editorState={editorState}
-              handleKeyCommand={this.handleKeyCommand}
-              handlePastedText={(value) => (console.log('paste', value))}
-              handlePastedFiles={this.pasteMedia}
-              handleDroppedFiles={this.pasteMedia}
-              onChange={this.onChange}
-              onFocus={this.showController.bind(this)}
-              onBlur={this.hiddenController.bind(this)}
-              onTab={this.onTab}
-              placeholder='请输入...'
-              ref='editor'
-              spellCheck={true}
-              onPaste={(value) => (console.log('paste', value))}/>
+                    blockStyleFn={ getBlockStyle }
+                    blockRendererFn={ mediaBlockRenderer }
+                    blockRenderMap={ DefaultDraftBlockRenderMap.merge(blockRenderMap) }
+                    editorState={ this.props.editorState }
+                    handlePastedText={ (value) => (console.log('paste', value)) }
+                    handlePastedFiles={ this.pasteMedia }
+                    handleDroppedFiles={ this.pasteMedia }
+                    onChange={ this.onChange }
+                    onFocus={ this.showController.bind(this) }
+                    // onBlur={ this.hiddenController.bind(this) }
+                    placeholder='请输入...'
+                    ref='editor'
+                    spellCheck={ true }
+                    onPaste={ (value) => (console.log('paste', value)) } />
           </div>
         </div>
-        <div style={display}>
-        <div className={styles["RichEditor-control"]}>
-          <div className={styles["RichEditor-control-box"]}>
-            <MediaControls handleFileInput={this.handleFileInput}/>
-            <InlineStyleControls editorState={editorState} onToggle={this.toggleInlineStyle}/>
-            <BlockStyleControls editorState={editorState} onToggle={this.toggleBlockType}/>
+        <div  className={ styles["RichEditor-out"] } style={display}>
+        <div className={ styles["RichEditor-container"]}>
+          <div className={ styles["RichEditor-control"]}>
+            <div className={ styles["RichEditor-control-box"]} onClick={this.focus}>
+              <MediaControls
+                             handleFileInput={ this.handleFileInput }
+                             toggleEmojiBox={ this.toggleEmojiBox.bind(this) } />
+              <InlineStyleControls
+                                   editorState={ editorState }
+                                   onToggle={ this.toggleInlineStyle } />
+              <BlockStyleControls
+                                  editorState={ editorState }
+                                  onToggle={ this.toggleBlockType } />
+            </div>
+            <div className={ styles["RichEditor-control-sendbtn"] }>
+              <Button
+                      disabled={ !contentState.hasText() }
+                      type="primary"
+                      inline
+                      size="small"
+                      style={ { padding: '5px 5px', lineHeight: '1.6em' } }
+                      onClick={ this.logState }>
+                发送
+              </Button>
+            </div>
           </div>
-          <div className={styles["RichEditor-control-sendbtn"]}>
-            <Button
-              disabled={!contentState.hasText()}
-              type="primary"
-              inline
-              size="small"
-              style={{padding: '5px 5px', lineHeight: '1.6em'}}
-              onTouchEnd={this.logState}>
-              发送
-            </Button>
-          </div>
+          <EmojiBox
+                    isShowEmojiBox={ this.state.isShowEmojiBox }
+                    insertEmoji={ this.insertEmoji } />
         </div>
         </div>
       </div>
     );
   }
-  static defaultProps={
-    isShowEditor:false
+  static defaultProps = {
+    isShowEditor: false
   };
 }
 
@@ -296,7 +306,8 @@ function getBlockStyle(block) {
       return styles['align-center'];
     case 'blockquote':
       return styles['blockquote'];
-    default: return null;
+    default:
+      return null;
   }
 }
 
@@ -309,45 +320,22 @@ function mediaBlockRenderer(block) {
   return null;
 }
 const Image = (props) => {
-  return <img src={props.src} style={styles2.media} />;
+  return <img
+              src={ props.src }
+              style={ styles2.media } />;
 };
 const Media = (props) => {
   const entity = Entity.get(props.block.getEntityAt(0));
   const {src} = entity.getData();
   const type = entity.getType();
-  return  <Image src={src} />;
+  return <Image src={ src } />;
 };
 
 const styles2 = {
-  root: {
-    fontFamily: '\'Georgia\', serif',
-    padding: 0,
-    width: '100%',
-  },
-  buttons: {
-    marginBottom: 10,
-  },
-  urlInputContainer: {
-    marginBottom: 10,
-  },
-  urlInput: {
-    fontFamily: '\'Georgia\', serif',
-    marginRight: 10,
-    padding: 3,
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 200,
-    padding: 10,
-  },
-  button: {
-    marginTop: 10,
-    textAlign: 'center',
-  },
+
   media: {
     width: '100%',
-    height:'100%'
+    height: '100%'
   },
 }
 
@@ -355,121 +343,3 @@ CreateEditor.propTypes = {
 }
 
 export default CreateEditor;
-
-
-
-
-
-// import React from 'react';
-// import MonacoEditor from 'react-monaco-editor';
-//
-// class CreateEditor extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       code: '// type your code...',
-//     }
-//   }
-//   editorDidMount(editor, monaco) {
-//     console.log('editorDidMount', editor);
-//     editor.focus();
-//   }
-//   onChange(newValue, e) {
-//     console.log('onChange', newValue, e);
-//   }
-//   render() {
-//     const code = this.state.code;
-//     const options = {
-//       selectOnLineNumbers: true
-//     };
-//     return (
-//       <MonacoEditor
-//         width="800"
-//         height="600"
-//         language="javascript"
-//         theme="vs-dark"
-//         value={code}
-//         options={options}
-//         onChange={::this.onChange}
-//         editorDidMount={::this.editorDidMount}
-//       />
-//     );
-//   }
-// }
-// export default CreateEditor
-
-
-// import React, { Component } from 'react';
-// import Editor from 'draft-js-plugins-editor';
-// import createHashtagPlugin from 'draft-js-hashtag-plugin';
-// import createLinkifyPlugin from 'draft-js-linkify-plugin';
-// import createImagePlugin from 'draft-js-image-plugin';
-// import { EditorState } from 'draft-js';
-// const imagePlugin = createImagePlugin();
-// const hashtagPlugin = createHashtagPlugin();
-// const linkifyPlugin = createLinkifyPlugin();
-//
-// const plugins = [
-//   hashtagPlugin,
-//   linkifyPlugin,
-//   imagePlugin
-// ];
-//
-//  class CreateEditor extends Component {
-//
-//   state = {
-//     editorState: EditorState.createEmpty(),
-//   };
-//
-//   onChange = (editorState) => {
-//     this.setState({
-//       editorState,
-//     });
-//   };
-//
-//   render() {
-//     return (
-//       <Editor
-//         editorState={this.state.editorState}
-//         onChange={this.onChange}
-//         plugins={plugins}
-//       />
-//     );
-//   }
-// }
-// export default CreateEditor
-//
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
-//
-// var CreateEditor = React.createClass({
-//
-//   modules: {
-//     toolbar: [
-//       ['bold', 'italic', 'underline','strike', 'blockquote'],
-//       [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-//       ['link', 'image'],
-//       ['clean']
-//     ],
-//   },
-//
-//   formats: [
-//     'bold', 'italic', 'underline', 'strike', 'blockquote',
-//     'list', 'bullet', 'indent',
-//     'link', 'image'
-//   ],
-//
-//   render: function() {
-//     return (
-//       <div className="text-editor">
-//         <ReactQuill theme="snow"
-//                     modules={this.modules}
-//                     formats={this.formats}>
-//         </ReactQuill>
-//       </div>
-//     );
-//   },
-//
-// });
-//
-// export default CreateEditor

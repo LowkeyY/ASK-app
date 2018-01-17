@@ -6,7 +6,7 @@ import { Card } from 'antd-mobile';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
-import draftToMarkdown from 'draftjs-to-markdown';
+// import draftToMarkdown from 'draftjs-to-markdown';
 import styles from './index.less'
 
 const rawContentState = {
@@ -170,7 +170,7 @@ class Wysiwyg extends Component {
                             min-height:600px;
                         }
                     `}</style>
-                    
+
         </Card>{ /*
                 <Card title="同步转换HTML" bordered={false}>
                     <pre>{draftToHtml(editorContent)}</pre>

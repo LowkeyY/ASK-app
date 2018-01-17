@@ -1,39 +1,43 @@
-const APIV1 = '/api/v1'
-const APIV2 = '/api/v2'
-
 module.exports = {
-  name: 'AntD Admin',
-  prefix: 'antdAdmin',
-  footerText: 'Ant Design Admin  © 2017 zuiidea',
-  logo: '/logo.png',
-  iconFontCSS: '/iconfont.css',
-  iconFontJS: '/iconfont.js',
-  CORS: [],
-  openPages: ['/login', '/search', '/pagecontent', '/mylist', '/mysets', '/creates', '/pdfcontent', '/fontcontrol', '/casedetail', '/discuss', '/librarydetails', '/forumdetails', '/details', '/searchuser'],
-  apiPrefix: '/api/v1',
-  baseURL: 'http://192.168.0.119:8001',
-  notRedirectSign: '_not_redirect_',
-  APIV1,
-  APIV2,
-  api: {
-    userLogin: `${APIV1}/user/login`,
-    userLogout: `${APIV1}/user/logout`,
-    users: `${APIV1}/users`,
-    posts: `${APIV1}/posts`,
-    user: `${APIV1}/user/:id`,
-    menus: `${APIV1}/sample/test.jcp`,
-    weather: `${APIV1}/weather`,
-    v1test: `${APIV1}/test`,
-    v2test: `${APIV2}/test`,
-    querylist: `/sample/api/querylist.jcp`,
-    typequery: `/sample/api/typequery.jcp`,
-    querycontent: `/sample/api/querycontent.jcp`,
-    querycommends: `/sample/api/querycommend.jcp`,
-    userInfo: `/sample/api/app.jcp`,
-    dashboard: `/sample/api/dashboard.jcp`,
-    querypt: '/sample/api/querypt.jcp',
-    queryuserlist: `/sample/api/queryuserlist.jcp`,
-    querysearchattApi: `/sample/api/searchquery.jcp`,
-    querysearchlistApi: `/sample/api/searchlist.jcp`,
-  },
+    name: 'AntD Admin',
+    prefix: 'antdAdmin',
+    footerText: 'Ant Design Admin  © 2017 zuiidea',
+    logo: '/logo.png',
+    iconFontCSS: '/iconfont.css',
+    iconFontJS: '/iconfont.js',
+    CORS: [],
+    openPages: ['/login', '/search', '/pagecontent', '/mylist', '/mysets', '/creates', '/pdfcontent', '/fontcontrol', '/discuss', '/details', '/searchuser', '/error', '/hotwordsresult','/preview'],
+    noLoaderPages: ['/mylist'],
+    baseURL: 'http://192.168.0.119:8088',
+    notRedirectSign: '_not_redirect_',
+    accessToken: 'CNESSIONID',
+    api: {
+        userLogin: `/apilogin/login.jcp`,
+        userLogout: `/apilogin/logout.jcp`,
+
+        dashboard: `/api/dashboard.jcp`,
+        typequery: `/api/typequery.jcp`,
+
+        createbbsxApi: "/api/create/createbbsx.jcp",
+
+        querycommends: "/api/query/querycommend.jcp",
+        querycontent: "/api/query/querycontent.jcp",
+        querylist: "/api/query/querylist.jcp",
+        querypdfApi: "/api/query/querypdf.jcp",
+        querypt: "/api/query/querypt.jcp",
+        queryauthsApi: "/api/query/queryuserdeleteauth.jcp",
+        queryuserlist: "/api/query/queryuserlist.jcp",
+
+        recordcommentsApi: "/api/record/recordcomments.jcp",
+        recordvisitsApi: "/api/record/recordvisits.jcp",
+
+        querysearchattApi: "/api/search/searchquery.jcp",
+        querysearchlistApi: "/api/search/searchlist.jcp",
+
+        mylistApi: "/api/user/mylist.jcp",
+        userAvatar: "/api/user/userAvatar.jcp",
+        userInfo: "/api/user/userInfos.jcp",
+        userOptApi: "/api/user/userOpts.jcp"
+
+    },
 }

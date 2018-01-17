@@ -12,6 +12,7 @@ export default modelExtend(pageModel, {
         tragetState: "",
         tragetStateKey: "",
         selectedIndex: 1,
+        textQuery:'',
         isSingle: true
     },
     subscriptions: {
@@ -19,11 +20,13 @@ export default modelExtend(pageModel, {
             history.listen(location => {
                 let {pathname, query = {}} = location;
                 if (pathname.startsWith('/searchuser')) {
-                    const {tragetState = "", isSingle = "", tragetStateKey = ""} = query;
+                    const {tragetState = "", isSingle = "", tragetStateKey = "",textQuery='',queryusers=[]} = query;
                     dispatch({
                         type: 'updateState',
                         payload: {
                             tragetState,
+                            textQuery,
+                            queryusers,
                             isSingle: isSingle == "true",
                             tragetStateKey
                         }

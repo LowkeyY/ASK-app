@@ -12,10 +12,10 @@ const BLOCK_TYPES = [
   // { label: 'left', style: 'left' },
   // { label: 'right', style: 'right' },
   // { label: <Icon type={getLocalIcon('/editor/左对齐.svg')}/>, style: 'left' },
-  { label:  <Icon type={getLocalIcon('/editor/blockquote.svg')} size="xxs"/>, style: 'blockquote' },
+  { label:  <Icon type={getLocalIcon('/editor/blockquote.svg')} size="xs"/>, style: 'blockquote' },
   // { label: <Icon type={getLocalIcon('/editor/alignleft.svg')} size="xxs"/>, style: 'left' },
-  { label: <Icon type={getLocalIcon('/editor/middle.svg')} size="xxs"/>, style: 'center' },
-  { label: <Icon type={getLocalIcon('/editor/ul.svg')} size="xxs"/>, style: 'unordered-list-item' },
+  { label: <Icon type={getLocalIcon('/editor/middle.svg')} size="xs"/>, style: 'center' },
+  { label: <Icon type={getLocalIcon('/editor/ul.svg')} size="xs"/>, style: 'unordered-list-item' },
 ];
 
 const BlockStyleControls = (props) => {
@@ -25,9 +25,8 @@ const BlockStyleControls = (props) => {
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType();
-
   return (
-    <div className={styles["RichEditor-controls"]}>
+    <div className={styles["RichEditor-controls-block"]}>
       {BLOCK_TYPES.map((type) =>
         <StyleButton
           key={type.style}

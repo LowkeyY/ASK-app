@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { SearchBar, Button, WhiteSpace, WingBlank, SegmentedControl, List, Radio, NavBar } from 'antd-mobile';
+import { SearchBar, Button, WhiteSpace, WingBlank, SegmentedControl, List, Radio, NavBar,Toast } from 'antd-mobile';
 import { Layout } from 'components'
 import styles from './index.less'
 import Singleuser from './singleuser'
@@ -14,6 +14,16 @@ const {BaseLine, Nav} = Layout,
 
 function Searchuser({searchuser, loading, dispatch}) {
     const {textQuery, queryusers, selectedUsers, selectedUserValues, tragetState, selectedIndex, isSingle, tragetStateKey} = searchuser;
+    const validateTextQuery=(text)=>{//验证搜索字符
+      if(text){
+        const validate= /^[a-zA-Z]*$/.test(text)
+        if(validate&&text.length<2){
+          return false
+        }else {
+          return true
+        }
+      }
+    }
     const updateState = (payload) => {
             dispatch({
                 type: "searchuser/updateState",
@@ -29,14 +39,27 @@ function Searchuser({searchuser, loading, dispatch}) {
         },
         onSubmit = () => {
             updateState({
-                selectedIndex: 0
+                selectedIndex: 0,
             });
-            dispatch({
+          if(textQuery){
+            validateTextQuery(textQuery)
+              ?
+              dispatch({
                 type: "searchuser/query",
                 payload: {
-                    textQuery
+                  textQuery
                 }
+              })
+              :
+              Toast.fail('请输入更多关键字', 3);
+          }else {
+            dispatch({
+              type: "searchuser/query",
+              payload: {
+                textQuery
+              }
             })
+          }
         },
         handleOnSubmit = () => {
             if (tragetState) {
@@ -113,7 +136,7 @@ function Searchuser({searchuser, loading, dispatch}) {
                                   size="small"
                                   inline>
                             保存
-                          </Button>);
+                          </Button >);
     }
 
     const singleProps = {
@@ -145,7 +168,7 @@ function Searchuser({searchuser, loading, dispatch}) {
                                onSubmit={onSubmit}
                                showCancelButton={ true }
                                onChange={ onChange } />
-                    <div className={styles[`${PrefixCls}-searchbar-box-notice`]}>*请输入尽可能详细的关键字查询更多内容</div>
+                    {/*<div className={styles[`${PrefixCls}-searchbar-box-notice`]}>*请输入尽可能详细的关键字查询更多内容</div>*/}
                   </div>
                 </div>
               </div>

@@ -7,22 +7,33 @@ import { searchStyles } from './index.less';
 import Filters from './filters'
 import Results from './results'
 
-const PrefixCls = "page-search";
-const getFilterValue = (obj) => {
-    const newObj = {};
-    Object.keys(obj).map(att => {
-        newObj[att] = obj[att].value
-    })
-    return {
-        ...newObj
+const PrefixCls = "page-search",
+    fromModal = "search",
+    getFilterValue = (obj) => {
+        const newObj = {};
+        Object.keys(obj).map(att => {
+            const value = obj[att];
+            newObj[att] = Array.isArray(value) ? value[0].value : value.value
+        })
+      console.log(newObj)
+        return {
+            ...newObj
+        };
     };
-};
 
 
 function Search({search, loading, dispatch}) {
-
-    const {modules, moduleMenu, isSearch, currentModuleId, currentFilter, textQuery, resultProps, filterProps , defalutHeight} = search;
-    console.log(resultProps);
+    const {modules, moduleMenu, isSearch, currentModuleId, currentFilter, textQuery, resultProps, filterProps, defalutHeight} = search,
+  {dpValue}=filterProps
+    const handleNeedRefreshing = () => {
+        //跳转时，开启分类检索页面刷新。
+        dispatch({
+            type: "typequery/updateState",
+            payload: {
+                refreshing: true
+            }
+        });
+    };
     const update = (payload = {}) => {
             dispatch({
                 type: "search/updateState",
@@ -80,14 +91,41 @@ function Search({search, loading, dispatch}) {
                 start: 0
             });
         },
-        goPage = (payload = {}) => {
+        goPage = (id) => {
             dispatch(routerRedux.push({
                 pathname: "/details",
                 query: {
                     moduleId: currentModuleId,
-                    ...payload
+                    fromModal,
+                    id
                 }
             }))
+        },
+        goPdf = (id) => {
+            dispatch(routerRedux.push({
+                pathname: "/pdfcontent",
+                query: {
+                    moduleId: currentModuleId,
+                    id
+                }
+            }))
+        },
+        goHotWords = (id) => {
+            handleNeedRefreshing()
+            dispatch(routerRedux.push({
+                pathname: "/hotwordsresult",
+                query: {
+                    moduleId: currentModuleId,
+                    lists: id
+                }
+            }))
+          dispatch({
+            type: "hotwordsresult/query",
+            payload:{
+              moduleId: currentModuleId,
+              lists: id
+            }
+          })
         },
         resetResult = (payload = {}) => {
             dispatch({
@@ -104,7 +142,44 @@ function Search({search, loading, dispatch}) {
                     tragetStateKey
                 }
             }));
-        };
+        },
+        collect = (id, isCollect) => {
+            dispatch({
+                type: 'search/collect',
+                payload: {
+                    value: isCollect ? 1 : 0,
+                    id: id
+                }
+            })
+        },
+
+      getStartDate=(v)=>{
+          dispatch({
+            type:"search/updateFilter",
+            payload:{
+              startDate:v
+            }
+          })
+
+        },
+      getEndDate=(v)=>{
+        dispatch({
+          type:"search/updateFilter",
+          payload:{
+            endDate:v
+          }
+        })
+      },
+      resetDate=(e)=>{
+    e.stopPropagation();
+    dispatch({
+      type:"search/updateFilter",
+      payload:{
+        startDate:null,
+        endDate:null
+      }
+    })
+  };
 
     const globalProps = {
         currentModuleId,
@@ -123,6 +198,9 @@ function Search({search, loading, dispatch}) {
             update: updateResult,
             onSubmit: doSearch,
             goPage: goPage,
+            goPdf: goPdf,
+            collect,
+            goHotWords: goHotWords,
             goFilter: goFilter,
             defalutHeight,
         } : {
@@ -134,6 +212,9 @@ function Search({search, loading, dispatch}) {
             filterProps,
             update: updateFilter,
             searchUser,
+            getStartDate,
+            getEndDate,
+            resetDate
         }
     }
 

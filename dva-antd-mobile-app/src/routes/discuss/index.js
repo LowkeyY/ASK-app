@@ -7,20 +7,22 @@ import { BaseLine } from 'components/Layout'
 import styles from './index.less'
 const Item = List.Item;
 
-function Discuss({dispatch, commendProps,app}) {
-    const {currentComments, moduleId, id} = commendProps,{ pageFontsize } = app;
+function Discuss({dispatch, commendProps, app, ...props}) {
+    const {currentComments, moduleId, id} = commendProps,
+        {userData: {pageFontsize}} = app,
+        {hasDeleteAuth} = props;
     const goBack = () => {
             dispatch(routerRedux.goBack())
         },
-        handleDeleteClick = (id) => {
+        handleDeleteClick = (itemId) => {
             dispatch({
                 type: "details/deleteCommends",
                 payload: {
-                    id
+                    id: itemId,
+                    contentId: id
                 }
             })
         };
-
     return (
         <div>
           <div className={ styles['discuss-head'] }>
@@ -31,14 +33,14 @@ function Discuss({dispatch, commendProps,app}) {
             </p>
           </div>
           <List>
-            { currentComments&&currentComments.map((data) => (
-                  <Dialogue {...data} dispatch={ dispatch } handleDeleteClick={ handleDeleteClick } pageFontsize={pageFontsize}/>
+            { currentComments && currentComments.map((data) => (
+                  <Dialogue hasDeleteAuth={ hasDeleteAuth } {...data} dispatch={ dispatch } handleDeleteClick={ handleDeleteClick } pageFontsize={ pageFontsize } />
               )) }
           </List>
         </div>
     )
 }
-export default connect(({discuss, loading,app}) => ({
+export default connect(({discuss, loading, app}) => ({
     discuss,
     loading,
     app

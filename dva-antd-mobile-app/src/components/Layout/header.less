@@ -1,15 +1,16 @@
+@import '../../themes/default.less';
 @navbarPrefixCls: navbar-fixed;
-@navbar-height: 90px;
+
 
 .@{navbarPrefixCls}{
   display: flex;
   width : 100%;
-  height: @navbar-height;
+  height: @primary-header-height;
   align-items: center;
   position: fixed;
   z-index: 100;
   top: 0;
-  margin-bottom:@navbar-height ;
+  margin-bottom: @primary-header-height;
   &-left , &-center , &-right {
     display: flex;
     height : 100%;

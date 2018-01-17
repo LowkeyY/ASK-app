@@ -1,12 +1,25 @@
 import React from 'react'
 import { List,Tag,Icon} from 'antd-mobile';
-import {getLocalIcon} from 'utils'
+import {getLocalIcon,getUserAvatar} from 'utils'
 import styles from './index.less'
 const Item = List.Item;
 const Brief = Item.Brief,
   defaultImgSrc = require("themes/images/user.png");
 const PrefixCls='fornmdetails';
+
 const ForumAuthor =(props)=>{
+  const getTime=(time)=>{
+    if(time){
+      var reg=new RegExp("[^a-zA-Z]+","g")
+      var result=time.match(reg);
+      if(result==null)
+      {
+        return time
+      }else{
+        return result
+      }
+    }
+  }
   return(
     <div>
       <List>
@@ -15,13 +28,13 @@ const ForumAuthor =(props)=>{
         >
           <div className={styles[`${PrefixCls}-author-box`]}>
             <div  className={styles[`${PrefixCls}-author-box-information-box`]}>
-              <img className={styles[`${PrefixCls}-author-box-icon`]} src={defaultImgSrc} alt=""/>
+              <img className={styles[`${PrefixCls}-author-box-icon`]} src={getUserAvatar(props.avatars)} alt=""/>
               <div className={styles[`${PrefixCls}-author-box-information`]}>
                 <h5 className={styles[`${PrefixCls}-author-box-information-author`]}>
                   {props.author}
                 </h5>
                 <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>身份: 将军</p>
+                    <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}>{props.grade}</p>
                 </div>
               </div>
             </div>
@@ -31,7 +44,7 @@ const ForumAuthor =(props)=>{
                   &nbsp;楼主
                 </span>
               <div className={styles[`${PrefixCls}-author-box-information-info`]}>
-                <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}> {props.creates}</p>
+                <p className={styles[`${PrefixCls}-author-box-information-info-integral`]}> {getTime(props.creates)}</p>
               </div>
             </div>
           </div>

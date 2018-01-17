@@ -1,18 +1,17 @@
 import React from 'react'
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Icon } from 'dva/router';
 import { WhiteSpace } from 'antd-mobile';
 import { Nav, BaseLine } from 'components/Layout'
 import MyEditor from 'components/editor/index'
 import InputFoot from 'components/inputfoot/inputfoot'
 import Discuss from '../discuss/index'
 import DetailsComponent from '../detailscomponent/index'
+import './index.less'
 
 function Details({loading, dispatch, details}) {
+    const {currentContent, currentComments, isShowEditor, isShowInputFoot, placeholder, is404, currentRecommentId, ...props} = details;
 
-    const {currentContent, currentComments,isShowEditor, isShowInputFoot,placeholder, ...props} = details;
-    const {isCollect=false} = currentContent
-    console.log(details )
     const contentProps = {
             ...props,
             currentContent,
@@ -22,19 +21,81 @@ function Details({loading, dispatch, details}) {
             ...props,
             currentComments,
             dispatch
+        },
+        headerProps = {
+            ...props,
+            dispatch
+        };
+    const {id, hasDeleteAuth , moduleId} = props;
+    if (moduleId == "4") {
+        //论坛
+        headerProps.hasDeleteAuth = hasDeleteAuth && !is404
+        if (!is404)
+            headerProps.handleClick = () => {
+                dispatch({
+                    type: 'details/deleteContent',
+                    payload: {
+                        id: id
+                    }
+                })
+            };
     }
+    if (moduleId == "1" || moduleId == "2") {
+        //文库 或 案例
+        headerProps.showCollect = !is404;
+        if (!is404) {
+            headerProps.isCollect = currentContent.isCollect;
+            headerProps.handleClick = (isCollect) => {
+                dispatch({
+                    type: 'details/collect',
+                    payload: {
+                        value: isCollect ? 1 : 0,
+                        id: id
+                    }
+                })
+              dispatch({
+                type: "mylist/removeNotCollection",
+                payload: {
+                  itemId:id
+                }
+              })
+            }
+        }
+    }
+    const handleOnSubmit = (contents) => {
+        dispatch({
+            type: 'details/comment',
+            payload: {
+                moduleId,
+                contents,
+                commentId: currentRecommentId,
+                contentId: id
+            }
+        })
+    }
+    const Focus=(state)=>{
+       state.focus()
+    }
+
     return (
         <div>
-          <Nav
-               dispatch={ dispatch }
-               {...props}
-               isCollect={ isCollect } />
-          <DetailsComponent contentProps={ contentProps } />
-          <WhiteSpace size='sm' />
-          <Discuss commendProps={ commendProps } />
-          <BaseLine />
-          <InputFoot isShowInputFoot={ isShowInputFoot } dispatch={ dispatch } currentComments={ currentComments } />
-          <MyEditor isShowEditor={ isShowEditor } dispatch={ dispatch } placeholder={placeholder}/>
+          <Nav {...headerProps} />
+          { is404 ? (
+            <div className="page-content-error">
+              <img src={ require('themes/images/404.png') } alt="" />
+              { /*<h1>页面未找到</h1>*/ }
+              { /*<span>(或者已删除)</span>*/ }
+            </div>
+            ) : (
+            <div>
+              <DetailsComponent contentProps={ contentProps } />
+              <WhiteSpace size='sm' />
+              <Discuss commendProps={ commendProps } {...props} />
+              <BaseLine />
+              <InputFoot dispatch={ dispatch } currentComments={ currentComments }/>
+              <MyEditor isShowEditor={ isShowEditor } dispatch={ dispatch } placeholder={ placeholder } onSubmit={ handleOnSubmit } />
+            </div>
+            ) }
         </div>
     )
 }

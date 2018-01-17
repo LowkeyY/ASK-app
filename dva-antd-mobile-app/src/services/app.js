@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const {api} = config
-const {userInfo, userLogout, userLogin, queryuserlist} = api
+const {userInfo, userLogout, userLogin, queryuserlist, userOptApi} = api
 
 export async function user(params) {
     return request({
@@ -9,7 +9,6 @@ export async function user(params) {
         method: 'get',
         data: params,
     })
-// return {"pageFontsize":"large","user":{"id":"0","nickname":"列兵","email":"wangfulin@timetang.com","roles":"系统管理员，设备资料版主","name":"系统管理员","dept":"-","integral":7}}
 }
 
 export async function logout(params) {
@@ -32,6 +31,14 @@ export async function queryusers(params) {
     return request({
         url: queryuserlist,
         method: 'get',
+        data: params,
+    })
+}
+
+export async function userDatas(params) {
+    return request({
+        url: userOptApi,
+        method: 'post',
         data: params,
     })
 }

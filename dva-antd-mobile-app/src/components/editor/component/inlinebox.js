@@ -5,13 +5,13 @@ import StyleButton from './stylebutton'
 import styles from '../index.less'
 
 const INLINE_STYLES = [
-  { label: <Icon type={getLocalIcon('/editor/bold.svg')} size="xxs"/>, style: 'BOLD' },
-  { label: <Icon type={getLocalIcon('/editor/italic.svg')} size="xxs"/>, style: 'ITALIC' },
+  { label: <Icon type={getLocalIcon('/editor/bold.svg')} size="xs"/>, style: 'BOLD' },
+  { label: <Icon type={getLocalIcon('/editor/italic.svg')} size="xs"/>, style: 'ITALIC' },
 ];
 const InlineStyleControls = (props) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();
   return (
-    <div className={styles["RichEditor-controls"]}>
+    <div className={styles["RichEditor-controls-inline"]}>
       {INLINE_STYLES.map(type =>
         <StyleButton
           key={type.style}

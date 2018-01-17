@@ -1,6 +1,5 @@
 @import '../../themes/default.less';
 @import '../../themes/content.less';
-@navbar-height: 90px;
 @PrefixCls:page-content;
 :global {
 
@@ -97,7 +96,7 @@
       }
     }
   .@{PrefixCls}-head-box{
-     height: @navbar-height;
+     height:  @primary-header-height;
   }
   .@{PrefixCls}-nav{
     width:100%;
@@ -105,7 +104,7 @@
     top:0;
     left:0;
     z-index:99;
-    height:@navbar-height;
+    height: @primary-header-height;
     box-shadow: 0 5px 10px #ddd;
     &-title{
       color:#108ee9;

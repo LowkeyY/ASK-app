@@ -1,10 +1,9 @@
 import React from 'react'
 import { List } from 'antd-mobile';
 import styles from './contenttitle.less'
+import {getUserAvatar} from 'utils'
 const Item = List.Item;
-const Brief = Item.Brief,
-  defaultImgSrc = require("themes/images/user.png");
-
+const Brief = Item.Brief;
 const CaseContentTitle =(props)=>{
   return(
     <div>
@@ -13,7 +12,7 @@ const CaseContentTitle =(props)=>{
             wrap="true"
           >
             <div className={styles['case-title-box']}>
-              <img className={styles['case-icom']} src={defaultImgSrc} alt=""/>
+              <img className={styles['case-icom']} src={getUserAvatar(props.userPic)} alt=""/>
               <h3 className={styles['case-title']}>{props.casecontenttitle}</h3>
             </div>
             <div>

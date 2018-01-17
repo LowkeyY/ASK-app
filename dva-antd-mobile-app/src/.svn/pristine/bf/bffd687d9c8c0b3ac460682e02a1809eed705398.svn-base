@@ -1,0 +1,62 @@
+@import '../../themes/default.less';
+
+:global {
+  .header-search{
+    display: flex;
+    width : 100%;
+    height: @primary-header-height;
+    align-items: center;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    background-color : @primary-color-headerbg;
+    .left , .center , .right {
+      display: flex;
+      height : 100%;
+      align-items: center;
+      color : @primary-color-headerfont;
+    }
+    .left {
+      margin-left: 15px;
+      font-size: 30px;
+      flex : 1;
+    }
+    .center {
+      margin: 0 20px 0 25px;
+      flex : 18;
+    }
+    .right {
+      margin-right: 15px;
+      flex : 1;
+    }
+    .am-badge {
+      color : @primary-color-headerfont;
+      & .am-icon-md{
+        width : 55px;
+        height : 55px;
+      }
+    }
+  }
+
+  .header-search-btn {
+      width : 98%;
+      color: @primary-color-headerfont;
+      justify-content : flex-start;
+      background-color: @primary-color-headersearchbg;
+      border: 1PX solid @primary-color-headersearchborder;
+      svg{
+        width: 0.36rem;
+        height: 0.36rem;
+        opacity: .9;
+      }
+      span{
+        font-size:0.3rem;
+        opacity: .9;
+      }
+  }
+  .result-list {
+    span{
+        color: black;
+      }
+  }
+}

@@ -2,17 +2,16 @@ import Header from './header';
 import PropTypes from 'prop-types';
 import Headersearch from './header-search';
 import Headertitle from './headertitle';
-import { NoticeBar, List, Tag, NavBar, Icon,Modal} from 'antd-mobile';
+import { NoticeBar, List, Tag } from 'antd-mobile';
 import { getLocalIcon } from 'utils'
 import { routerRedux } from 'dva/router';
 import markImage from 'themes/images/watermark.png';
 import { emptyFunc } from 'utils'
 import './index.less';
 
-const PrefixCls = "page-content",alert = Modal.alert;
+const PrefixCls = "page-content";
 
 module.exports = {
-    Header,
     Headersearch,
     Headertitle,
     BaseLine: () => (
@@ -50,68 +49,5 @@ module.exports = {
           <img src={ markImage } />
         </div>
     ),
-    Nav: (props) => {
-        let title;
-        const isisCollect = props.isCollect,
-            getTitle = (moduleId) => {
-                switch (moduleId) {
-                case '4':
-                    return title = '帖子详情';
-                case '1':
-                    return title = '案例详情';
-                case '2':
-                    return title = '文库详情';
-                default:
-                    return title = '';
-
-
-                }
-        }
-        const goBack = () => {
-            props.dispatch(routerRedux.goBack())
-        }
-        const del=()=>{
-          const alertInstance = alert('删除', '确定删除???', [
-            { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-            { text: '确定', onPress: () => console.log('ok') },
-          ]);
-          setTimeout(() => {
-            // 可以调用close方法以在外部close
-            console.log('auto close');
-            alertInstance.close();
-          },10000);
-        }
-        return (
-            <div className={ `${PrefixCls}-head-box` }>
-              <div className={ `${PrefixCls}-nav` }>
-                <NavBar
-                        mode="light"
-                        leftContent="返回"
-                        onLeftClick={ goBack }
-                        rightContent={ props.moduleId === "4"
-                                       ?
-                                       [<p onClick={del}>
-                                          删除
-                                        </p>]
-                                       :
-                                       [<Tag selected={ isisCollect }>
-                                          <Icon type={ getLocalIcon('/page/collection.svg') } />
-                                          { isisCollect
-                                            ?
-                                            <span className={ `${PrefixCls}-collection` }>已收藏</span>
-                                            : <span className={ `${PrefixCls}-collection` }>收藏</span> }
-                                        </Tag>] }>
-                  <p className={ `${PrefixCls}-nav-title` }>
-                    { getTitle(props.moduleId) }
-                  </p>
-                </NavBar>
-              </div>
-            </div>
-        )
-        Nav.propTypes = {
-            dispatch: PropTypes.func.isRequired,
-            moduleId: PropTypes.number.isRequired
-        };
-    }
+    Nav: Header
 };
-

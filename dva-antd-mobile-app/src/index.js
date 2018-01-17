@@ -1,4 +1,4 @@
-import { message } from 'antd'
+import { Toast } from 'antd-mobile'
 import dva from 'dva'
 import createLoading from 'dva-loading'
 import { browserHistory } from 'dva/router'
@@ -6,13 +6,13 @@ import 'babel-polyfill'
 
 // 1. Initialize
 const app = dva({
-  ...createLoading({
-    effects: true,
-  }),
-  history: browserHistory,
-  onError (error) {
-    message.error(error.message)
-  },
+    ...createLoading({
+        effects: true,
+    }),
+    history: browserHistory,
+    onError(error) {
+        Toast.offline(error.message)
+    },
 })
 
 // 2. Model

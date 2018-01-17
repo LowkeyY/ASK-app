@@ -2,6 +2,9 @@
 @PrefixCls: page-search;
 
 :global{
+  body{
+    font-size: .28rem;
+  }
 	.@{PrefixCls} , .@{PrefixCls}-module , .@{PrefixCls}-terms {
 		& .am-flexbox-item{
 			margin-left: 0.1rem;
@@ -31,6 +34,9 @@
 		}
 	}
 }
+.header-search-box{
+  height:@primary-header-height;
+}
 .header-search{
   display: -webkit-box;
   display: -webkit-flex;
@@ -57,11 +63,15 @@
       background: #fff;
       border: 0 none;
       padding: 0 30px 0 30px;
-      color: #888;
+      color: #000;
     }
   }
 }
 .goback-btn{
   color: #108ee9;
   margin-right: 40px;
+}
+.@{PrefixCls}-date-picker-line{
+   width:100%;
+  border-bottom: 1px solid #ddd;
 }

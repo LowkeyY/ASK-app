@@ -4,22 +4,27 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Nav } from 'components/Layout';
 import { List, Badge, Icon, Button, Accordion, Tag } from 'antd-mobile';
-import { __hotword} from 'utils/row'
+import { _hotword} from 'utils/row'
 import ListViews from 'components/listviews';
 
 function HotWordsResult({hotwordsresult, loading, dispatch}) {
-
+ const {currentData,dataSource,hasMore,isLoading,pageIndex,pagination,scrollerTop,totalCount}=hotwordsresult
   const renderRow = (rowData, sectionID, rowID) => {
-        return __hotword(rowData, sectionID, rowID, handleHotWordsClick);
-    }
-
+        return _hotword(rowData, sectionID, rowID);
+  };
 const listviewsProps={
-  renderRow
+  dataSource,
+  isLoading,
+  renderRow,
+  scrollerTop,
+  totalCount,
+  pageIndex,
+  pagination
 }
    return(
      <div>
-       <Nav dispatch={dispatch}/>
-       {/*<ListViews {...listviewsProps}/>*/}
+       <Nav dispatch={dispatch} />
+       <ListViews {...listviewsProps}/>
      </div>
    )
 }

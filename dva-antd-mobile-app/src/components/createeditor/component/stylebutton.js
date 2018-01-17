@@ -16,7 +16,7 @@ class StyleButton extends React.Component {
       className += ' ' + styles['RichEditor-activeButton'];
     }
     return (
-      <span className={className} onMouseDown={this.onToggle}>
+      <span className={className} onTouchEnd={this.onToggle}>
                 {this.props.label}
             </span>
     );

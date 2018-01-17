@@ -82,19 +82,14 @@ function Dashboard({dashboard, loading, dispatch}) {
                     { list.items && list.items.map((item, index) => {
                           let isNew = item.isNew === true;
                           let result = (
-                          <Item
-                                arrow="horizontal"
-                                multipleLine
-                                onClick={ handleListItemClick.bind(null, list.id, item.id) }
-                                key={ `${lists.id}-${index}` }
-                                wrap>
+                          <Item arrow="horizontal" multipleLine onClick={ handleListItemClick.bind(null, list.id, item.id) } key={ `${lists.id}-${index}` } wrap>
                             <span className={ styles[`${PrefixCls}-list-body`] + " " + (isNew ? styles[`${PrefixCls}-list-isNew`] : "") }>{ item.title }</span>
                             <Brief>
                               { `${item.author} - (${item.date})` }
                             </Brief>
                           </Item>
                           );
-
+                      
                           return !isNew ? result :
                               <Badge key={ `badge-${index}` } text={ '新' } corner>
                                 { result }
@@ -110,30 +105,22 @@ function Dashboard({dashboard, loading, dispatch}) {
     const headerProps = {
         dispatch,
         rightContent: {
+            dot: hasNews,
             icon: "/header/news.svg",
-            to: "/mylist"
+            to: "/mylist?title=我的新消息&moduleId=0&types=1"
         }
     };
     return (
         <div>
           <Headersearch {...headerProps}/>
           <div className={ styles[`${PrefixCls}-normal`] }>
-            <Grid
-                  itemStyle={ { borderRadius: '20px' } }
-                  data={ modules }
-                  columnNum={ 4 }
-                  hasLine={ false }
-                  onClick={ (_, index) => {
-                                handleGirdClick(_.id);
-                            } } />
+            <Grid itemStyle={ { borderRadius: '20px' } } data={ modules } columnNum={ 4 } hasLine={ false } onClick={ (_, index) => {
+                                                                                                                          handleGirdClick(_.id);
+                                                                                                                      } } />
             <HotWords hotwords={ hotWords } handleOnClick={ handleNeedRefreshing } hotWordModuleId={ hotWordModuleId } />
             <WhiteSpace size="sm" />
             <div className={ styles[`${PrefixCls}-noticebar-container`] }>
-              <NoticeBar
-                         onClick={ handleNoticeClick }
-                         mode="link"
-                         icon={ <Icon type={ getLocalIcon("/page/notes.svg") } /> }
-                         marqueeProps={ { loop: true, style: { padding: '0 0.15rem' } } }>
+              <NoticeBar onClick={ handleNoticeClick } mode="link" icon={ <Icon type={ getLocalIcon("/page/notes.svg") } /> } marqueeProps={ { loop: true, style: { padding: '0 0.15rem' } } }>
                 { notes.title }
               </NoticeBar>
               <Modal

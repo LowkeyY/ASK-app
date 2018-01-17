@@ -1,14 +1,28 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { query } from 'services/querys'
+import {createbbsx} from 'services/querycontent'
 import { pageModel } from './common'
+import {EditorState} from 'draft-js'
+import { routerRedux } from 'dva/router';
+import { Toast } from 'antd-mobile';
 
 const getDefaultTech = (techs, key) => {
-    return key
-        && techs.hasOwnProperty(key)
-        && Array.isArray(techs[key])
-        && techs[key].length && techs[key][0].value || "";
-};
+        return key
+            && techs.hasOwnProperty(key)
+            && Array.isArray(techs[key])
+            && techs[key].length && techs[key][0].value || "";
+    },
+    getDefaultParams = () => {
+        const pa = {
+            theTitle: "",
+            theTechs: [],
+            theUsers: [],
+            thePlate: "",
+            theContents: ""
+        };
+        return pa;
+    };
 
 export default modelExtend(pageModel, {
     namespace: 'creates',
@@ -18,11 +32,10 @@ export default modelExtend(pageModel, {
         plates: [],
         techs: {},
         currentTechs: [],
-        selectTechs: [],
-        selectedUsers: [],
-        selectPlate: "",
+        currentParams: getDefaultParams(),
+        editorState:EditorState.createEmpty(),
         showSelectMenu: false,
-        referenceElem:""
+        preivewPlate:''
     },
     subscriptions: {
         setup({dispatch, history}) {
@@ -31,13 +44,15 @@ export default modelExtend(pageModel, {
             })
             history.listen(({pathname, query, action}) => {
                 if (pathname === '/creates') {
-                    dispatch({
-                        type: 'updateState',
-                        payload: {
-                            showSelectMenu: false
-                        }
-                    });
                     if (action === "PUSH") {
+                        dispatch({
+                            type: 'updateState',
+                            payload: {
+                                currentParams: getDefaultParams(),
+                                showSelectMenu: false,
+                              editorState:EditorState.createEmpty()//清空editor
+                            }
+                        });
                         dispatch({
                             type: 'query',
                         })
@@ -52,6 +67,11 @@ export default modelExtend(pageModel, {
             const data = yield call(query);
             if (data) {
                 const {plates, techs, defaultPlate = "1"} = data;
+                const {creates : {currentParams, currentTechs}, typequery = {
+                        filterSelected: {
+                            plates: ""
+                        }
+                    }} = yield select(state => state);
                 yield put({
                     type: 'updateState',
                     payload: {
@@ -60,41 +80,52 @@ export default modelExtend(pageModel, {
                         defaultPlate
                     }
                 });
-                const {typequery = {
-                        filterSelected: {
-                            plates: ""
-                        }
-                    }} = yield select(state => state);
                 yield put({
                     type: 'changePlates',
                     payload: {
-                        selectPlate: typequery.filterSelected.plates
+                        selectPlate: typequery.filterSelected.plates || defaultPlate
                     },
-                })
+                });
             }
+        },
+      *createbbsx({payload},{call,put,select}){
+          const data =yield call(createbbsx,{
+            ...payload
+          })
+        if(data){
+          yield put(routerRedux.push({
+            pathname: "/"
+          }));
+        Toast.success('发帖成功', 2);
         }
+
+      }
     },
     reducers: {
         changePlates(state, {payload}) {
-            let {selectPlate = "", ...props} = payload;
-            const {techs = [], defaultPlate} = state,
+            let {selectPlate = "", ...props} = payload,
+                {techs = [], defaultPlate, currentParams, currentTechs} = state,
                 others = {};
-            if (!selectPlate || selectPlate == "0")
-                selectPlate = defaultPlate
-            others.selectPlate = selectPlate;
-            others.currentTechs = techs[selectPlate];
-            others.selectTechs = [getDefaultTech(techs, selectPlate)];
+            selectPlate = selectPlate && selectPlate != "0" ? selectPlate : defaultPlate;
+            currentTechs = techs[selectPlate];
+            currentParams.thePlate = selectPlate;
+            currentParams.theTechs = [getDefaultTech(techs, selectPlate)];
             return {
                 ...state,
-                ...others,
-                ...props
+                ...props,
+                currentTechs,
+                currentParams
             }
         },
         updateUser(state, {payload = {}}) {
-            const {selectedUsers = []} = payload;
+            const {selectedUsers = []} = payload,
+                {currentParams} = state;
             return {
                 ...state,
-                selectedUsers
+                currentParams: {
+                    ...currentParams,
+                    theUsers: selectedUsers
+                }
             }
         },
     }

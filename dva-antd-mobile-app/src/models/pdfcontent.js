@@ -1,6 +1,7 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { pageModel } from './common'
+import {queryPdf} from '../services/querys'
 
 
 export default modelExtend(pageModel, {
@@ -28,6 +29,7 @@ export default modelExtend(pageModel, {
   },
   effects: {
     *updateQuery ({ payload }, { call, put }) {
+      const data= yield call(queryPdf,payload);
         yield put({
           type: 'updateState',
           payload

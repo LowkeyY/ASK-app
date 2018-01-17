@@ -2,7 +2,7 @@
 import modelExtend from 'dva-model-extend'
 import { ListView } from 'antd-mobile';
 import { pageModel } from './common'
-import { getLists } from 'services/querylist'
+import { getLists, userDatas } from 'services/querylist'
 
 
 export default modelExtend(pageModel, {
@@ -17,6 +17,9 @@ export default modelExtend(pageModel, {
         pageIndex: 0,
         totalCount: 0,
         scrollerTop: 0,
+        pagination: {
+            0: 0
+        },
     },
     subscriptions: {
         setup({dispatch, history}) {
@@ -66,6 +69,25 @@ export default modelExtend(pageModel, {
                 })
             }
         },
+        * collect({payload}, {call, put, select}) {
+            const {id, value} = payload;
+            const data = yield call(userDatas, {
+                opts: "collect",
+                optId: id,
+                types: value
+            })
+            if (data) {
+                yield put({
+                    type: 'updateItemState',
+                    payload: {
+                        itemId: id,
+                        itemValue: {
+                            isCollect: value === 1
+                        }
+                    },
+                })
+            }
+        }
     },
     reducers: {
         resetState(state, {payload}) {
@@ -79,6 +101,9 @@ export default modelExtend(pageModel, {
                 pageIndex: 0,
                 totalCount: 0,
                 scrollerTop: -1,
+                pagination: {
+                    0: 0
+                },
             }
         },
         updateData(state, {payload}) {
@@ -96,5 +121,43 @@ export default modelExtend(pageModel, {
                 ...payload
             }
         },
+        updateItemState(state, {payload}) {
+            const {itemId = "", itemValue = {}} = payload;
+            let {currentData, dataSource} = state;
+            if (itemId && currentData.length) {
+                currentData = currentData.map(item => {
+                    if (item.id === itemId)
+                        item = {
+                            ...item,
+                            ...itemValue
+                        };
+                    return item;
+                });
+                dataSource = dataSource.cloneWithRows(currentData);
+            }
+            return {
+                ...state,
+                currentData,
+                dataSource
+            }
+        },
+        deleteItemById(state, {payload}) {
+            const {itemId = ""} = payload,
+                newData = [];
+            let {currentData = [], dataSource} = state;
+            if (itemId && currentData.length) {
+                currentData.map(item => {
+                    if (item.id != itemId)
+                        newData.push(item)
+                });
+                dataSource = dataSource.cloneWithRows(newData);
+            }
+            return {
+                ...state,
+                currentData: newData,
+                dataSource
+            }
+        },
+
     },
 })

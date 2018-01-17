@@ -10,7 +10,7 @@ import { TabBar, Icon } from 'antd-mobile';
 import './app.less'
 import Error from './error'
 
-const {prefix, openPages} = config;
+const {prefix, openPages, noLoaderPages} = config;
 
 let lastHref;
 
@@ -29,6 +29,10 @@ const App = ({children, dispatch, app, loading, location}) => {
     }
 
     if (openPages && openPages.includes(pathname)) {
+        if (noLoaderPages.includes(pathname))
+            return (<div>
+                      { children }
+                    </div>)
         return (<div>
                   <Loader spinning={ loading.effects[`${pathname.startsWith("/") ? pathname.substr(1) : pathname}/query`] } />
                   { children }
@@ -36,11 +40,7 @@ const App = ({children, dispatch, app, loading, location}) => {
     }
 
     return (
-        <TabBar
-                unselectedTintColor="#949494"
-                tintColor="#33A3F4"
-                barTintColor="white"
-                hidden={ false }>
+        <TabBar unselectedTintColor="#949494" tintColor="#33A3F4" barTintColor="white" hidden={ false }>
           { menus.map((_, index) => {
                 const props = Object.assign({
                     key: "meun_" + index,

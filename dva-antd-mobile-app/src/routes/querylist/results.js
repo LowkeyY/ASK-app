@@ -1,5 +1,8 @@
 import { RefreshControl, ListView } from 'antd-mobile';
 import ReactDOM from 'react-dom';
+import 'components/listviews/index.less';
+
+const ListViewPageSize = 10;
 
 class Results extends React.Component {
     constructor(props) {
@@ -7,6 +10,7 @@ class Results extends React.Component {
 
         this.state = {
             height: (this.props.defalutHeight || document.documentElement.clientHeight) - 140,
+            currentPagination: 0,
         };
     }
 
@@ -45,8 +49,49 @@ class Results extends React.Component {
     onScroll = (e) => {
         this.st = e.scroller.getValues().top;
         this.domScroller = e;
+        const curPagination = this.updatePaginationBySt(Math.ceil(this.st));
+        if (curPagination != this.state.currentPagination) {
+            this.setState({
+                currentPagination: curPagination
+            }) //向上滑动 更新当前页码
+        }
     };
 
+    updatePaginationBySt = (st) => {
+        let result = this.state.currentPagination,
+            isFind = false;
+        const {pagination} = this.props;
+        pagination && Object.keys(pagination).map(_ => {
+            if (!isFind && st <= +_) {
+                result = pagination[_];
+                isFind = true;
+            }
+        })
+        return result;
+    };
+
+    onEndReached = (e) => {
+        const currentSt = Math.floor(this.st);
+        this.setState({
+            currentPagination: this.props.pageIndex
+        }) //向下滑动记录当前页码
+        this.props.onEndReached(e, currentSt);
+    };
+
+    getCurrentPagination = () => {
+        let result = 0,
+            hasValue = false;
+        const {pagination = "", totalCount = 0, pageIndex} = this.props;
+        if (totalCount > 0) {
+            pagination && Object.keys(pagination).map(_ => {
+                if (!hasValue && !isNaN(_) && this.st <= _) {
+                    result = pagination[_];
+                    hasValue = true;
+                }
+            });
+        }
+        return result;
+    };
     render() {
         const separator = (sectionID, rowID) => (
             <div key={ `${sectionID}-${rowID}` } style={ { backgroundColor: '#F5F5F9', height: 2, borderTop: '1px solid #ECECED', borderBottom: '1px solid #ECECED', } } />
@@ -61,29 +106,38 @@ class Results extends React.Component {
             )
         };
 
-        const stickyHeader = () => {
-            const pageIndex = this.props.pageIndex;
-            return pageIndex ? <div>
-                                 { `第 ${pageIndex}页` }
-                               </div> : "";
+        const paginationer = () => {
+            const {totalCount = 0} = this.props,
+                {currentPagination} = this.state;
+            if (currentPagination > 0 && totalCount > ListViewPageSize) {
+                return (
+                    <div className="comp-view-pagination tabbar">
+                      <span>{ `${ currentPagination }/${ Math.ceil(totalCount / ListViewPageSize) }` }</span>
+                    </div>
+                    );
+            }
+            return "";
         }
         return (
-            <ListView
-                      ref={ el => this.lv = el }
-                      dataSource={ this.props.dataSource }
-                      renderFooter={ footer }
-                      renderRow={ this.props.renderRow }
-                      renderSeparator={ separator }
-                      initialListSize={ this.props.initialListSize || 10 }
-                      pageSize={ 10 }
-                      style={ { height: this.state.height, border: '1px solid #ddd', margin: '0.1rem 0', } }
-                      scrollerOptions={ { scrollbars: true } }
-                      refreshControl={ <RefreshControl refreshing={ this.props.refreshing } onRefresh={ this.props.onRefresh } /> }
-                      onScroll={ this.onScroll }
-                      scrollRenderAheadDistance={ 200 }
-                      scrollEventThrottle={ 20 }
-                      onEndReached={ this.props.onEndReached }
-                      onEndReachedThreshold={ 10 } />
+            <div>
+              <ListView
+                        ref={ el => this.lv = el }
+                        dataSource={ this.props.dataSource }
+                        renderFooter={ footer }
+                        renderRow={ this.props.renderRow }
+                        renderSeparator={ separator }
+                        initialListSize={ this.props.initialListSize || 10 }
+                        pageSize={ 10 }
+                        style={ { height: this.state.height, border: '1px solid #ddd'} }
+                        scrollerOptions={ { scrollbars: true } }
+                        refreshControl={ <RefreshControl refreshing={ this.props.refreshing } onRefresh={ this.props.onRefresh } /> }
+                        onScroll={ this.onScroll }
+                        scrollRenderAheadDistance={ 200 }
+                        scrollEventThrottle={ 20 }
+                        onEndReached={ this.onEndReached }
+                        onEndReachedThreshold={ 10 } />
+              { paginationer() }
+            </div>
             );
     }
 }
