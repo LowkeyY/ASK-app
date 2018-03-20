@@ -9,7 +9,7 @@ class Results extends React.Component {
         super(props);
 
         this.state = {
-            height: (this.props.defalutHeight || document.documentElement.clientHeight) - 140,
+            height: (props.defalutHeight||document.documentElement.clientHeight) - 140,
             currentPagination: 0,
         };
     }
@@ -17,12 +17,12 @@ class Results extends React.Component {
     componentDidMount() {
         setTimeout(() => {
             if (ReactDOM.findDOMNode(this.lv)) {
-                const hei = (this.props.defalutHeight || document.documentElement.clientHeight) - ReactDOM.findDOMNode(this.lv).offsetTop - 140;
+                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).offsetTop - 140;
                 this.setState({
                     height: hei,
                 })
             }
-        }, 0);
+        },1000);
 
         this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
             this.tsPageY = e.touches[0].pageY;
@@ -119,7 +119,7 @@ class Results extends React.Component {
             return "";
         }
         return (
-            <div>
+            <div className="query-lists-box">
               <ListView
                         ref={ el => this.lv = el }
                         dataSource={ this.props.dataSource }

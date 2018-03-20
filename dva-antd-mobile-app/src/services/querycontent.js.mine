@@ -1,0 +1,79 @@
+import { request, config } from 'utils'
+
+const {api : {querycontent, querycommends, queryauthsApi, userOptApi, recordvisitsApi, recordcommentsApi,createbbsxApi}} = config
+export async function getContent(data) {
+    return request({
+        url: querycontent,
+        method: 'get',
+        data,
+    })
+}
+export async function getCommends(data) {
+    return request({
+        url: querycommends,
+        method: 'get',
+        data,
+    })
+}
+export async function getAuths(data) {
+    return request({
+        url: queryauthsApi,
+        method: 'get',
+        data,
+    })
+}
+
+export async function userDatas(params) {
+    return request({
+        url: userOptApi,
+        method: 'post',
+        data: params,
+    })
+}
+export async function deleteCommends(params = {}) {
+    params = {
+        opts: "delete",
+        ...params,
+    }
+    return request({
+        url: userOptApi,
+        method: 'post',
+        data: params,
+    })
+}
+
+export async function deleteContent(params = {}) {
+    params = {
+        opts: "delete",
+        types: "1",
+        ...params,
+    }
+    return request({
+        url: userOptApi,
+        method: 'post',
+        data: params,
+    })
+}
+
+export async function recordVisit(params = {}) {
+    return request({
+        url: recordvisitsApi,
+        method: 'post',
+        data: params,
+    })
+}
+
+export async function recordcomments(params = {}) {
+    return request({
+        url: recordcommentsApi,
+        method: 'post',
+        data: params,
+    })
+}
+export async function createbbsx(params = {}) {
+  return request({
+    url: createbbsxApi,
+    method: 'post',
+    data: params,
+  })
+}

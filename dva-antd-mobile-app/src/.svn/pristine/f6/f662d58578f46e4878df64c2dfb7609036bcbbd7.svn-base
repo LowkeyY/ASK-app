@@ -1,0 +1,284 @@
+
+import modelExtend from 'dva-model-extend';
+import { pageModel } from './common';
+import { routerRedux } from 'dva/router';
+import { Toast } from 'antd-mobile';
+import { getContent, getCommends, getAuths, deleteCommends, userDatas, recordVisit, recordcomments } from 'services/querycontent';
+
+const findChildrenById = (items = [], id, result = []) => {
+    if (items && items.length)
+      items.map(item => {
+        if (item.id === id)
+          result.push(item);
+        findChildrenById(item.items, id, result);
+      })
+  },
+  addDeleteId = (items = [], result = []) => {
+    if (items && items.length)
+      items.map(item => {
+        result.push(item.id);
+        addDeleteId(item.items, result);
+      })
+  },
+  findDeleteIds = (currentComments, id) => {
+    let results = [],
+      deleteIds = [];
+    findChildrenById(currentComments, id, results);
+    results = results[0];
+    deleteIds.push(results.id);
+    addDeleteId(results.items, deleteIds);
+    return deleteIds;
+  },
+  deleteItemsById = (items, deleteId) => {
+    let currentItmes = [];
+    if (items && items.length) {
+      items.map((item, index) => {
+        if (item.id !== deleteId) {
+          currentItmes.push(item);
+          if (item.items && item.items.length)
+            item.items = deleteItemsById(item.items, deleteId);
+        }
+      })
+    }
+    return currentItmes;
+  },
+  defaultStatusTag = {
+    is404: false,
+    hasDeleteAuth: false,
+    isShowEditor: false,
+    currentRecommentId: "",
+  };
+
+
+export default modelExtend(pageModel, {
+  namespace: 'details',
+  state: {
+    currentContent: {},
+    currentComments: [],
+    isShowInputFoot: true,
+    placeholder: '请输入内容...',
+    fromModal: "",
+    ...Object.assign({}, defaultStatusTag),
+    animating:false,
+  },
+  subscriptions: {
+    setup({dispatch, history}) {
+      history.listen(location => {
+        let {pathname, query} = location;
+        if (pathname.startsWith('/details')) {
+          dispatch({
+            type: 'updateState',
+            payload: {
+              ...Object.assign({}, defaultStatusTag),
+              ...query
+            }
+          })
+          dispatch({
+            type: 'queryContent',
+            payload: {
+              ...query
+            }
+          })
+          dispatch({
+            type: 'queryCommends',
+            payload: {
+              ...query
+            }
+          })
+          dispatch({
+            type: 'queryDeleteAuth',
+            payload: {
+              ...query
+            }
+          })
+          dispatch({
+            type: 'visit',
+            payload: {
+              ...query
+            }
+          })
+        }
+      })
+    }
+  },
+  effects: {
+    * queryContent({payload, }, {call, put, select}) {
+      const result = yield call(getContent, payload);
+      console.log(result)
+      if (result) {
+        const {data, is404 = false} = result;
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentContent: {
+              ...result.data,
+            },
+            is404,
+            animating:false
+          },
+        })
+      }
+    },
+    * queryCommends({payload, }, {call, put, select}) {
+      const result = yield call(getCommends, payload);
+      if (result) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentComments: result.data,
+            isShowEditor: false,
+          },
+        })
+      }
+    },
+    * queryDeleteAuth({payload, }, {call, put, select}) {
+      const result = yield call(getAuths, payload);
+      if (result) {
+        const {hasAuth = false} = result;
+        yield put({
+          type: 'updateState',
+          payload: {
+            hasDeleteAuth: hasAuth === true,
+          },
+        })
+      }
+    },
+    * deleteCommends({payload}, {call, put, select}) {
+      const {currentComments, moduleId, fromModal = ""} = yield select(_ => _.details),
+        {id, contentId = ""} = payload,
+        deleteIds = findDeleteIds(currentComments, id);
+
+      const result = yield call(deleteCommends, {
+        optId: deleteIds.join(","),
+        moduleId,
+        contentId,
+        types: "2"
+      });
+      if (result) {
+        if (fromModal) {
+          const {contentId, ...others} = result;
+          yield put({
+            type: `${fromModal}/updateItemState`,
+            payload: {
+              itemId: contentId,
+              itemValue: others
+            },
+          })
+        }
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentComments: deleteItemsById(currentComments, id),
+          },
+        })
+        Toast.success('已删除', 2);
+      }
+    },
+    * deleteContent({payload}, {call, put, select}) {
+      const {moduleId, fromModal = ""} = yield select(_ => _.details),
+        {id} = payload;
+      const result = yield call(deleteCommends, {
+        optId: id,
+        moduleId,
+        contentId: id,
+        types: "1"
+      });
+
+      if (result) {
+        if (fromModal) {
+          const {contentId, ...others} = result;
+          yield put({
+            type: `${fromModal}/deleteItemById`,
+            payload: {
+              itemId: contentId,
+            },
+          })
+        }
+        yield put(routerRedux.goBack());
+        Toast.success('已删除', 2);
+      }
+    },
+    * collect({payload}, {call, put, select}) {
+      const {id, value} = payload;
+      const data = yield call(userDatas, {
+        opts: "collect",
+        optId: id,
+        types: value
+      })
+      if (data) {
+        const {currentContent, fromModal} = yield select(_ => _.details);
+        const others = {
+          isCollect: value === 1
+        };
+        yield put({
+          type: 'updateState',
+          payload: {
+            currentContent: {
+              ...currentContent,
+              ...others
+            }
+          },
+        })
+        if (fromModal) {
+          yield put({
+            type: `${fromModal}/updateItemState`,
+            payload: {
+              itemId: id,
+              itemValue: others
+            },
+          })
+        }
+      }
+    },
+    * visit({payload}, {call, put, select}) {
+      const {moduleId = "", id = "", fromModal = ""} = payload;
+      const data = yield call(recordVisit, {
+        moduleId,
+        contentId: id
+      })
+      if (data && fromModal) {
+        const {contentId = id, ...others} = data;
+        yield put({
+          type: `${fromModal}/updateItemState`,
+          payload: {
+            itemId: contentId,
+            itemValue: others
+          },
+        })
+      }
+    },
+
+    * comment({payload}, {call, put, select}) {
+      const {params, files} = payload,
+      data = yield call(recordcomments, params, files);
+      if (data) {
+        const {moduleId = "", fromModal = ""} = yield select(_ => _.details),
+          {contentId = id, ...others} = data;
+        yield put({
+          type:'updateState',
+          payload:{
+            animating:false
+          }
+        })
+        if (fromModal && contentId)
+          yield put({
+            type: `${fromModal}/updateItemState`,
+            payload: {
+              itemId: contentId,
+              itemValue: others
+            },
+          });
+        if (contentId && moduleId)
+          yield put({
+            type: "queryCommends",
+            payload: {
+              moduleId,
+              id: contentId
+            },
+          });
+      }
+    }
+  },
+
+})
+

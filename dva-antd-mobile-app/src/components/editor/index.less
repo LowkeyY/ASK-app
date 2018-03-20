@@ -2,30 +2,61 @@
   width: 100%;
   height:220px;
 }
-
+.RichEditor-mask{
+  width: 100%;
+  position: fixed;
+  top:0;
+  bottom:0;
+  background: rgba(0,0,0,.4);
+  z-index: 99;
+  overflow:scroll;
+}
 .RichEditor-box{
   width: 100%;
   position: fixed;
   left:0;
   bottom:0;
-  z-index: 10;
+  z-index: 100;
 }
 
 .RichEditor-root {
   background: #fff;
-  border: 1px solid #ddd;
+  border:2px solid #ddd;
   font-family: 'Microsoft YaHei', serif;
   font-size: 14px;
   padding: 10px;
+  .RichEditor-emailcontrol{
+      display:flex;
+    justify-content:start;
+    :global{
+      .am-checkbox-agree .am-checkbox-inner{
+        top:5px;
+      }
+      .am-checkbox-agree{
+        margin:0 20px;
+        padding: 0;
+      }
+    }
+    & input{
+      width: 30px;
+      height: 30px;
+
+    }
+   .RichEditor-emailcontrol-text{
+     color: #108ee9;
+      padding-left: 10px;
+     font-size:28px;
+
+   }
+  }
 }
 
 .RichEditor-editor {
   overflow-y: scroll;
   justify-content: center;
   padding: 20px;
-  border: 1px solid #ddd;
-  height: 140px;
-  cursor: pointer;
+  border: 2px solid #ddd;
+  height: 240px;
   font-size: 30px;
   margin: 10px 0 10px 0;
 }
@@ -155,7 +186,7 @@ margin: 10px 0;
   position: absolute;
   color: #108ee9;
   right: 10px;
-  top:-20px;
+  top:-1px;
 }
 
 .RichEditor-emjoy-box{
@@ -172,7 +203,7 @@ margin: 10px 0;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content:  ;
+    justify-content: flex-start ;
     flex-wrap:wrap;
     & li{
       padding: 0 10px;

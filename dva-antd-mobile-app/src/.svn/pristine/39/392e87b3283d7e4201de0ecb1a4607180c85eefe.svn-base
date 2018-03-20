@@ -1,0 +1,22 @@
+@PrefixCls: fontsizepage;
+@bgColor : white;
+
+.@{PrefixCls}-preview-size{
+  width: 100%;
+  margin-top: 20px;
+  min-height: 600px;
+  background: @bgColor;
+  .@{PrefixCls}-font{
+    margin: 0 ;
+     width: 100%;
+    text-align: center;
+   }
+}
+:global{
+  .am-slider-wrapper{
+    height:35px;
+  }
+  .am-slider-step{
+    padding: 50px 0;
+  }
+}

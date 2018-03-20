@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Icon } from 'antd-mobile';
-import { Editor, EditorState, Modifier, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState, convertFromHTML,CompositeDecorator} from 'draft-js';
+import { Button, Icon, Checkbox } from 'antd-mobile';
+import { Editor, EditorState, Modifier, RichUtils, DefaultDraftBlockRenderMap, AtomicBlockUtils, convertToRaw, Entity, ContentState, convertFromHTML, CompositeDecorator } from 'draft-js';
 import { getLocalIcon } from 'utils'
 import { stateToHTML } from 'draft-js-export-html';
 import Immutable from 'immutable';
@@ -10,19 +10,13 @@ import BlockStyleControls from './component/blockbox'
 import EmojiBox from 'components/emoji/index'
 import "draft-js/dist/Draft.css";
 import styles from './index.less'
-
+const AgreeItem = Checkbox.AgreeItem;
 const blockRenderMap = Immutable.Map({
-
     'center': {
         element: 'span',
-    },
-    'atomic': {
-        element: 'span',
-    },
-
-
+    }
 });
-let options = { // 转换Html
+let toHtmlOptions = { // 转换Html
     blockStyleFn(block) {
         if (block.getType() === 'center') {
             return {
@@ -41,7 +35,19 @@ let options = { // 转换Html
     },
     entityStyleFn: (entity) => {
         const entityType = entity.get('type').toLowerCase();
-        if (entityType === 'image') {
+        if (entityType == 'image' || entityType == 'atomic') {
+            const data = entity.getData();
+            return {
+                element: 'img',
+                attributes: {
+                    src: data.src,
+                },
+                style: {
+                    width: "685px"
+                },
+            };
+        }
+        if (entityType === 'emoji') {
             const data = entity.getData();
             return {
                 element: 'img',
@@ -53,18 +59,6 @@ let options = { // 转换Html
                 },
             };
         }
-      //   if (entityType === 'emoji') {
-      //   const data = entity.getData();
-      //   return {
-      //     element: 'img',
-      //     attributes: {
-      //       src: data.src,
-      //     },
-      //     style: {
-      //       // Put styles here...
-      //     },
-      //   };
-      // }
     },
 }
 
@@ -76,18 +70,38 @@ class MyEditor extends React.Component {
             editorState: EditorState.createEmpty(),
             showEditor: true, //控制display
             disabled: true,
-            isShowEmojiBox: false
+            isShowEmojiBox: false,
+            emailControl: true,
+            position: false,
+            imgControl: false,
         };
+        this.replaceSystemEmoji = (content) => {
+            const ranges = [
+                '\ud83c[\udf00-\udfff]',
+                '\ud83d[\udc00-\ude4f]',
+                '\ud83d[\ude80-\udeff]'
+            ];
+            return content.replace(new RegExp(ranges.join('|'), 'g'), '').replace(/\[\/.+?\]/g, '');
+        }
 
-        this.focus = () => this.refs.editor.focus();
+        this.focus = () => {
+            this.refs.editor.focus()
+        };
         this.logState = () => { //发送数据
-          console.log(stateToHTML(this.state.editorState.getCurrentContent(), options))
-            const content = this.state.editorState;
-            this.props.onSubmit && this.props.onSubmit(stateToHTML(this.state.editorState.getCurrentContent(), options));
-          this.setState({
-            editorState:  EditorState.createEmpty()
-          })
-
+            const emailControl = this.state.emailControl,
+                imgControl = this.state.imgControl;
+            const currentContent = this.state.editorState.getCurrentContent(),
+                {entityMap} = convertToRaw(currentContent),
+                entityParam = {};
+            Object.keys(entityMap).map(key => {
+                const entity = entityMap[key];
+                if (entity && entity.data && entity.data.data)
+                    entityParam[entity.data.src.replace(/[^a-z0-9-]/g, "")] = entity.data.data
+            });
+            this.props.onSubmit && this.props.onSubmit(this.replaceSystemEmoji(stateToHTML(currentContent, toHtmlOptions)), entityParam, emailControl, imgControl);
+            this.setState({
+                editorState: EditorState.createEmpty(),
+            })
         };
 
         this.onChange = (editorState) => this.setState({
@@ -96,18 +110,22 @@ class MyEditor extends React.Component {
         this.toggleBlockType = (type) => this._toggleBlockType(type);
         this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
         this.insertImage = (file) => this._insertImage(file);
-        this.insertEmoji = (emoji) => this._insertEmoji(emoji)
-        this.handleFileInput = this._handleFileInput.bind(this)
+        this.insertEmoji = (emoji, emojiName) => this._insertEmoji(emoji, emojiName)
+        this.handleFileInput = this._handleFileInput.bind(this);
         this.handleUploadImage = () => this._handleUploadImage();
-
+        this.handleKeyCommand = this._handleKeyCommand.bind(this);
+        this.emailControl = this.emailControl.bind(this);
+        this.imgControl = this.imgControl.bind(this);
     }
 
-    toggleEmojiBox() {
-     this.refs.editor.blur()
+    toggleEmojiBox(e) {
+        e.stopPropagation()
         this.setState({
             isShowEmojiBox: !this.state.isShowEmojiBox
         })
+        this.refs.editor.blur()
     }
+
     _toggleBlockType(blockType) {
         this.onChange(
             RichUtils.toggleBlockType(
@@ -126,32 +144,52 @@ class MyEditor extends React.Component {
         );
     }
 
+    _handleKeyCommand(command) {
+        const {editorState} = this.state;
+        const newState = RichUtils.handleKeyCommand(editorState, command);
+        if (newState) {
+            this.onChange(newState);
+            return true;
+        }
+        return false;
+    }
+
     _insertImage(file) { //插入图片
         const {editorState} = this.state;
         const contentState = editorState.getCurrentContent();
         const fileSrc = typeof file == "object" ? URL.createObjectURL(file) : file;
         const contentStateWithEntity = contentState.createEntity('image', 'IMMUTABLE', {
             src: fileSrc,
+            data: file
         })
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        this.onChange(AtomicBlockUtils.insertAtomicBlock(
-            this.state.editorState,
-            entityKey,
-            ' '
-        ));
 
+        const newEditorState = EditorState.set(
+            editorState,
+            {
+                currentContent: contentStateWithEntity
+            }
+        );
+        this.setState({
+            editorState: AtomicBlockUtils.insertAtomicBlock(
+                newEditorState,
+                entityKey,
+                ' '
+            ),
+        }, () => {
+            setTimeout(() => this.focus(), 0);
+        });
     }
 
-    _insertEmoji(url) {//插入表情
-      const decorator = new CompositeDecorator([
-        {
-          strategy: findImageEntities,
-          component: Emoji,
-        }
-      ]);
-        const emoji = '<img src="' + url + '"/>';
-        const {editorState} = this.state;
-        var contentState = editorState.getCurrentContent();
+    _insertEmoji(url, emojiName) { //插入表情
+        const decorator = new CompositeDecorator([
+            {
+                strategy: findImageEntities,
+                component: Emoji,
+            }
+        ]);
+        const contentState = this.state.editorState.getCurrentContent();
+        const emoji = `[/${emojiName}]`;
         const contentStateWithEntity = contentState
             .createEntity('emoji', 'IMMUTABLE', {
                 src: url
@@ -159,52 +197,55 @@ class MyEditor extends React.Component {
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
         const currentSelectionState = this.state.editorState.getSelection();
         let emojiAddedContent;
-        const afterRemovalContentState = Modifier.removeRange( //从编辑器中删除整个范围的文本
-            contentState,
-            currentSelectionState,
-        );
-        const targetSelection = afterRemovalContentState.getSelectionAfter();
+        let emojiEndPos = 0;
+        let blockSize = 0;
+        // 定位光标
+        const targetSelection = contentState.getSelectionAfter();
         emojiAddedContent = Modifier.insertText(
-            afterRemovalContentState,
+            contentState,
             targetSelection,
-            ' sdfdsf',
+            emoji,
             null,
             entityKey,
         );
-        const blocksFromHTML = convertFromHTML(emoji);
-        const state = ContentState.createFromBlockArray(
-            blocksFromHTML.contentBlocks,
-            blocksFromHTML.entityMap,
+        emojiEndPos = targetSelection.getAnchorOffset();
+        const blockKey = targetSelection.getAnchorKey();
+        blockSize = contentState.getBlockForKey(blockKey).getLength();
+        emojiAddedContent = Modifier.insertText(
+            emojiAddedContent,
+            emojiAddedContent.getSelectionAfter(),
+            '',
         );
-      this.state = {
-        editorState: EditorState.createWithContent(
-          state,
-          decorator,
-        ),
-      };
-
-      const newEditorState = EditorState.push(
-              editorState,
-        emojiAddedContent
+        const newEditorState = EditorState.push(
+            this.state.editorState,
+            emojiAddedContent,
+            'insert-emoji',
         );
+        this.onChange(EditorState.forceSelection(newEditorState, emojiAddedContent.getSelectionAfter()));
 
-        this.onChange(this.state.editorState)
-
+        this.setState({ //隐藏emoji box
+            isShowEmojiBox: false
+        })
     }
     ;
 
-    // uploadImg(file, callback) {
-    //   callback("http://tupian.enterdsk.com/2013/lxy/12/9/3/1.jpg")
-    // };
     _handleFileInput(e) {
-        const fileList = e.target.files;
-        const file = fileList[0];
-        // if ( (typeof this.uploadImg) != "undefined" && (typeof this.uploadImg) == "function" ){
-        //   this.uploadImg(file,this.insertImage)
-        //   console.log(this.insertImage)
-        //   return
-        // }
-        this.insertImage(file);
+        if (e instanceof Blob) {
+            this.insertImage(e);
+        } else if (e.target) {
+            const fileList = e.target.files,
+                _target = e.target;
+            for (let i = 0; i < fileList.length; i++) {
+                const file = fileList[i],
+                    isLast = i == fileList.length - 1;
+                setTimeout(() => {
+                    this.insertImage(file);
+                    if (isLast === true) {
+                        _target.value = "";
+                    }
+                }, i == 0 ? 0 : i * 50);
+            }
+        }
     }
 
     _handleUploadImage() {
@@ -212,13 +253,25 @@ class MyEditor extends React.Component {
     }
 
     goBottom() {
-       setTimeout(function() {
-         document.documentElement.scrollTop = document.body.scrollHeight;
-       }, 300);
+        this.setState({
+            position: true
+        })
+        const that = this
+    // setTimeout(function () {
+    //   that.refs.editorbox.scorllIntoView(true)
+    // },300)
+    // setTimeout(function() {
+    //     document.documentElement.scrollTop = document.body.scrollHeight;
+    // }, 0);
+    }
+    resetPosition() {
+        // this.setState({
+        //   position:false
+        // })
     }
 
-
     hiddenEditor = () => {
+
         this.props.dispatch({
             type: 'details/updateState',
             payload: {
@@ -228,13 +281,47 @@ class MyEditor extends React.Component {
         })
     }
 
+
+    lostFocus() {
+        this.refs.editor.blur()
+    }
+    emailControl() { //邮件提醒
+        this.setState({
+            emailControl: !this.state.emailControl
+        })
+    }
+    imgControl() { //原图上传
+        this.setState({
+            imgControl: !this.state.imgControl
+        })
+    }
+    componentDidMount() {
+        const that = this
+        this.refs.editorbox.ontouchmove = function(e) { //阻止滑动穿透
+            console.log(e.target)
+        }
+        this.refs.mask.ontouchmove = function(e) {
+
+            if (e.target.className.indexOf("mask") > 0) {
+                e.preventDefault()
+                that.props.dispatch({
+                    type: 'details/updateState',
+                    payload: {
+                        isShowEditor: false
+                    }
+                })
+            }
+        }
+        if (this.state.isShowEditor === true) {
+            document.body.onscroll = function(e) {
+                e.preventDefault()
+            }
+        }
+    }
     render() {
         const {editorState} = this.state;
-        const display = this.props.isShowEditor ? {
-            display: 'block'
-        } : {
-            display: 'none'
-        };
+        const display = this.props.isShowEditor ? 'block' : 'none',
+            position = this.state.position ? 'absolute' : 'fixed';
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
         let className = styles['RichEditor-editor'];
@@ -244,50 +331,56 @@ class MyEditor extends React.Component {
                 className += ' ' + styles['RichEditor-hidePlaceholder'];
             }
         }
-
         return (
-            <div className={ styles["RichEditor-box-header"] } style={ display }>
-              <div className={ styles["RichEditor-box"] }>
-                <div className={ styles["RichEditor-root"] }>
-                  <div className={ styles["RichEditor-box-closebtn"] } onClick={ this.hiddenEditor }>
-                    <Icon type={ getLocalIcon('/editor/close.svg') } size="lg"/>
-                  </div>
-                  <div className={ className } onClick={ this.focus }>
-                    <Editor
-                            blockStyleFn={ getBlockStyle }
-                            blockRendererFn={ mediaBlockRenderer }
-                            blockRenderMap={ DefaultDraftBlockRenderMap.merge(blockRenderMap) }
-                            editorState={ editorState }
-                            handlePastedText={ (value) => (console.log('paste', value)) }
-                            onChange={ this.onChange }
-                            onFocus={ this.goBottom }
-                            placeholder={ this.props.placeholder }
-                            ref='editor'
-                            spellCheck={ true }
-                            onPaste={ (value) => (console.log('paste', value)) }
-                    />
-
-                  </div>
-                  <div className={ styles["RichEditor-container"] }>
-                    <div className={ styles["RichEditor-control"] }>
-                      <div className={ styles["RichEditor-control-box"] } onClick={ this.focus}>
-                        <MediaControls handleFileInput={ this.handleFileInput } toggleEmojiBox={ this.toggleEmojiBox.bind(this) } />
-                        <InlineStyleControls editorState={ editorState } onToggle={ this.toggleInlineStyle } />
-                        <BlockStyleControls editorState={ editorState } onToggle={ this.toggleBlockType } />
-                      </div>
-                      <div className={ styles["RichEditor-control-sendbtn"] }>
-                        <Button
-                                disabled={ !contentState.hasText() }
-                                type="primary"
-                                inline
-                                size="small"
-                                style={ { padding: '5px 5px', lineHeight: '1.6em' } }
-                                onClick={ this.logState }>
-                          发送
-                        </Button>
-                      </div>
+            <div className={ styles["RichEditor-mask"] } style={ { display: display } } ref='mask'>
+              <div className={ styles["RichEditor-box-header"] } ref="editorbox">
+                <div className={ styles["RichEditor-box"] } style={{position:position}}>
+                  <div className={ styles["RichEditor-root"] }>
+                    <div className={ styles["RichEditor-emailcontrol"] }>
+                      <AgreeItem checked={ this.state.emailControl } onChange={ this.emailControl }>
+                        <span className={ styles['RichEditor-emailcontrol-text'] }>邮件提醒</span>
+                      </AgreeItem>
+                      { /*<AgreeItem checked={ this.state.imgControl }  onChange={ this.imgControl }>*/ }
+                      { /*<span className={ styles['RichEditor-emailcontrol-text'] }>原图</span>*/ }
+                      { /*</AgreeItem>*/ }
                     </div>
-                    <EmojiBox isShowEmojiBox={ this.state.isShowEmojiBox } insertEmoji={ this.insertEmoji } />
+                    <div className={ styles["RichEditor-box-closebtn"] } onClick={ this.hiddenEditor }>
+                      <Icon type={ getLocalIcon('/editor/close.svg') } size="lg" />
+                    </div>
+                    <div className={ className } onClick={ this.focus }>
+                      <Editor blockStyleFn={ getBlockStyle }
+                        blockRendererFn={ mediaBlockRenderer } /* blockRenderMap={DefaultDraftBlockRenderMap.merge(blockRenderMap)}*/
+                        editorState={ editorState }
+                        handlePastedText={ (value) => (console.log('paste', value)) }
+                        onChange={ this.onChange }
+                        onFocus={ this.goBottom.bind(this) }
+                        onBlur={ this.resetPosition.bind(this) }
+                        handleKeyCommand={ this.handleKeyCommand }
+                        placeholder={ this.props.placeholder }
+                        ref='editor'
+                        spellCheck={ true }
+                        onPaste={ (value) => (console.log('paste', value)) } />
+                    </div>
+                    <div className={ styles["RichEditor-container"] }>
+                      <div className={ styles["RichEditor-control"] }>
+                        <div className={ styles["RichEditor-control-box"] } onClick={ this.focus }>
+                          <MediaControls handleFileInput={ this.handleFileInput } toggleEmojiBox={ this.toggleEmojiBox.bind(this) } />
+                          <InlineStyleControls editorState={ editorState } onToggle={ this.toggleInlineStyle } />
+                          <BlockStyleControls editorState={ editorState } onToggle={ this.toggleBlockType } />
+                        </div>
+                        <div className={ styles["RichEditor-control-sendbtn"] }>
+                          <Button disabled={ !contentState.hasText() }
+                            type="primary"
+                            inline
+                            size="small"
+                            style={ { padding: '5px 5px', lineHeight: '1.6em' } }
+                            onClick={ this.logState }>
+                            发送
+                          </Button>
+                        </div>
+                      </div>
+                      <EmojiBox isShowEmojiBox={ this.state.isShowEmojiBox } insertEmoji={ this.insertEmoji } />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -327,7 +420,7 @@ const Image = (props) => {
     return <img src={ props.src } style={ props.style } />;
 };
 const Media = (props) => {
-    const entity = Entity.get(props.block.getEntityAt(0));
+    const entity = props.contentState.getEntity(props.block.getEntityAt(0));
     const {src} = entity.getData();
     const type = entity.getType();
     if (type === 'image') {
@@ -335,29 +428,26 @@ const Media = (props) => {
     }
 
 };
-function findImageEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (character) => {
-      const entityKey = character.getEntity();
-      console.log( Entity.get(entityKey).getType())
-      return (
-        entityKey !== null &&
-        Entity.get(entityKey).getType() === 'EMOJI'
-      );
-    },
-    callback
-  );
-}
-const Emoji = (props) => {
-  const {
-    height,
-    src,
-    width,
-  } = props.contentState.getEntity(props.entityKey).getData();
-  return (
 
-    <span style={{backgroundImage:`url(${src})`,width:'25px',height:'25px',display:'inline-block'}}></span>
-  );
+function findImageEntities(contentBlock, callback, contentState) {
+    contentBlock.findEntityRanges(
+        (character) => {
+            const entityKey = character.getEntity();
+            return (
+                entityKey !== null &&
+                Entity.get(entityKey).getType() === 'EMOJI'
+            );
+        },
+        callback
+    );
+}
+
+const Emoji = (props) => {
+    const {height, src, width, } = props.contentState.getEntity(props.entityKey).getData();
+    return (
+
+        <span style={ { backgroundImage: `url(${src})`, width: '25px', height: '25px', display: 'inline-block' } }></span>
+        );
 };
 const styles2 = {
     media: {

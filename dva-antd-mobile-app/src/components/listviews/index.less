@@ -17,7 +17,13 @@
 		.am-list-body .am-flexbox:last-child .am-list-line:after{
 			border-bottom: 0;
 		}
-		
+    .am-list-body div:not(:last-child) .am-list-line:after{
+      border: 0 none;
+    }
+    .am-list-body{
+      border: 0 none;
+    }
+
 		.row{
 			.am-list-line .am-list-brief{
 		    	font-size: @font-size;
@@ -86,4 +92,13 @@
 	.tabbar {
 		bottom: 110px;
 	}
+  .query-lists-box{
+    .am-list-body{
+      border: 0 none;
+      & div:not(:last-child) .am-list-line:after{
+        border: 0 none;
+      }
+    }
+  }
+
 }

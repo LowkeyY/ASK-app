@@ -1,0 +1,13 @@
+@PrefixCls: mysets;
+@bgColor : white;
+
+.@{PrefixCls}-normal {
+	:global {
+		.am-input-label{
+			font-size : .3rem;
+		}
+		.am-list-item .am-input-control input {
+			font-size : 0.3rem;
+		}
+	}
+}

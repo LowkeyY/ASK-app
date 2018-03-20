@@ -1,0 +1,161 @@
+
+.RichEditor-box{
+  width: 100%;
+}
+.RichEditor-root {
+  background: #fff;
+  font-family: 'Microsoft YaHei', serif;
+  font-size: 30px;
+}
+
+.RichEditor-editor {
+  padding: 14px;
+  border: 1px solid #ddd;
+  min-height:520px;
+  cursor: pointer;
+  font-size: 30px;
+  overflow-y: scroll;
+  margin: 10px 0 20px 0;
+}
+
+.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-editor .public-DraftEditor-content {
+  margin: 0 -15px -15px;
+  padding: 15px;
+}
+
+.RichEditor-editor .public-DraftEditor-content {
+  min-height: 100px;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Microsoft YaHei', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 20px;
+}
+.RichEditor-controls-block{
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.RichEditor-controls-inline{
+  width: 25%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.RichEditor-controls-media {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #999999;
+  user-select: none;
+  &-item{
+    margin-right:30px;
+  }
+  &-img-box{
+    margin-right: 30px;
+    position: relative;
+    overflow: hidden;
+    & input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+    }
+  }
+  &-camera-box{
+    margin-right: 30px;
+    position: relative;
+    overflow: hidden;
+    & input{
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+    }
+  }
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 30px;
+  padding: 2px 0;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
+
+.align-right div {
+  text-align: right;
+}
+.align-center div {
+  text-align: center;
+}
+.align-left div {
+  text-align: left;
+}
+.blockquote {
+  margin: 10px 0;
+}
+.blockquote div{
+  background: #ddd;
+  padding: 10px 0;
+
+}
+.RichEditor-out{
+  margin-top: 80px;
+}
+.RichEditor-container{
+  width: 100%;
+  position: fixed;
+  left:0;
+  bottom: 0;
+  z-index:10;
+}
+.RichEditor-control{
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ddd;
+
+  &-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-left: 20px;
+  }
+}
+.RichEditor-control-sendbtn{
+
+  margin-right: 20px;
+  padding-top: 10px;
+}
+
+
+
+
