@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { WhiteSpace, WingBlank, SegmentedControl, List, Radio,Icon } from 'antd-mobile';
+import { WhiteSpace, WingBlank, SegmentedControl, List, Radio, Icon } from 'antd-mobile';
 import { getLocalIcon } from 'utils'
 import { Layout } from 'components';
 import styles from './index.less';
@@ -10,7 +10,6 @@ const {BaseLine} = Layout,
     PrefixCls = "page-search-user";
 
 function Multiuser({users, selecteds, onSubmit, selectedDatas, selectedIndex, onChange}) {
-     console.log(users)
     const layoutItems = () => {
             const datas = selectedIndex == 0 ? users : selectedDatas;
             return (
@@ -32,11 +31,10 @@ function Multiuser({users, selecteds, onSubmit, selectedDatas, selectedIndex, on
                 )
             }
             case 1: {
-
                 return (
                     <List.Item onClick={ onSubmit.bind(null, data) }>
                       <RadioItem key={ data.value } checked={ false }>
-                        <span>{ data.text } <span className={styles[`${PrefixCls}-checked-user`]}><Icon  type={ getLocalIcon("/page/deleteuser.svg") }/></span></span>
+                        <span>{ data.text } <span className={ styles[`${PrefixCls}-checked-user`] }><Icon type={ getLocalIcon("/page/deleteuser.svg") }/></span></span>
                       </RadioItem>
                     </List.Item>
                 )
@@ -47,11 +45,10 @@ function Multiuser({users, selecteds, onSubmit, selectedDatas, selectedIndex, on
         title: "选择用户"
     }
     return (<div>
-              <SegmentedControl
-                                selectedIndex={ selectedIndex }
-                                values={ ['搜索结果', '已选用户'] }
-                                onChange={ onChange }
-                                style={ { padding: '.2rem' } } />
+              <SegmentedControl selectedIndex={ selectedIndex }
+                values={ ['搜索结果', '已选用户'] }
+                onChange={ onChange }
+                style={ { padding: '.2rem' } } />
               <div className={ styles[`${PrefixCls}-search-menu`] }>
                 <WingBlank size="sm">
                   <div>

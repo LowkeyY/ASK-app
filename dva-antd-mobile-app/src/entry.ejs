@@ -4,14 +4,18 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="">
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>ASK项目</title>
   <% for (item of htmlWebpackPlugin.options.headScripts) { %>
     <script src="<%= item %>"></script>
   <% } %>
+  <style>
+    body {
+      padding-top: env(safe-area-inset-top) !important;
+      padding-bottom: env(safe-area-inset-bottom) !important;
+    }
+  </style>
 </head>
 
 <body>

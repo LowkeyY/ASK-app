@@ -9,13 +9,14 @@ import { setLoginOut } from 'utils'
 import { Toast } from 'antd-mobile';
 
 const {prefix} = config;
-
+const defalutHeight=document.documentElement.clientHeight
 export default {
     namespace: 'app',
     state: {
         user: {},
         userData: {},
-        isLayout: false
+        isLayout: false,
+        defalutHeight
     },
     subscriptions: {
         setup({dispatch, history}) {
@@ -50,7 +51,7 @@ export default {
             const data = yield call(logout);
             if (data) {
                 setLoginOut();
-                yield put(routerRedux.push({
+                yield put(routerRedux.replace({
                     pathname: "/login"
                 }))
             }
@@ -72,9 +73,7 @@ export default {
                         }
                     },
                 })
-                yield put(routerRedux.push({
-                    pathname: "/mine"
-                }));
+                yield put(routerRedux.go(-2));
                 Toast.success('修改成功', 1);
             } else {
                 Toast.fail('修改失败请重试', 1);

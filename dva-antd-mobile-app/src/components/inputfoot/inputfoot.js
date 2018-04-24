@@ -12,10 +12,10 @@ class InputFoot extends React.Component {
     }
 
     goDiscuss = () => {
-        // let anchorElement = document.getElementById('discuss');
-        // if (anchorElement) {
-        //     anchorElement.scrollIntoView();
-        // }
+        let anchorElement = document.getElementById('discuss');
+        if (anchorElement) {
+            anchorElement.scrollIntoView();
+        }
     }
     toBlur=()=>{//解决iosreadonly依然获取光标
 
@@ -23,21 +23,16 @@ class InputFoot extends React.Component {
     }
     hiddenINputFoot = (e) => {
         e.stopPropagation();
-        setTimeout(function() {
-            document.documentElement.scrollTop = document.body.scrollHeight;
-        }, 300);
-        let anchorElement = document.getElementById('discuss');
-        if (anchorElement) {
-            anchorElement.scrollIntoView();
-        }
         this.props.dispatch({
             type: 'details/updateState',
             payload: {
                 isShowEditor: true,
                 placeholder: '请输入内容...',
-                currentRecommentId: ""
+                currentRecommentId: "",
+                 isShowInputFoot:false
             }
         })
+
 
     }
     getChildren = (items, children) => {

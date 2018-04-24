@@ -1,25 +1,25 @@
 module.exports = {
-    name: 'AntD Admin',
-    prefix: 'antdAdmin',
-    footerText: 'Ant Design Admin  © 2017 zuiidea',
+    name: '',
+    prefix: '',
+    footerText: '',
     logo: '/logo.png',
     iconFontCSS: '/iconfont.css',
     iconFontJS: '/iconfont.js',
     CORS: [],
-    openPages: ['/login', '/search', '/pagecontent', '/mylist', '/mysets', '/creates', '/pdfcontent', '/fontcontrol', '/discuss', '/details', '/searchuser', '/error', '/hotwordsresult', '/preview'],
+    openPages: ['/login', '/search', '/pagecontent', '/mylist', '/mysets', '/creates', '/pdfcontent', '/fontcontrol', '/discuss', '/details', '/searchuser', '/error', '/hotwordsresult', '/preview','/agreement'],
     noLoaderPages: ['/mylist'],
-    baseURL: 'http://192.168.0.119:8088',
+   // baseURL: 'https://askapp.nuctech.com:8443',
+   // baseURL:'http://192.168.0.119:8080',
+      baseURL:'https://192.168.0.119:8443',
+   // baseURL: 'http://askapp.nuctech.com:8088',
     notRedirectSign: '_not_redirect_',
     accessToken: 'CNESSIONID',
     api: {
         userLogin: `/apilogin/login.jcp`,
         userLogout: `/apilogin/logout.jcp`,
-
         dashboard: `/api/dashboard.jcp`,
         typequery: `/api/typequery.jcp`,
-
         createbbsxApi: "/api/create/createbbsx.jcp",
-
         querycommends: "/api/query/querycommend.jcp",
         querycontent: "/api/query/querycontent.jcp",
         querylist: "/api/query/querylist.jcp",
@@ -37,7 +37,7 @@ module.exports = {
         mylistApi: "/api/user/mylist.jcp",
         userAvatar: "/api/user/userAvatar.jcp",
         userInfo: "/api/user/userInfos.jcp",
-        userOptApi: "/api/user/userOpts.jcp"
-
+        userOptApi: "/api/user/userOpts.jcp",
+        submitDraftApi:'/api/create/createbbsxdraft.jcp'
     },
 }

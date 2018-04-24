@@ -19,7 +19,6 @@
 .@{PrefixCls}-header {
   position: fixed;
   z-index: 100;
-  top: 0;
   width : 100%;
   height: @primary-header-height;
   :global{
@@ -30,15 +29,6 @@
   }
 }
 .selectmenu-box{
-  & form{
-    position: absolute;
-    top:90px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
-  }
   :global{
     .am-list-content{
       font-size: .34rem !important;
@@ -58,11 +48,12 @@
     .am-list-item .am-list-line .am-list-extra{
       color: #000;
     }
-
   }
+  overflow-y: scroll;
 }
 .my-draft-list{
   padding-left:.15rem;
+  position:null;
 }
 
 .@{PrefixCls}-preview-btn{

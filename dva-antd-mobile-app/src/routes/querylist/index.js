@@ -9,7 +9,7 @@ import Results from './results';
 const Item = List.Item,
     Brief = Item.Brief;
 
-function Querylist({querylist, typequery, dispatch}) {
+function Querylist({querylist, typequery, dispatch,app}) {
 
     const updateState = (payload) => {
         dispatch({
@@ -21,7 +21,8 @@ function Querylist({querylist, typequery, dispatch}) {
     let PrefixCls = "query-list",
         fromModal = "querylist",
         {dataSource, isLoading, hasMore, pageIndex, scrollerTop, pagination, totalCount} = querylist,
-        {refreshing, filterSelected, primaryTag, preFilterSelected, defalutHeight} = typequery;
+        {refreshing, filterSelected, primaryTag, preFilterSelected} = typequery,
+        {defalutHeight}=app;
     const currentKey = (+(preFilterSelected[primaryTag] || filterSelected[primaryTag]));
     const handleItemClick = (id, currentKey) => {
             if (currentKey === 3) {
@@ -156,7 +157,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
-              <div className={ "title" }>
+              <div className={ "title" } style={obj.isNew?{color:'#ff5b05'}:null}>
                 <h3>{ obj.title }</h3>
               </div>
               <Brief>
@@ -189,7 +190,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
-              <div className={ "title" }>
+              <div className={ "title" }  style={obj.isNew?{color:'#ff5b05'}:null}>
                 <h3>{ obj.title }</h3>
               </div>
               <Brief>
@@ -213,7 +214,7 @@ function Querylist({querylist, typequery, dispatch}) {
                   onClick={ handleItemClick.bind(null, obj.id, currentKey) }
                   key={ `${sectionID} - ${rowID}` }
                   wrap>
-              <div className={ "title" }>
+              <div className={ "title" } style={obj.isNew?{color:'#ff5b05'}:null}>
                 <h3>{ obj.title }</h3>
               </div>
               <Brief>
@@ -312,7 +313,8 @@ Querylist.propTypes = {
     typequery: PropTypes.object
 };
 
-export default connect(({querylist, typequery}) => ({
+export default connect(({querylist, typequery,app}) => ({
     querylist,
-    typequery
+    typequery,
+    app
 }))(Querylist)

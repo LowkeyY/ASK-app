@@ -23,7 +23,7 @@ class Results extends React.Component {
                     currentPagination: 0,
                 })
             }
-        }, 20);
+        },150);
 
         this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
             this.tsPageY = e.touches[0].pageY;
@@ -43,7 +43,7 @@ class Results extends React.Component {
     componentWillUnmount() {
         this.lv.getInnerViewNode().removeEventListener('touchstart', this.ts);
         this.lv.getInnerViewNode().removeEventListener('touchmove', this.tm);
-        if (this.st && this.st !== 0)
+        if (this.st && this.st != 0 && this.props.updateScrollerTop)
             this.props.updateScrollerTop(this.st);
     }
 

@@ -43,12 +43,13 @@ function Filters(filters) {
                 }
             })
         },
-        handleFilterClick = (key, currentItems) => {
-            update({
-                isShow: currentKey != key ? true : !isShow,
-                currentKey: key,
-                currentItems
-            })
+        handleFilterClick = (key, currentItems,e) => {
+              e.stopPropagation()
+             update({
+               isShow: currentKey != key ? true : !isShow,
+               currentKey: key,
+               currentItems
+             })
         },
 
         handleDateClick = (key, value) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { List,Tag,Icon} from 'antd-mobile';
-import {getLocalIcon,getUserAvatar} from 'utils'
+import {getLocalIcon,getUserAvatar, getUserAvatarError } from 'utils'
 import styles from './index.less'
 const Item = List.Item;
 const Brief = Item.Brief,
@@ -28,7 +28,7 @@ const ForumAuthor =(props)=>{
         >
           <div className={styles[`${PrefixCls}-author-box`]}>
             <div  className={styles[`${PrefixCls}-author-box-information-box`]}>
-              <img className={styles[`${PrefixCls}-author-box-icon`]} src={getUserAvatar(props.avatars)} alt=""/>
+              <img className={styles[`${PrefixCls}-author-box-icon`]} src={getUserAvatar(props.avatars)} alt="" onError={getUserAvatarError}/>
               <div className={styles[`${PrefixCls}-author-box-information`]}>
                 <h5 className={styles[`${PrefixCls}-author-box-information-author`]}>
                   {props.author}

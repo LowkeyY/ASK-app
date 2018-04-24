@@ -40,6 +40,7 @@ const fetch = (options) => {
     const cloneData = lodash.cloneDeep(data)
     cloneData[notRedirectSign] = 'true';
     cloneData[accessToken] = _cg(accessToken);
+    //console.log(" --------- fetch : "+JSON.stringify(cloneData));
 
     try {
         let domin = ''
@@ -201,7 +202,7 @@ export default function request(options) {
             message = getResponeseErrMsg(status) || data.message || statusText
             if (status === 401) {
                 // window.location.replace(`${location.origin}/login?from=${location.pathname}`);
-                hashHistory.push(`/login`)
+                hashHistory.replace(`/login`)
                 return;
             }
         }

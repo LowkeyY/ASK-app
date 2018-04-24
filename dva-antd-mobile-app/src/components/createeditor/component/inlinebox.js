@@ -5,8 +5,8 @@ import StyleButton from './stylebutton'
 import styles from '../index.less'
 
 const INLINE_STYLES = [
-  { label: <Icon type={getLocalIcon('/editor/bold.svg')} size="xs"/>, style: 'BOLD' },
-  { label: <Icon type={getLocalIcon('/editor/italic.svg')} size="xs"/>, style: 'ITALIC' },
+  { label: <Icon type={getLocalIcon('/editor/bold.svg')} size="sm"/>, style: 'BOLD' },
+  { label: <Icon type={getLocalIcon('/editor/italic.svg')} size="sm"/>, style: 'ITALIC' },
 ];
 const InlineStyleControls = (props) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();

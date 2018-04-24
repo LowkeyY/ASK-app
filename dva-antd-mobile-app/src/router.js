@@ -31,7 +31,7 @@ const Routers = function({history, app}) {
                             cb(null, require('routes/login/'))
                         }, 'login')
                     },
-                }, {
+                },{
                     path: 'mine',
                     getComponent(nextState, cb) {
                         require.ensure([], require => {
@@ -151,7 +151,26 @@ const Routers = function({history, app}) {
                             cb(null, require('routes/pdfcontent/'))
                         }, 'pdfcontent')
                     }
-                }, {
+                },
+              {
+                path: 'agreement',
+                getComponent(nextState, cb) {
+                  require.ensure([], require => {
+                    registerModel(app, require('models/agreement'));
+                    cb(null, require('routes/agreement/'))
+                  }, 'agreement')
+                }
+              },
+              {
+                path: 'hotwordsresult',
+                getComponent(nextState, cb) {
+                  require.ensure([], require => {
+                    registerModel(app, require('models/hotwordsresult'));
+                    cb(null, require('routes/hotwordsresult/'))
+                  }, 'hotwordsresult')
+                }
+              },
+              {
                     path: '*',
                     getComponent(nextState, cb) {
                         console.log("* -> ", nextState);

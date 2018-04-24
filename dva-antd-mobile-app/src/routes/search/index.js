@@ -54,9 +54,7 @@ function Search({search, loading, dispatch}) {
                 payload
             })
         },
-        goBack = () => {
-            dispatch(routerRedux.goBack());
-        },
+        goBack = () => {dispatch(routerRedux.goBack());},
         goResults = (payload = {}) => {
             update({
                 isSearch: true,
@@ -115,7 +113,7 @@ function Search({search, loading, dispatch}) {
         goHotWords = (id) => {
             handleNeedRefreshing()
             dispatch(routerRedux.push({
-                pathname: "/hotwordsresult",
+                pathname: "/typequery",
                 query: {
                     moduleId: currentModuleId,
                     lists: id

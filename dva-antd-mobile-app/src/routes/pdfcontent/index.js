@@ -14,7 +14,7 @@ setOptions({
 
 function pdfcontent({location, pdfcontent, loading, dispatch}) {
 
-    const {fileUrl = "", pdfProps = {}, numPages, scale, isShowScale} = pdfcontent;
+    const {fileUrl = "", pdfProps = {}, numPages, scale} = pdfcontent;
     const goBack = () => {
             dispatch(routerRedux.goBack())
         },
@@ -33,23 +33,8 @@ function pdfcontent({location, pdfcontent, loading, dispatch}) {
                 scale: num
             }
         })
-        setTimeout(function() {
-            dispatch({
-                type: 'pdfcontent/updateState',
-                payload: {
-                    isShowScale: true
-                }
-            })
-        }, 3000)
     }
-    const ShowScale = () => {
-        dispatch({
-            type: 'pdfcontent/updateState',
-            payload: {
-                isShowScale: !isShowScale
-            }
-        })
-    }
+
     const PrefixCls = "pdfcontent";
 
     const finalProps = {
@@ -68,7 +53,7 @@ function pdfcontent({location, pdfcontent, loading, dispatch}) {
         <div>
           <div className={ styles[`${PrefixCls}-header`] }>
             <NavBar leftContent="返回" mode="light" onLeftClick={ goBack }></NavBar>
-            <div className={ styles[`${PrefixCls}-silder-box`] } style={ { display: 'block' } }>
+            <div className={ styles[`${PrefixCls}-silder-box`] }>
               <div className={ styles[`${PrefixCls}-font-small`] }>
                 <Icon size="md" type={ getLocalIcon('/page/scaledown.svg') } />
               </div>
@@ -76,7 +61,7 @@ function pdfcontent({location, pdfcontent, loading, dispatch}) {
                 <Icon size="md" type={ getLocalIcon('/page/scaleup.svg') } />
               </div>
               <Slider style={ { marginLeft: 30, marginRight: 30 } }
-                defaultValue={ 1 }
+                defaultValue={ scale }
                 min={ 1 }
                 max={ 2.5 }
                 step={ 0.5 }
@@ -85,7 +70,7 @@ function pdfcontent({location, pdfcontent, loading, dispatch}) {
                 onChange={ onScale } />
             </div>
           </div>
-          <div className={ styles[`${PrefixCls}-normal`] } onClick={ ShowScale }>
+          <div className={ styles[`${PrefixCls}-normal`] }>
             <WingBlank size="sm">
               <Document file={ fileUrl } {...finalProps}>
                 { Array.from(

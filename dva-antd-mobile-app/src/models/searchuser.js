@@ -12,15 +12,20 @@ export default modelExtend(pageModel, {
         tragetState: "",
         tragetStateKey: "",
         selectedIndex: 1,
-        textQuery:'',
+        textQuery: '',
         isSingle: true
     },
     subscriptions: {
         setup({dispatch, history}) {
             history.listen(location => {
-                let {pathname, query = {}} = location;
+                let {pathname, query = {}, action} = location;
                 if (pathname.startsWith('/searchuser')) {
-                    const {tragetState = "", isSingle = "", tragetStateKey = "",textQuery='',queryusers=[]} = query;
+                    const {tragetState = "", isSingle = "", tragetStateKey = "", textQuery='', queryusers=[]} = query,
+                        others = {};
+                    if (action == "PUSH" && isSingle == "true") {
+                        others.selectedUsers = [];
+                        others.selectedUserValues = [];
+                    }
                     dispatch({
                         type: 'updateState',
                         payload: {
@@ -28,7 +33,8 @@ export default modelExtend(pageModel, {
                             textQuery,
                             queryusers,
                             isSingle: isSingle == "true",
-                            tragetStateKey
+                            tragetStateKey,
+                            ...others
                         }
                     })
                 }

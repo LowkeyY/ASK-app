@@ -39,7 +39,8 @@ export default modelExtend(pageModel, {
             history.listen(({pathname, query, action}) => {
                 if (pathname === '/mylist') {
                     window.cnClearBadge();
-                    if (action == "PUSH" || query.types === "1") {
+                    if (action == "PUSH" || (action == "POP" && query.types == "1")) {
+                        //type 表示访问类型 我的消息列表、我的收藏案例等， types 表示 新消息、发布的与回复的区分
                         const {type = 0, title = "", ...others} = query;
                         dispatch({ //重置默认搜索结果
                             type: "updateState",
@@ -71,6 +72,7 @@ export default modelExtend(pageModel, {
                 ...payload
             });
             if (data) {
+
                 let {resultProps : {currentData, pageIndex, hasMore, dataSource}} = yield select(state => state.mylist);
                 currentData = [...currentData, ...data.data];
                 pageIndex = pageIndex + 1;

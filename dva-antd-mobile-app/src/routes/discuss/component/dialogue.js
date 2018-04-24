@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from 'antd-mobile';
-import { getUserAvatar } from 'utils'
+import { getUserAvatar , getUserAvatarError } from 'utils'
 import Replay from './reply'
 import styles from './dialogue.less'
 import pagecontentstyles from 'themes/content.less'
@@ -54,7 +54,7 @@ function Dialogue(props, dispatch) {
     return (
         <div className={ styles['dialogue-box'] }>
           <div className={ styles['dialogue-title-box'] }>
-            <img className={ styles['dialogue-image'] } src={ getUserAvatar(props.avatars) } alt="" />
+            <img className={ styles['dialogue-image'] } src={ getUserAvatar(props.avatars) } alt="" onError={getUserAvatarError}/>
             <div className={ styles['dialogue-info'] }>
               <h5 className={ styles['dialogue-author'] }>{ `${props.name}(${props.grade})` }</h5>
               <p className={ styles[`dialogue-times`] }>

@@ -30,7 +30,8 @@ const App = ({children, dispatch, app, loading, location}) => {
     //
     //     }
     // }
-    if (lastHref !== href) {
+  cnSetStatusBarStyle(pathname);
+  if (lastHref !== href) {
         NProgress.start();
         if (!loading.global) {
             NProgress.done();

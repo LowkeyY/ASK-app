@@ -131,7 +131,7 @@ function Typequery({typequery, loading, dispatch}) {
             <Filterview values={ getSelectTexts() } onClick={ onOpenChange } lager={ currentMenus.length > 1 } />
             <Drawer
                     className={ `my-drawer ${menuOpened ? "active" : ""}` }
-                    style={ { height: document.documentElement.clientHeight - 90 } }
+                    style={ { height: cnDeviceHeight - 90 } }
                     enableDragHandle
                     contentStyle={ { color: '#A6A6A6', textAlign: 'center', paddingTop: 0 } }
                     sidebar={ getSidebars() }

@@ -16,8 +16,8 @@ const Brief = Item.Brief;
 function Dashboard({dashboard, loading, dispatch}) {
     const {Headersearch, BaseLine} = Layout,
         PrefixCls = "dashboard",
-        {hasNews, modules, lists, notes, hotWords, isModalShow, hotWordModuleId, noteModuleId, dashboardRefreshing,dataSource,defalutHeight} = dashboard,
-         handleClickId=lists[0]&&lists[0].id
+        {hasNews, modules, lists, notes, hotWords, isModalShow, hotWordModuleId, noteModuleId, dashboardRefreshing, dataSource, defalutHeight} = dashboard,
+        handleClickId = lists[0] && lists[0].id
 
     const handleNeedRefreshing = () => {
             //跳转时，开启分类检索页面刷新。
@@ -58,16 +58,16 @@ function Dashboard({dashboard, loading, dispatch}) {
             dispatch({
                 type: 'dashboard/query',
             })
-          dispatch({
-            type: 'dashboard/updateState',
-            payload:{
-              dashboardRefreshing:true
-            }
-          })
+            dispatch({
+                type: 'dashboard/updateState',
+                payload: {
+                    dashboardRefreshing: true
+                }
+            })
         },
-      onEndReached = () => {
-          return;
-      };
+        onEndReached = () => {
+            return;
+        };
 
     const onWrapTouchStart = (e) => {
         // fix touch to scroll background page on iOS
@@ -79,34 +79,34 @@ function Dashboard({dashboard, loading, dispatch}) {
             e.preventDefault();
         }
     }
-    const renderRow =(obj, sectionID, rowID)=>{
-      let isNew = obj.isNew === true;
-      let result = (
+    const renderRow = (obj, sectionID, rowID) => {
+        let isNew = obj.isNew === true;
+        let result = (
         <Item arrow="horizontal"
-              multipleLine
-              onClick={ handleListItemClick.bind(null, handleClickId,obj.id) }
-              key={ `${sectionID}-${rowID}` }
-              wrap>
+          multipleLine
+          onClick={ handleListItemClick.bind(null, handleClickId, obj.id) }
+          key={ `${sectionID}-${rowID}` }
+          wrap>
           <span className={ styles[`${PrefixCls}-list-body`] + " " + (isNew ? styles[`${PrefixCls}-list-isNew`] : "") }>{ obj.title }</span>
           <Brief>
             { `${obj.author} - (${obj.date})` }
           </Brief>
         </Item>
-      );
-      return !isNew ? result :
-        <Badge key={ `badge-${sectionID}` } text={ '新' } corner>
-          { result }
-        </Badge>
+        );
+        return !isNew ? result :
+            <Badge key={ `badge-${sectionID}` } text={ '新' } corner>
+              { result }
+            </Badge>
     }
-     const listviewsProps={
-          dataSource,
-          renderRow,
-       onRefresh,
-       onEndReached,
-       isDashboard:true,
-       refreshing:dashboardRefreshing,
-       defalutHeight:defalutHeight-40
-     }
+    const listviewsProps = {
+        dataSource,
+        renderRow,
+        onRefresh,
+        onEndReached,
+        isDashboard: true,
+        refreshing: dashboardRefreshing,
+        defalutHeight: defalutHeight - 40
+    }
     const packModuleList = () => {
         return lists.map((list, index) => {
             const isLast = index === lists.length - 1;
@@ -125,9 +125,8 @@ function Dashboard({dashboard, loading, dispatch}) {
                                                </Link>
                                              </div>
                                          ) }>
-
                     </List>
-                    {/*{ isLast && <WhiteSpace size="sm" /> }*/}
+                    { /*{ isLast && <WhiteSpace size="sm" /> }*/ }
                   </div>
                 </div>
             )
@@ -138,7 +137,17 @@ function Dashboard({dashboard, loading, dispatch}) {
         rightContent: {
             dot: hasNews,
             icon: "/header/news.svg",
-            to: "/mylist?title=我的新消息&moduleId=0&types=1"
+            //to: "/mylist?title=我的新消息&moduleId=0&types=1",
+            onClick: () => {
+                dispatch(routerRedux.push({
+                    pathname: "/mylist",
+                    query: {
+                        moduleId: 0,
+                        types: 1,
+                        title: "我的新消息"
+                    }
+                }));
+            }
         }
     };
     return (
@@ -186,7 +195,7 @@ function Dashboard({dashboard, loading, dispatch}) {
                 </Link>
               </div>
             </div>
-            {packModuleList()}
+            { packModuleList() }
           </div>
           <ListViews {...listviewsProps}/>
         </div>

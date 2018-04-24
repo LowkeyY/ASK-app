@@ -5,12 +5,20 @@ import modelExtend from 'dva-model-extend'
 import { pageModel } from './common'
 import { setLoginIn } from 'utils'
 
+const CryptoJS = require("crypto-js") , encrypt = (word) => {
+  var key = CryptoJS.enc.Utf8.parse("nuctech1-Aakapp9");
+  var srcs = CryptoJS.enc.Utf8.parse(word);
+  var encrypted = CryptoJS.AES.encrypt(srcs, key, {mode:CryptoJS.mode.ECB,padding: CryptoJS.pad.Pkcs7});
+  return encrypted.toString();
+}
+
 export default modelExtend(pageModel, {
     namespace: 'login',
 
     state: {
         state: true,
-        isLogin: true
+        isLogin: true,
+        loadPwd:''
     },
 
     effects: {
@@ -21,8 +29,8 @@ export default modelExtend(pageModel, {
                     isLogin: false
                 }
             })
-            const {from = "/", ...params} = payload;
-            const data = yield call(login, params, true);
+            const {from = "/", ...params} = payload , {user_power = ""} = params;
+            const data = yield call(login, Object.assign({}, params, {user_power : encrypt(user_power)}) , true);
 
             if (data && data.success !== false) {
                 yield put({
@@ -41,7 +49,7 @@ export default modelExtend(pageModel, {
                     ...data,
                     ...params
                 });
-                yield put(routerRedux.push({
+                yield put(routerRedux.replace({
                     pathname: from
                 }))
             }
@@ -53,9 +61,7 @@ export default modelExtend(pageModel, {
                         isLogin: true
                     }
                 })
-
             }
-
         },
     },
     reducers: {

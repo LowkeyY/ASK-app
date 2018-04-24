@@ -21,7 +21,7 @@ function Results(results) {
             });
         },
         onEndReached = (event, st = 0) => {
-            if (isLoading || !hasMore)
+            if ((isLoading || !hasMore) && !refreshing)
                 return;
             const adds = {};
             if (!isNaN(st) && st > 0)
@@ -77,17 +77,20 @@ function Results(results) {
 
     return (
         <div>
-          <div  className={ styles["header-search-box"]}>
-          <div className={ styles["header-search"] }>
-            <div className={ styles["center"] }>
-              <div className={ styles["goback-btn"] } onClick={ goBack }>
-                <Icon type={ getLocalIcon("/page/goback.svg") } size="sm" />
+          <div className={ styles["header-search-box"] }>
+            <div className={ styles["header-search"] }>
+              <div className={ styles["center"] }>
+                <div className={ styles["goback-btn"] } onClick={ goBack }>
+                  <Icon type={ getLocalIcon("/page/goback.svg") } size="sm" />
+                </div>
+                <Button className={ "header-search-btn result-list" }
+                  size="small"
+                  icon="search"
+                  onClick={ goFilter }>
+                  { textQuery }
+                </Button>
               </div>
-              <Button className={ "header-search-btn result-list" } size="small" icon="search" onClick={ goFilter }>
-                { textQuery }
-              </Button>
             </div>
-          </div>
           </div>
           <Listviews {...listviewsProps}/>
         </div>

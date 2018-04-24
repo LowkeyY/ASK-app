@@ -1,5 +1,5 @@
 import { request, formsubmit,config } from 'utils'
-const {api : {querypt, querysearchattApi, querysearchlistApi , mylistApi,userOptApi,querypdfApi,createbbsxApi}} = config;
+const {api : {querypt, querysearchattApi, querysearchlistApi , mylistApi,userOptApi,querypdfApi,createbbsxApi,submitDraftApi}} = config;
 
 export async function query() {
   return request({
@@ -44,4 +44,7 @@ export async function queryPdf(params) {
 }
 export async function submits(params,files) {
   return formsubmit(createbbsxApi,params,files,true)
+}
+export async function submitDraft(params,files){
+  return formsubmit(submitDraftApi,params,files)
 }

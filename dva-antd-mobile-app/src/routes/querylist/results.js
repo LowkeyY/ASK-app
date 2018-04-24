@@ -9,20 +9,24 @@ class Results extends React.Component {
         super(props);
 
         this.state = {
-            height: (props.defalutHeight||document.documentElement.clientHeight) - 140,
+            height: cnDeviceHeight - 140,
             currentPagination: 0,
         };
     }
 
     componentDidMount() {
+        const currentHeight = document.documentElement.clientHeight;
         setTimeout(() => {
-            if (ReactDOM.findDOMNode(this.lv)) {
-                const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).offsetTop - 140;
+            let listView = this.lv , listViewDom;
+            if ((listViewDom = this.lv.getInnerViewNode()) && (listViewDom = listViewDom.parentElement)) {
+                let hei = cnDeviceHeight - listViewDom.offsetTop - 140;
                 this.setState({
                     height: hei,
                 })
+                if( cnIsAndroid() && currentHeight != cnDeviceHeight)
+                    listViewDom.style.height = hei + "px";
             }
-        },1000);
+        }, 300);
 
         this.lv.getInnerViewNode().addEventListener('touchstart', this.ts = (e) => {
             this.tsPageY = e.touches[0].pageY;
@@ -120,22 +124,21 @@ class Results extends React.Component {
         }
         return (
             <div className="query-lists-box">
-              <ListView
-                        ref={ el => this.lv = el }
-                        dataSource={ this.props.dataSource }
-                        renderFooter={ footer }
-                        renderRow={ this.props.renderRow }
-                        renderSeparator={ separator }
-                        initialListSize={ this.props.initialListSize || 10 }
-                        pageSize={ 10 }
-                        style={ { height: this.state.height, border: '1px solid #ddd'} }
-                        scrollerOptions={ { scrollbars: true } }
-                        refreshControl={ <RefreshControl refreshing={ this.props.refreshing } onRefresh={ this.props.onRefresh } /> }
-                        onScroll={ this.onScroll }
-                        scrollRenderAheadDistance={ 200 }
-                        scrollEventThrottle={ 20 }
-                        onEndReached={ this.onEndReached }
-                        onEndReachedThreshold={ 10 } />
+              <ListView ref={ el => this.lv = el }
+                dataSource={ this.props.dataSource }
+                renderFooter={ footer }
+                renderRow={ this.props.renderRow }
+                renderSeparator={ separator }
+                initialListSize={ this.props.initialListSize || 10 }
+                pageSize={ 10 }
+                style={ { height: this.state.height, border: '1px solid #ddd' } }
+                scrollerOptions={ { scrollbars: true } }
+                refreshControl={ <RefreshControl refreshing={ this.props.refreshing } onRefresh={ this.props.onRefresh } /> }
+                onScroll={ this.onScroll }
+                scrollRenderAheadDistance={ 200 }
+                scrollEventThrottle={ 20 }
+                onEndReached={ this.onEndReached }
+                onEndReachedThreshold={ 10 } />
               { paginationer() }
             </div>
             );

@@ -9,13 +9,12 @@
 }
 
 .RichEditor-editor {
-  padding: 14px;
+  padding: 20px 10px 0;
   border: 2px solid #ddd;
-  min-height:320px;
-  cursor: pointer;
+  min-height:500px;
   font-size: 30px;
-  overflow-y: scroll;
-  margin: 10px 0 20px 0;
+  margin: 0 0 100px;
+  height: auto;
 }
 
 .RichEditor-editor .public-DraftEditorPlaceholder-root,
@@ -67,10 +66,12 @@
   color: #999999;
   user-select: none;
   &-item{
-    margin-right:30px;
+    width:33%;
+    text-align: center;
   }
   &-img-box{
-    margin-right: 30px;
+    width:33%;
+    text-align: center;
     position: relative;
     overflow: hidden;
     & input{
@@ -83,7 +84,8 @@
     }
   }
   &-camera-box{
-    margin-right: 30px;
+    width:33%;
+    text-align: center;
     position: relative;
     overflow: hidden;
     & input{
@@ -98,9 +100,9 @@
 }
 
 .RichEditor-styleButton {
+  width:50%;
+  text-align: center;
   color: #999;
-  cursor: pointer;
-  margin-right: 30px;
   padding: 2px 0;
 }
 
@@ -126,11 +128,15 @@
 
 }
 .RichEditor-out{
-  margin-top: 80px;
+  //margin-top: 80px;
+  z-index: 100;
+  position: fixed;
+  left:0;
+  width: 100%;
 }
 .RichEditor-container{
   width: 100%;
-  position: fixed;
+  //position: fixed;
   left:0;
   bottom: 0;
   z-index:10;
@@ -141,6 +147,7 @@
   justify-content: space-between;
   align-items: center;
   border-top: 2px solid #ddd;
+  height: 1rem;
 
   &-box{
     display: flex;
@@ -154,6 +161,7 @@
   margin-right: 20px;
   padding-top: 10px;
 }
+
 
 
 

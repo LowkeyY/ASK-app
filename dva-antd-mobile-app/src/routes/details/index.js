@@ -11,8 +11,7 @@ import { WaterMark} from 'components/Layout'
 import './index.less'
 
 function Details({loading, dispatch, details}) {
-  const {currentContent, currentComments, isShowEditor, isShowInputFoot, placeholder, is404, animating, currentRecommentId, ...props} = details;
-
+  const {currentContent, currentComments, isShowEditor, isShowInputFoot, placeholder, is404, animating, currentRecommentId,editorState,theUsers, ...props} = details;
   const contentProps = {
       ...props,
       currentContent,
@@ -63,7 +62,13 @@ function Details({loading, dispatch, details}) {
       }
     }
   }
-
+  const getAddUser = (users = []) => {
+    const result = [];
+    users.map(_ => {
+      result.push(_.value)
+    })
+    return result.join("|");
+  }
   const handleOnSubmit = (contents, files, emailControl,isOriginal) => {
     const params = {
       moduleId,
@@ -71,7 +76,8 @@ function Details({loading, dispatch, details}) {
       commentId: currentRecommentId,
       contentId: id,
       emailControl,
-      isOriginal
+      isOriginal,
+      addUsers: getAddUser(theUsers),
     }
     dispatch({
       type: 'details/comment',
@@ -91,6 +97,13 @@ function Details({loading, dispatch, details}) {
   const Focus = (state) => {
     state.focus()
   }
+  const editorProps={
+    editorState,
+    isShowEditor,
+    dispatch,
+    placeholder,
+    theUsers
+  }
 
   return (
     <div>
@@ -109,7 +122,7 @@ function Details({loading, dispatch, details}) {
           <Discuss commendProps={commendProps} {...props} />
           <BaseLine/>
           </div>
-          <InputFoot dispatch={dispatch} currentComments={currentComments}/>
+          <InputFoot dispatch={dispatch} currentComments={currentComments} isShowInputFoot={isShowInputFoot}/>
         </div>
       )}
 
@@ -117,8 +130,7 @@ function Details({loading, dispatch, details}) {
                          text="发送中..."
                          animating={animating}/>
     </div>
-      <MyEditor isShowEditor={isShowEditor} dispatch={dispatch} placeholder={placeholder}
-                onSubmit={handleOnSubmit}/>
+      <MyEditor {...editorProps} onSubmit={handleOnSubmit} />
     </div>
   )
 }

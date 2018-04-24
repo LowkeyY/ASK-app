@@ -5,7 +5,7 @@ import { pageModel } from './common'
 import { query } from 'services/typequery'
 import { isEmptyObject } from 'utils'
 
-const defalutClientHeight = document.documentElement.clientHeight||document.body.clientHeight;
+
 const primaryTag = "moduleId",
     defaultSelectedKey = "4",
     getDefaultSelected = (moduleMenu, primaryTag) => { //保存默认查询属性，每个条件组中第一个条件的值
@@ -37,7 +37,6 @@ export default modelExtend(pageModel, {
         defaultSelectedKey,
         defaultSelected: {},
         filterSelected: {},
-        defalutHeight : defalutClientHeight,
         modules: [],
         moduleMenu: {},
         menuOpened: false,

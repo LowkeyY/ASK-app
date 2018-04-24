@@ -4,6 +4,7 @@ import { pageModel } from './common';
 import { routerRedux } from 'dva/router';
 import { Toast } from 'antd-mobile';
 import { getContent, getCommends, getAuths, deleteCommends, userDatas, recordVisit, recordcomments } from 'services/querycontent';
+import { EditorState } from 'draft-js'
 
 const findChildrenById = (items = [], id, result = []) => {
         if (items && items.length)
@@ -45,7 +46,6 @@ const findChildrenById = (items = [], id, result = []) => {
     defaultStatusTag = {
         is404: false,
         hasDeleteAuth: false,
-        isShowEditor: false,
         currentRecommentId: "",
     };
 
@@ -60,6 +60,9 @@ export default modelExtend(pageModel, {
         fromModal: "",
         ...Object.assign({}, defaultStatusTag),
         animating: false,
+        isShowEditor: false,
+        editorState: EditorState.createEmpty(),
+        theUsers:[],
     },
     subscriptions: {
         setup({dispatch, history}) {
@@ -74,7 +77,7 @@ export default modelExtend(pageModel, {
                         }
                     })
                     dispatch({
-                        type: 'queryContent',
+                        type: 'query',
                         payload: {
                             ...query
                         }
@@ -102,7 +105,7 @@ export default modelExtend(pageModel, {
         }
     },
     effects: {
-        * queryContent({payload, }, {call, put, select}) {
+        * query({payload, }, {call, put, select}) {
             const result = yield call(getContent, payload);
             if (result) {
                 const {data, is404 = false} = result;
@@ -113,7 +116,8 @@ export default modelExtend(pageModel, {
                             ...result.data,
                         },
                         is404,
-                        animating: false
+                        animating: false,
+
                     },
                 })
             }
@@ -124,8 +128,7 @@ export default modelExtend(pageModel, {
                 yield put({
                     type: 'updateState',
                     payload: {
-                        currentComments: result.data,
-                        isShowEditor: false,
+                        currentComments: result.data
                     },
                 })
             }
@@ -251,14 +254,17 @@ export default modelExtend(pageModel, {
         * comment({payload}, {call, put, select}) {
             const {params, files} = payload,
                 data = yield call(recordcomments, params, files);
-            console.log(data)
             if (data && data.success !== false) {
                 const {moduleId = "", fromModal = ""} = yield select(_ => _.details),
                     {contentId = id, ...others} = data;
                 yield put({
                     type: 'updateState',
                     payload: {
-                        animating: false
+                        animating: false,
+                        isShowEditor: false,
+                        isShowInputFoot:true,
+                        editorState: EditorState.createEmpty(),
+                        theUsers:[],
                     }
                 })
                 if (fromModal && contentId)
@@ -283,13 +289,23 @@ export default modelExtend(pageModel, {
                 yield put({
                     type: "updateState",
                     payload: {
-                        animating: false
+                        animating: false,
+
                     }
                 });
 
             }
         }
     },
+  reducers:{
+    updateUser(state, {payload = {}}) {
+      const {selectedUsers = []} = payload;
+      return {
+        ...state,
+          theUsers: selectedUsers
+      }
+    },
+  }
 
 })
 

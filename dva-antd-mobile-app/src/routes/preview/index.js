@@ -45,7 +45,8 @@ function Preview({loading, dispatch, preview,app,creates={}}) {
         selectTechs: theTechs.join("|"),
         addUsers: theUsers.join("|"),
         contents:theContents,
-        emailControl
+        emailControl,
+        fromPreview : true
       }
     const params={
       ...data,
@@ -59,8 +60,7 @@ function Preview({loading, dispatch, preview,app,creates={}}) {
       dispatch({
         type: 'creates/submit',
         payload: {
-          params,
-          files
+          params
         }
       })
     },

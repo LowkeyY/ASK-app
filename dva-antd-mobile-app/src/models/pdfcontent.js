@@ -5,7 +5,8 @@ import { queryPdf } from '../services/querys'
 import { config } from 'utils'
 import { Loader } from 'components'
 import PdfError from 'components/pdferror'
-const {api : querypdfApi, baseURL} = config
+import { _cg } from 'utils/cookie'
+const {api : {querypdfApi}, baseURL, notRedirectSign, accessToken } = config
 
 export default modelExtend(pageModel, {
     namespace: 'pdfcontent',
@@ -14,7 +15,6 @@ export default modelExtend(pageModel, {
         fileUrl: "",
         numPages: 0,
         scale: 1,
-        isShowScale: false,
         pdfProps: {
             error: <PdfError text="加载PDF文件失败"/>,
             loading:  <Loader spinning={true} />,
@@ -26,21 +26,22 @@ export default modelExtend(pageModel, {
             history.listen(location => {
                 let {pathname, query} = location;
                 if (pathname.startsWith('/pdfcontent')) {
-                    let {fileUrl = ""} = query;
-                    if (fileUrl == "")
+                    let {fileUrl = "" , id= "" , moduleId = ""} = query;
+                    if (fileUrl != "")
                         dispatch({
                             type: 'updateState',
                             payload: {
                                 fileUrl
                             }
                         })
-                    else
+                    else if(id != "" && moduleId != ""){
                         dispatch({
-                            type: 'updateQuery',
-                            payload: {
-                                ...query
-                            }
+                          type: 'updateState',
+                          payload: {
+                            fileUrl : baseURL + querypdfApi + "?" + accessToken + "=" + _cg(accessToken) + "&" + notRedirectSign + "=true&id=" +id+"&moduleId=" + moduleId
+                          }
                         })
+                    }
                 }
             })
         }
@@ -48,10 +49,15 @@ export default modelExtend(pageModel, {
     effects: {
         *updateQuery({payload}, {call, put}) {
             const data = yield call(queryPdf, payload);
-            yield put({
+            if(data){
+              const {fileUrl = ""} = data
+              yield put({
                 type: 'updateState',
-                payload
-            })
+                payload :{
+                  fileUrl
+                }
+              })
+            }
         },
     }
 })

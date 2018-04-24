@@ -138,27 +138,33 @@ const isSameEffect = (min, max) => {
 const setLoginIn = ({accessToken, user_name, user_power}) => {
     const now = new Date()
     now.setDate(now.getDate() + 5)
-    _cs('user_session', now.getTime())
+    //_cs('user_session', now.getTime())
     _cs('user_name', user_name)
-    _cs('user_power', user_power)
+    //_cs('user_power', user_power)
     _cs(config.accessToken, accessToken)
-    localStorage.setItem(config.accessToken, accessToken)
     userAccessToken = accessToken
-    cnSetAlias(user_name);
+    cnSetAlias(user_name , accessToken);
 }
 
 const setLoginOut = () => {
+    const token = _cg(config.accessToken) , user_name =  _cg("user_name")
     _cr(config.accessToken)
-    localStorage.removeItem(config.accessToken)
     userAccessToken = ""
     _cr('user_power')
-    cnDeleteAlias();
+    cnDeleteAlias(user_name , token);
 }
 
 const getApiParams = () => {
     const param = {};
-    param[`${config.accessToken}`] = userAccessToken;
+    param[`${config.accessToken}`] = _cg(config.accessToken);
     return param;
+}
+
+const getUserAvatarError = (el) =>{
+  if(el && el.target){
+    el.target.src = defaultUserAvatar;
+    el.target.onerror=null;
+  }
 }
 
 module.exports = {
@@ -176,6 +182,7 @@ module.exports = {
     isSameEffect,
     getLocalIcon,
     getUserAvatar,
+    getUserAvatarError,
     setLoginIn,
     setLoginOut,
     getApiParams,

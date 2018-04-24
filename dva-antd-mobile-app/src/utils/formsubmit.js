@@ -79,7 +79,7 @@ const compressDataUrlToFile = (data) => {
     });
 };
 
-const processData = (data, file) => {
+const processData = (data, file , prefix = "") => {
     var arr = data.split(','),
         bstr = atob(arr.length > 1 ? arr[1] : data),
         n = bstr.length,
@@ -90,7 +90,7 @@ const processData = (data, file) => {
     var blob = new Blob([u8arr], {
         type: file.type
     });
-    blob.name = file.name;
+    blob.name = prefix + file.name;
     return blob;
 }
 
@@ -103,6 +103,7 @@ const compressFile = (img, file, orientation, callback) => {
         height;
     drawWidth = img.naturalWidth;
     drawHeight = img.naturalHeight;
+
     let maxSide = Math.max(drawWidth, drawHeight);
     if (maxSide > 1024) {
         let minSide = Math.min(drawWidth, drawHeight);
@@ -116,6 +117,7 @@ const compressFile = (img, file, orientation, callback) => {
             drawHeight = maxSide;
         }
     }
+    //cns__1024_768
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -164,7 +166,9 @@ const compressFile = (img, file, orientation, callback) => {
         break;
     }
     }
-    callback(processData(canvas.toDataURL(file.type, file.size > imgCompassMaxSize ? (compressionRatio / 100) : 1), file));
+    callback(
+      processData(canvas.toDataURL(
+        file.type, file.size > imgCompassMaxSize ? (compressionRatio / 100) : 1), file , `cn__${drawWidth}_${drawHeight}__cn`));
 }
 
 const submit = (url, param, isCNDefined) => axios.post(checkUrl(url), param, {
@@ -204,7 +208,7 @@ const submit = (url, param, isCNDefined) => axios.post(checkUrl(url), param, {
         status = response.status
         message = getResponeseErrMsg(status) || data.message || statusText
         if (status === 401) {
-            hashHistory.push(`/login`)
+            hashHistory.replace(`/login`)
             return;
         }
     }

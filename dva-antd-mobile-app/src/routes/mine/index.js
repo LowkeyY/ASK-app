@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { NavBar, Button, WhiteSpace, WingBlank, List,Badge } from 'antd-mobile';
-import { getUserAvatar } from 'utils'
+import { getUserAvatar , getUserAvatarError} from 'utils'
 import styles from './index.less';
 
 function Mine({location, mine, app, loading, dispatch,dashboard={}}) {
@@ -55,7 +55,7 @@ function Mine({location, mine, app, loading, dispatch,dashboard={}}) {
                 <div className={ styles[`${PrefixCls}-list-sets`] }>
                   <div className={ styles[`${PrefixCls}-list-sets-left`] }>
                     <div className={ styles[`${PrefixCls}-list-sets-left-img`] }>
-                      <img src={ getUserAvatar(user.userPic) } alt="icon" />
+                      <img src={ getUserAvatar(user.userPic) } alt="icon" onError={getUserAvatarError}/>
                     </div>
                     <div className={ styles[`${PrefixCls}-list-sets-left-title`] }>
                       <p>

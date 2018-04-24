@@ -1,7 +1,7 @@
 import React from 'react'
 import FileUpload from 'react-fileupload'
 import { List, ImagePicker, Icon, ActivityIndicator, Toast } from 'antd-mobile';
-import { getUserAvatar, config, getApiParams } from 'utils'
+import { getUserAvatar, config, getApiParams, getUserAvatarError } from 'utils'
 import styles from './index.less'
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -52,11 +52,11 @@ class Sets extends React.Component {
                 <Item>
                   <div className={ `${PrefixCls}-user-icon-upload` }>
                     <FileUpload options={ options }>
-                      <p className={ "icon-title" } ref="chooseBtn">
+                      <p className={ "icon-title-avatar" } ref="chooseBtn">
                         <span>更换头像</span>
                       </p>
                       <div className={ "icon-img-box" }>
-                        <img src={ getUserAvatar(userPic) } alt="icon" />
+                        <img src={ getUserAvatar(userPic) } alt="icon" onError={getUserAvatarError}/>
                       </div>
                     </FileUpload>
                   </div>
